@@ -317,9 +317,9 @@ require_once __DIR__ . '/../db/config.php';
 try {
     // Consulta SQL para obtener los nombres de los proyectos y los usuarios asignados a cada proyecto
     $query_proyectos_y_usuarios = "SELECT p.NombreProyecto, CONCAT(u.Nombre, ' ', u.ApellidoPaterno, ' ', u.ApellidoMaterno) AS NombreUsuario
-                                   FROM Asignaciones a
-                                   INNER JOIN Proyectos p ON a.ID_Proyecto = p.ID_Proyecto
-                                   INNER JOIN Usuario u ON a.ID_Usuario = u.ID
+                                   FROM asignaciones a
+                                   INNER JOIN proyectos p ON a.ID_Proyecto = p.ID_Proyecto
+                                   INNER JOIN usuario u ON a.ID_Usuario = u.ID
                                    ORDER BY p.NombreProyecto";
 
     // Preparar y ejecutar la consulta SQL para obtener proyectos y usuarios asignados
@@ -334,8 +334,8 @@ try {
 
     // Consulta SQL para obtener el total de asignaciones por proyecto
     $query_total_asignaciones_por_proyecto = "SELECT p.NombreProyecto, COUNT(a.ID_Proyecto) AS TotalAsignacionesPorProyecto
-                                              FROM Asignaciones a
-                                              INNER JOIN Proyectos p ON a.ID_Proyecto = p.ID_Proyecto
+                                              FROM asignaciones a
+                                              INNER JOIN proyectos p ON a.ID_Proyecto = p.ID_Proyecto
                                               GROUP BY a.ID_Proyecto";
 
     // Preparar y ejecutar la consulta SQL para obtener el total de asignaciones por proyecto

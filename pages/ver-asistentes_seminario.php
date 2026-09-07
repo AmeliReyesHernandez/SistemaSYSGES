@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-
-
-
 require_once __DIR__ . '/../db/config.php';
 
 try {
@@ -15,8 +12,8 @@ try {
    $query = "
     SELECT aps.ID_Asignacion, s.ID_Seminario, s.Nombre, p.Nombre AS NombrePonente, aps.FechaAsignacion
     FROM asignacion_ponente_seminario aps
-    LEFT JOIN Seminarios s ON aps.ID_Seminario = s.ID_Seminario
-    LEFT JOIN Ponentes p ON aps.ID_Ponente = p.ID_Ponente
+    LEFT JOIN seminarios s ON aps.ID_Seminario = s.ID_Seminario
+    LEFT JOIN ponentes p ON aps.ID_Ponente = p.ID_Ponente
 ";
 
 // Consulta para contar registros

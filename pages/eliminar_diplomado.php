@@ -13,13 +13,13 @@ try {
         $id = intval($_GET['eliminar_id']);
 
         // Primero verificar si existe
-        $stmt = $conn->prepare("SELECT * FROM Diplomados WHERE ID_Diplomado = :id");
+        $stmt = $conn->prepare("SELECT * FROM diplomados WHERE ID_Diplomado = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
             // Eliminar
-            $delete = $conn->prepare("DELETE FROM Diplomados WHERE ID_Diplomado = :id");
+            $delete = $conn->prepare("DELETE FROM diplomados WHERE ID_Diplomado = :id");
             $delete->bindParam(':id', $id, PDO::PARAM_INT);
 
             if ($delete->execute()) {

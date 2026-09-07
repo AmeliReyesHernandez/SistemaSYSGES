@@ -335,8 +335,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Feminicidios";
-    $countQuery = "SELECT COUNT(*) FROM Feminicidios";
+    $query = "SELECT * FROM feminicidios";
+    $countQuery = "SELECT COUNT(*) FROM feminicidios";
 
     $condiciones = [];
     $params = [];

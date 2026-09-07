@@ -1,11 +1,5 @@
-
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
-
-?>
-
-<?php
-
 require_once __DIR__ . '/../db/config.php';
 
 try {
@@ -17,16 +11,16 @@ try {
     $query = "
         SELECT ap.ID_Asignacion, d.NombreDiplomado, p.Nombre, ap.FechaAsignacion
         FROM asignacionponente ap
-        LEFT JOIN Diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
-        LEFT JOIN Ponentes p ON ap.ID_Ponente = p.ID_Ponente
+        LEFT JOIN diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
+        LEFT JOIN ponentes p ON ap.ID_Ponente = p.ID_Ponente
     ";
 
     // Consulta para contar registros (también con JOINs)
     $countQuery = "
         SELECT COUNT(*)
         FROM asignacionponente ap
-        LEFT JOIN Diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
-        LEFT JOIN Ponentes p ON ap.ID_Ponente = p.ID_Ponente
+        LEFT JOIN diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
+        LEFT JOIN ponentes p ON ap.ID_Ponente = p.ID_Ponente
     ";
 
     $condiciones = [];
@@ -319,14 +313,6 @@ try {
 
 <?php
 require_once __DIR__ . '/../pages/header.php';
-?>
-
-
-
-
-
-
-<?php
  
 require_once __DIR__ . '/../pages/footer.php';
 ?>
@@ -357,7 +343,7 @@ require_once __DIR__ . '/../pages/footer.php';
           <th>Diplomado</th>
           <th>Ponente</th>
           <th>Fecha Asignación</th>
-        <!--    <th>Acciones</th>-->
+            <!--<th>Acciones</th>-->
         </tr>
       </thead>
       <tbody>
@@ -367,11 +353,11 @@ require_once __DIR__ . '/../pages/footer.php';
             <td><?= htmlspecialchars($a['NombreDiplomado'] ?: '—') ?></td>
             <td><?= htmlspecialchars($a['Nombre'] ?: '—') ?></td>
             <td><?= htmlspecialchars($a['FechaAsignacion']) ?></td>
-         <!--    <td>
+           <!--  <td>
                <a href="./../checkout/editar-asignacion-ponente-diplomado.php?id=<?= $a['ID_Asignacion'] ?>" class="btn btn btn-warning">Editar</a>
             <button class="eliminar-asignacion btn btn-danger" data-id="<?= $a['ID_Asignacion'] ?>">Eliminar</button>
 
-          </td>-->
+          </td> -->
           </tr>
         <?php endforeach; ?>
         <?php if (!$asignaciones): ?>

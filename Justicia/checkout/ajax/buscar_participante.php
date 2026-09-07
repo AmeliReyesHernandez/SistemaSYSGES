@@ -17,15 +17,15 @@ try {
 
     $sql = "
         SELECT ID_Participante AS id, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, 'participante' AS tipo
-        FROM Participante
+        FROM participante
         WHERE Nombre LIKE :q OR ApellidoPaterno LIKE :q OR ApellidoMaterno LIKE :q
         UNION
         SELECT ID_Personal AS id, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, 'personal' AS tipo
-        FROM Personal
+        FROM personal
         WHERE Nombre LIKE :q OR ApellidoPaterno LIKE :q OR ApellidoMaterno LIKE :q
         UNION
         SELECT id AS id, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, 'usuario' AS tipo
-        FROM Usuario
+        FROM usuario
         WHERE Nombre LIKE :q OR ApellidoPaterno LIKE :q OR ApellidoMaterno LIKE :q
         LIMIT 10
     ";

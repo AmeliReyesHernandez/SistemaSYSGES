@@ -1,0 +1,516 @@
+[11-Nov-2025 03:30:21 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 03:30:30 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 03:30:45 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 03:30:50 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 03:31:03 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:00:42 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:00:44 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:00:45 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:00:45 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:00:46 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:01:05 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:01:54 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:02:18 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:03:27 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:08:35 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:08:52 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:15:56 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:22:19 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd.personal' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/header.php:27
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/header.php(27): PDOStatement->execute()
+#1 /home/gesmujer/public_html/SYSGES/pages/home.php(155): require_once('/home/gesmujer/...')
+#2 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 27
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 776
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 780
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 790
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 793
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 845
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 848
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 869
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 872
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 897
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 900
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 921
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 924
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 947
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 950
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 973
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 976
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 998
+[11-Nov-2025 15:27:19 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 1001
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 776
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 780
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 790
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 793
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 845
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 848
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 869
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 872
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 897
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 900
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 921
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 924
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 947
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 950
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 973
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 976
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 998
+[11-Nov-2025 15:32:16 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 1001
+[11-Nov-2025 15:35:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.usuario' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:75
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(75): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 75
+[11-Nov-2025 15:38:40 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.usuario' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:75
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(75): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 75
+[11-Nov-2025 15:41:46 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.usuario' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:75
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(75): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 75
+[11-Nov-2025 15:41:57 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.usuario' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:75
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(75): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 75
+[11-Nov-2025 15:44:10 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.usuario' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:75
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(75): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 75
+[11-Nov-2025 15:48:35 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.usuario' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:75
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(75): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 75
+[11-Nov-2025 17:22:30 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.usuario' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:75
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(75): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 75
+[11-Nov-2025 18:48:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.personale' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:122
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(122): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 122
+[11-Nov-2025 18:48:57 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.personale' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:122
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(122): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 122
+[11-Nov-2025 18:49:02 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.personale' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:122
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(122): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 122
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 776
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 780
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 790
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 793
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 845
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 848
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 869
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 872
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 897
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 900
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 921
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 924
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 947
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 950
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 973
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 976
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 998
+[11-Nov-2025 19:46:16 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 1001
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 776
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 780
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 790
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 793
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 845
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 848
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 869
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 872
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 897
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 900
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 921
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 924
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 947
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 950
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 973
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 976
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 998
+[11-Nov-2025 19:52:36 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 1001
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 776
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 780
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 790
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 793
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 845
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 848
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 869
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 872
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 897
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 900
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 921
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 924
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 947
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 950
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 973
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 976
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 998
+[11-Nov-2025 19:57:44 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 1001
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 776
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 780
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 790
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json1 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 793
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 845
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json3 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 848
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 869
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json4 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 872
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 897
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json5 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 900
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 921
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json6 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 924
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 947
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json7 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 950
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 973
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json8 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 976
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 998
+[11-Nov-2025 19:57:50 UTC] PHP Warning:  Undefined variable $datos_json9 in /home/gesmujer/public_html/SYSGES/pages/home.php on line 1001
+[11-Nov-2025 20:03:23 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.personale' doesn't exist in /home/gesmujer/public_html/SYSGES/pages/asistentes.php:122
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/pages/asistentes.php(122): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/asistentes.php on line 122
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:11:37 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:33:42 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 18:46:08 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[12-Nov-2025 18:46:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/ver-ponentes-diplomado.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:30:50 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 19:31:25 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendarioa.php on line 324
+[12-Nov-2025 20:06:25 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[12-Nov-2025 20:06:25 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/ver-ponentes-diplomado.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[12-Nov-2025 20:08:36 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[12-Nov-2025 20:08:36 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/ver-ponentes-diplomado.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:14:32 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:14:32 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:17:06 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:17:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:19:36 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:19:36 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:21:12 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:21:12 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:21:19 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:21:19 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:21:59 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:21:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:22:02 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:22:02 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:22:05 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:22:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:22:12 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:22:12 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:36:31 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:36:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:37:54 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:37:54 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:38:01 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:38:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:39:16 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:39:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:39:38 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 9
+[13-Nov-2025 02:39:39 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 9
+[13-Nov-2025 02:39:40 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 9
+[13-Nov-2025 02:39:40 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 9
+[13-Nov-2025 02:39:41 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 9
+[13-Nov-2025 02:39:41 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 9
+[13-Nov-2025 02:39:54 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:39:54 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:42:27 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:42:27 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:42:42 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:42:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:42:44 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:42:44 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:42:47 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:42:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:44:10 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:44:10 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:44:23 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:44:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:44:53 UTC] PHP Warning:  require_once(/home/gesmujer/public_html/SYSGES/pages./seccion.php): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 3
+[13-Nov-2025 02:44:53 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/gesmujer/public_html/SYSGES/pages./seccion.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/gesmujer/public_html/SYSGES/pages/citas.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 3
+[13-Nov-2025 02:45:14 UTC] PHP Warning:  require_once(/home/gesmujer/public_html/SYSGES/pagesseccion.php): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 3
+[13-Nov-2025 02:45:14 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/gesmujer/public_html/SYSGES/pagesseccion.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/gesmujer/public_html/SYSGES/pages/citas.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/citas.php on line 3
+[13-Nov-2025 02:45:31 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:45:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:46:43 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:46:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:50:03 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:50:03 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:5) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:54:05 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:54:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:5) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:54:52 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:54:52 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:5) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:54:57 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:54:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:5) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:56:59 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:56:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:5) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 02:58:30 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 02:58:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/citas.php:5) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 16:34:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php:5) in /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php on line 38
+[13-Nov-2025 16:35:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php:5) in /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php on line 41
+[13-Nov-2025 16:38:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php:5) in /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php on line 41
+[13-Nov-2025 16:39:55 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php:5) in /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php on line 38
+[13-Nov-2025 16:40:14 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php:5) in /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php on line 38
+[13-Nov-2025 16:41:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php:24) in /home/gesmujer/public_html/SYSGES/pages/eliminar_personal.php on line 38
+[13-Nov-2025 16:44:46 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php:5) in /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php on line 38
+[13-Nov-2025 17:02:52 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php:23) in /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php on line 37
+[13-Nov-2025 17:02:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php:23) in /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php on line 37
+[13-Nov-2025 17:17:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php:23) in /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php on line 37
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:31 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:21:48 UTC] PHP Deprecated:  Function strftime() is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-calendario.php on line 324
+[13-Nov-2025 17:43:05 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:43:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:44:35 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:44:35 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:44:38 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:44:38 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:44:49 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:44:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:44:59 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:44:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:45:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:45:17 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:48:58 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:48:58 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:49:05 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:49:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:49:22 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:49:22 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:49:38 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:49:38 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:49:50 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:49:50 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_feminicidio.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:57:11 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:57:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:57:22 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:57:22 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:57:53 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:57:54 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:58:00 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:58:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:58:37 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:58:37 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:58:53 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:58:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:00:10 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:00:10 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:01:30 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:01:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:01:55 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:01:55 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:01:56 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:01:56 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:01:57 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:01:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:01:58 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:01:58 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:01:59 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:01:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:01:59 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:01:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:02:00 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:02:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:02:00 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:02:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:02:01 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:02:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:02:01 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:02:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:02:02 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:02:02 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:02:03 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:02:03 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:02:04 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:02:04 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-donativo.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:23:32 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:23:32 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/ver-actividades.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:25:00 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 18:25:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/ver-ponentes-diplomado.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 18:29:41 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:29:41 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:29:41 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:29:48 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:29:48 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:29:58 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:29:58 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:31:10 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:31:10 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:32:15 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-seminario.php on line 410
+[13-Nov-2025 18:32:31 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-taller.php on line 402
+[13-Nov-2025 18:32:31 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-taller.php on line 402
+[13-Nov-2025 18:34:34 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-taller.php on line 402
+[13-Nov-2025 18:34:34 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-taller.php on line 402
+[13-Nov-2025 18:36:01 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/pages/ver-taller.php on line 402
+[13-Nov-2025 18:50:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php:23) in /home/gesmujer/public_html/SYSGES/pages/eliminar_usuario.php on line 37
+[13-Nov-2025 20:07:28 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/pages/eliminar-tutor.php:23) in /home/gesmujer/public_html/SYSGES/pages/eliminar-tutor.php on line 37

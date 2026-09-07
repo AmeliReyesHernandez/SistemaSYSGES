@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 // Incluir el archivo de configuración de la base de datos
 require_once __DIR__ . '/../db/config.php';
 
@@ -19,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparar la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Citas (ID_Usuario, ID_Personal, TipoAtencion, Fecha, Hora) 
+        $sql = "INSERT INTO citas (ID_Usuario, ID_Personal, TipoAtencion, Fecha, Hora) 
                 VALUES (?, ?, ?, ?, ?)";
         
         // Preparar la sentencia
@@ -147,7 +143,7 @@ require_once __DIR__ . '/../pages/header.php';
     <div class="row g-5">
     <div class="col-xxl-12 col-xxl-12">
         <h4 class="mb-3">Datos Generales</h4>
-        <form class="needs-validation" action="register-cita.php" method="POST" enctype="multipart/form-data"  novalidate>
+        <form class="needs-validation" action="register-ucita.php" method="POST" enctype="multipart/form-data"  novalidate>
     <div class="row g-3">
 
 
@@ -166,7 +162,7 @@ require_once __DIR__ . '/../pages/header.php';
 <?php
     try {
         // Consulta para obtener los IDs de personal con el nombre completo
-        $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto FROM Personal";
+        $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto FROM personal";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 
@@ -221,7 +217,7 @@ require_once __DIR__ . '/../pages/header.php';
 
             <hr class="my-4">
 
-    <button class="w-100 btn btn-primary btn-lg" type="submit"  onclick="return confirmarEnvio();">Registrar</button>
+    <button class="w-100 btn btn-primary btn-lg" type="submit"  >Registrar</button>
     </form>
     </div>
     </div>

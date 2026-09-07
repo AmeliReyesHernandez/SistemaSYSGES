@@ -30,7 +30,7 @@ try {
         $descripcion_proyecto = $_POST["descripcion_proyecto"];
         $administrador = $_POST["administrador"];
 
-        $sql = "UPDATE Proyectos 
+        $sql = "UPDATE proyectos 
                 SET ID_Personal = :id_personal,
                     NombreProyecto = :nombre_proyecto,
                     MontoFinanciamiento = :monto_financiamiento,
@@ -62,7 +62,7 @@ try {
     }
 
     // Obtener datos actuales del proyecto para precargar en el formulario
-    $stmt = $conn->prepare("SELECT * FROM Proyectos WHERE ID_Proyecto = :id");
+    $stmt = $conn->prepare("SELECT * FROM proyectos WHERE ID_Proyecto = :id");
     $stmt->bindParam(':id', $idProyecto, PDO::PARAM_INT);
     $stmt->execute();
     $proyecto = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -182,7 +182,7 @@ require_once __DIR__ . '/../pages/header.php';
             $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo FROM Personal";
+            $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo FROM personal";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 

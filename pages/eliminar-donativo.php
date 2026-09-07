@@ -1,10 +1,6 @@
-
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-<?php
 require_once __DIR__ . '/../db/config.php'; // Ajusta la ruta si es diferente
 
 // Verificar que venga el ID del donativo
@@ -20,7 +16,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Antes de eliminar, verificar si el donativo existe
-    $check = $conn->prepare("SELECT * FROM Donativos WHERE ID_Donativo = :id");
+    $check = $conn->prepare("SELECT * FROM donativos WHERE ID_Donativo = :id");
     $check->bindParam(':id', $idDonativo, PDO::PARAM_INT);
     $check->execute();
 
@@ -29,7 +25,7 @@ try {
     }
 
     // Intentar eliminar (puede fallar si hay FK relacionadas)
-    $stmt = $conn->prepare("DELETE FROM Donativos WHERE ID_Donativo = :id");
+    $stmt = $conn->prepare("DELETE FROM donativos WHERE ID_Donativo = :id");
     $stmt->bindParam(':id', $idDonativo, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
@@ -44,10 +40,5 @@ try {
     }
 
 } catch (PDOException $e) {
-    // Si hay error de integridad referencial (FK), atraparlo
-    if ($e->getCode() == "23000") {
-        die("No se puede eliminar este donativo porque tiene registros relacionados (por ejemplo: asignaciones o referencias en otra tabla).");
-    } else {
-        die("Error en la base de datos: " . $e->getMessage());
-    }
+    echo  $e;
 }

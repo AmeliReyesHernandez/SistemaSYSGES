@@ -105,13 +105,13 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Traer especialidades
-    $especialidades = $conn->query("SELECT ID_Especialidad, NombreEspecialidad FROM Especialidades ORDER BY NombreEspecialidad ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $especialidades = $conn->query("SELECT ID_Especialidad, NombreEspecialidad FROM especialidades ORDER BY NombreEspecialidad ASC")->fetchAll(PDO::FETCH_ASSOC);
 
     // Traer títulos profesionales
-    $titulos = $conn->query("SELECT ID_Titulo, NombreTitulo FROM TitulosProfesionales ORDER BY NombreTitulo ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $titulos = $conn->query("SELECT ID_Titulo, NombreTitulo FROM titulosprofesionales ORDER BY NombreTitulo ASC")->fetchAll(PDO::FETCH_ASSOC);
 
     // Traer instituciones
-    $instituciones = $conn->query("SELECT ID_Institucion, NombreInstitucion FROM Instituciones ORDER BY NombreInstitucion ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $instituciones = $conn->query("SELECT ID_Institucion, NombreInstitucion FROM instituciones ORDER BY NombreInstitucion ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     die("Error al conectar con la base de datos: " . $e->getMessage());
@@ -245,7 +245,7 @@ require_once __DIR__ . '/../pages/header.php';
     </div>
     <div class="mb-3">
       <label class="form-label">Apellido Paterno</label>
-      <input type="text" name="ApellidoPaterno" class="form-control" value="<?= htmlspecialchars($ponente['ApellidoPaterno']) ?>" required>
+      <input type="text" name="ApellidoPaterno" class="form-control" value="<?= htmlspecialchars($ponente['ApellidoPaterno']) ?>" >
     </div>
     <div class="mb-3">
       <label class="form-label">Apellido Materno</label>
@@ -253,7 +253,7 @@ require_once __DIR__ . '/../pages/header.php';
     </div>
     <div class="mb-3">
       <label class="form-label">Correo</label>
-      <input type="email" name="Correo" class="form-control" value="<?= htmlspecialchars($ponente['Correo']) ?>" required>
+      <input type="email" name="Correo" class="form-control" value="<?= htmlspecialchars($ponente['Correo']) ?>" >
     </div>
     <div class="mb-3">
       <label class="form-label">Teléfono</label>
@@ -263,7 +263,7 @@ require_once __DIR__ . '/../pages/header.php';
    <!-- Especialidad -->
 <div class="mb-3">
   <label class="form-label">Especialidad</label>
-  <select name="especialidad" id="especialidad" class="form-select" required>
+  <select name="especialidad" id="especialidad" class="form-select" >
     <option value="">-- Selecciona una especialidad --</option>
     <?php foreach ($especialidades as $esp): ?>
       <option value="<?= htmlspecialchars($esp['ID_Especialidad']) ?>"
@@ -279,7 +279,7 @@ require_once __DIR__ . '/../pages/header.php';
 <!-- Título Profesional -->
 <div class="mb-3">
   <label class="form-label">Título Profesional</label>
-  <select name="titulo_profesional" id="titulo_profesional" class="form-select" required>
+  <select name="titulo_profesional" id="titulo_profesional" class="form-select" >
     <option value="">-- Selecciona un título profesional --</option>
     <?php foreach ($titulos as $tit): ?>
       <option value="<?= htmlspecialchars($tit['ID_Titulo']) ?>"
@@ -295,7 +295,7 @@ require_once __DIR__ . '/../pages/header.php';
 <!-- Institución -->
 <div class="mb-3">
   <label class="form-label">Institución</label>
-  <select name="institucion" id="institucion" class="form-select" required>
+  <select name="institucion" id="institucion" class="form-select" >
     <option value="">-- Selecciona una institución --</option>
     <?php foreach($instituciones as $inst): ?>
       <option value="<?= htmlspecialchars($inst['ID_Institucion']) ?>"
@@ -310,12 +310,12 @@ require_once __DIR__ . '/../pages/header.php';
 
 <div class="col-sm-12">
     <label class="form-label">Biografía:</label>
-    <textarea class="form-control" name="Biografia" required><?= htmlspecialchars($ponente['Biografia']) ?></textarea>
+    <textarea class="form-control" name="Biografia" ><?= htmlspecialchars($ponente['Biografia']) ?></textarea>
 </div>
 
 <div class="col-sm-12">
     <label class="form-label">Redes Sociales:</label>
-    <textarea class="form-control" name="RedesSociales" required><?= htmlspecialchars($ponente['RedesSociales']) ?></textarea>
+    <textarea class="form-control" name="RedesSociales" ><?= htmlspecialchars($ponente['RedesSociales']) ?></textarea>
 </div>
 
 
@@ -416,7 +416,7 @@ require_once __DIR__ . '/../pages/header.php';
         <div id="instAlert" class="alert alert-danger d-none"></div>
         <div class="mb-3">
           <label>Nombre de la Institución</label>
-          <input type="text" name="nueva_institucion" class="form-control" required>
+          <input type="text" name="nueva_institucion" class="form-control" >
         </div>
         <div class="mb-3">
           <label>Descripción</label>

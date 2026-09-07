@@ -322,15 +322,7 @@ try {
 
 <?php
 require_once __DIR__ . '/../pages/header.php';
-?>
 
-
-
-
-
-
-
-<?php
 require_once __DIR__ . '/../pages/footer.php';
 ?>
 <!-- Termina -->
@@ -359,8 +351,8 @@ try {
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Talleres";
-    $countQuery = "SELECT COUNT(*) FROM Talleres";
+    $query = "SELECT * FROM talleres";
+    $countQuery = "SELECT COUNT(*) FROM talleres";
 
     $condiciones = [];
     $params = [];

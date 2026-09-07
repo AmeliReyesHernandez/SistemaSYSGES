@@ -318,7 +318,7 @@ require_once __DIR__ . '/../db/config.php';
 
 try {
     // Inicializar la consulta SQL
-    $query = "SELECT * FROM Personal";
+    $query = "SELECT * FROM personal";
 
     // Verificar si se envió una consulta de búsqueda
     if (isset($_GET['search']) && !empty($_GET['search'])) {

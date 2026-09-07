@@ -1,9 +1,5 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
-
-?>
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 if (!isset($_GET['id'])) {
@@ -21,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tipo_donacion = $_POST["tipo_donacion"];
 
     try {
-        $sql = "UPDATE Donativos 
+        $sql = "UPDATE donativos 
                 SET ID_Donante = ?, MontoDonacion = ?, TipoDonacion = ?
                 WHERE ID_Donativo = ?";
         $stmt = $conn->prepare($sql);
@@ -43,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$sql = "SELECT * FROM Donativos WHERE ID_Donativo = ?";
+$sql = "SELECT * FROM donativos WHERE ID_Donativo = ?";
 $stmt = $conn->prepare($sql);
 $stmt->execute([$id_donativo]);
 $donativo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -157,7 +153,7 @@ require_once __DIR__ . '/../pages/header.php';
           <label for="id_donante" class="form-label">Nombre del Donante</label>
           <select name="id_donante" class="form-select" id="id_donante" required>
             <?php
-              $sqlDonantes = "SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto FROM Donantes";
+              $sqlDonantes = "SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto FROM donantes";
               $stmtDonantes = $conn->query($sqlDonantes);
 
               while ($row = $stmtDonantes->fetch(PDO::FETCH_ASSOC)) {

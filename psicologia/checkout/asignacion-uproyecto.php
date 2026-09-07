@@ -13,10 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparar la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Asignaciones (ID_Usuario, ID_Proyecto) VALUES (?, ?)";
+        $sql = "INSERT INTO asignaciones (ID_Usuario, ID_Proyecto) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
 
-        // Vincular los parámetros
+        // Vincular los par谩metros
         $stmt->bindParam(1, $id_usuario);
         $stmt->bindParam(2, $id_proyecto);
 
@@ -29,11 +29,10 @@ exit();
 exit();
     }
 
-    // Cerrar la conexión
-    $conn = null;
+ 
 }
 
-// Recuperar los parámetros de la URL
+// Recuperar los par谩metros de la URL
 $id_usuario = isset($_GET['id_usuario']) ? $_GET['id_usuario'] : '';
 $nombre_usuario = isset($_GET['nombre_usuario']) ? urldecode($_GET['nombre_usuario']) : '';
 
@@ -124,7 +123,7 @@ require_once __DIR__ . '/../pages/header.php';
         <main>
     <div class="py-5 text-center">
     <img class="d-block mx-auto mb-4" src="../assets/img/logo 1.png" alt="" width="100" height="100">
-        <h2>Asignación de Proyectos</h2>
+        <h2>Asignaci贸n de Proyectos</h2>
         <p class="lead">Este formulario se utiliza para asignar proyectos a usuarios.</p>
 
     </div>
@@ -152,7 +151,7 @@ require_once __DIR__ . '/../pages/header.php';
         <select name="id_proyecto" class="form-select"  id="id_proyecto">
         <?php
                 try {
-                    $sql = "SELECT ID_Proyecto, NombreProyecto FROM Proyectos";
+                    $sql = "SELECT ID_Proyecto, NombreProyecto FROM proyectos";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
 
@@ -164,7 +163,7 @@ require_once __DIR__ . '/../pages/header.php';
                         echo "<option value=''>No hay proyectos disponibles</option>";
                     }
 
-                    $conn = null; // Cerrar la conexión
+                    $conn = null; // Cerrar la conexi贸n
                 } catch(PDOException $e) {
                     echo "<option value=''>Error al obtener los proyectos</option>";
                 }

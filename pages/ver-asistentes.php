@@ -29,16 +29,16 @@ try {
     $query = "
         SELECT ap.ID_Asignacion, d.ID_Diplomado, d.NombreDiplomado, p.Nombre, ap.FechaAsignacion
         FROM asignacionponente ap
-        LEFT JOIN Diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
-        LEFT JOIN Ponentes p ON ap.ID_Ponente = p.ID_Ponente
+        LEFT JOIN diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
+        LEFT JOIN ponentes p ON ap.ID_Ponente = p.ID_Ponente
     ";
 
     // Consulta para contar registros con los mismos JOIN
     $countQuery = "
         SELECT COUNT(*)
         FROM asignacionponente ap
-        LEFT JOIN Diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
-        LEFT JOIN Ponentes p ON ap.ID_Ponente = p.ID_Ponente
+        LEFT JOIN diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
+        LEFT JOIN ponentes p ON ap.ID_Ponente = p.ID_Ponente
     ";
 
     $condiciones = [];

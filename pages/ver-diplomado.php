@@ -361,7 +361,7 @@ try {
            <td><?= htmlspecialchars($d['FechaInicio']) ?></td>
           <td><?= htmlspecialchars($d['FechaFin']) ?></td>
           <td>
-            <a href="/ERP/ERP_IRP/checkout/editar_diplomado.php?id=<?= $d['ID_Diplomado'] ?>" class="btn btn-sm btn-warning">Editar</a>
+            <a href="./../checkout/editar_diplomado.php?id=<?= $d['ID_Diplomado'] ?>" class="btn btn-sm btn-warning">Editar</a>
             <button class="btn btn-sm btn-danger eliminar-diplomado" data-id="<?= $d['ID_Diplomado'] ?>">Eliminar</button>
           </td>
         </tr>

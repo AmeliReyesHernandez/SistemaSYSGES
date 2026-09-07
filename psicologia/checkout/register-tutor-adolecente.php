@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-<?php
 require_once __DIR__ . '/../db/config.php';
 // Verificar si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $rutaINE = $_FILES['rutaINE']['name'];
     $rutaComDomicilio = $_FILES['rutaComDomicilio']['name'];
 
-    $carpeta_destino = '/xampp/htdocs/ERP/ERP_IRP/uploads/documents/';   // Ruta donde guardar los archivos subidos
+    $carpeta_destino = '../uploads/documents/';   // Ruta donde guardar los archivos subidos
     move_uploaded_file($_FILES['rutaCURP']['tmp_name'], $carpeta_destino . $rutaCURP);
     move_uploaded_file($_FILES['rutaINE']['tmp_name'], $carpeta_destino . $rutaINE);
     move_uploaded_file($_FILES['rutaComDomicilio']['tmp_name'], $carpeta_destino . $rutaComDomicilio);
@@ -36,7 +34,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     
     $discapacidads = !empty($_POST['discapacidads']) ? $_POST['discapacidads'] : '-';
-    $discapacidad = !empty($_POST['discapacidad']) ? $_POST['discapacidad'] : '-';
+    
+    
+    
+        $discapacidads = !empty($_POST['discapacidads']) ? $_POST['discapacidads'] : '-';
+    if ($_POST['discapacidads'] == 'SI') {
+    // Convertir el arreglo a texto separado por comas
+    $discapacidad = implode(",", $_POST['discapacidad']);
+} else {
+    // Si es NO, no hay discapacidades
+    $discapacidad = "";
+}
+    
+    
+  // $discapacidad = !empty($_POST['discapacidad']) ? $_POST['discapacidad'] : '-';
 
     $decendencia = !empty($_POST['decendencia']) ? $_POST['decendencia'] : '-';
     $numDecendencia = !empty($_POST['numDecendencia']) ? $_POST['numDecendencia'] : '-';
@@ -361,15 +372,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id_tipo_violencia"])) 
             }
             
             // echo '<script>alert("Formulario enviado correctamente");</script>';
-            echo '<script>window.close();</script>';
+            //echo '<script>window.close();</script>';
         } catch(PDOException $e) {
             // Manejar errores de manera adecuada
-            echo "Error al insertar el registro: " . $e->getMessage();
+            //echo "Error al insertar el registro: " . $e->getMessage();
         }
     }
 } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Si se envió el formulario pero no se recibieron datos de tipos de violencia, mostrar una alerta
-    echo "<script>alert('No se han recibido datos de tipos de violencia.');</script>";
+    //echo "<script>alert('No se han recibido datos de tipos de violencia.');</script>";
 }
 
 
@@ -423,8 +434,8 @@ if(isset($_POST['hijos2']) && is_array($_POST['hijos2'])) {
 
 
 // Datos a insertar (puedes recibirlos de un formulario POST)
-$id_tutor   = $conn->lastInsertId();
-$id_personal  = $_POST['id_personal'];
+
+$id_personal2  = $_POST['id_personal'];
 $observaciones = "SIN DATOS";
 
 try {
@@ -432,13 +443,13 @@ try {
             VALUES (:id_tutor, :id_personal, :observaciones)";
     $stmt = $conn->prepare($sql);
 
-    $stmt->bindParam(':id_tutor', $id_usuario, PDO::PARAM_INT);
+    $stmt->bindParam(':id_tutor', $userId, PDO::PARAM_INT);
     $stmt->bindParam(':id_personal', $id_personal2, PDO::PARAM_INT);
     $stmt->bindParam(':observaciones', $observaciones, PDO::PARAM_STR);
 
     $stmt->execute();
 
-    echo "Registro de atención creado correctamente. ID: " . $conn->lastInsertId();
+    //echo "Registro de atención creado correctamente. ID: " . $conn->lastInsertId();
 } catch(PDOException $e) {
     echo "Error al registrar atención: " . $e->getMessage();
 }
@@ -447,7 +458,7 @@ try {
 
 
 // Datos a insertar (puedes recibirlos de un formulario POST)
-$id_tutor   = $conn->lastInsertId();
+//$id_tutor   = $conn->lastInsertId();
 $id_personal2  = $_POST['id_personal2'];
 $observaciones = "SIN DATOS";
 
@@ -456,15 +467,15 @@ try {
             VALUES (:id_tutor, :id_personal2, :observaciones)";
     $stmt = $conn->prepare($sql);
 
-    $stmt->bindParam(':id_tutor', $id_usuario, PDO::PARAM_INT);
+    $stmt->bindParam(':id_tutor', $userId, PDO::PARAM_INT);
     $stmt->bindParam(':id_personal2', $id_personal2, PDO::PARAM_INT);
     $stmt->bindParam(':observaciones', $observaciones, PDO::PARAM_STR);
 
     $stmt->execute();
 
-    echo "Registro de atención creado correctamente. ID: " . $conn->lastInsertId();
+    //echo "Registro de atención creado correctamente. ID: " . $conn->lastInsertId();
 } catch(PDOException $e) {
-    echo "Error al registrar atención: " . $e->getMessage();
+    echo "Error al registrar atención vvvv: " . $e->getMessage();
 }
 
 
@@ -571,8 +582,6 @@ require_once __DIR__ . '/../pages/header.php';
         </li>
       </ul>
     </div>
-
- 
 
     
         <div class="container">
@@ -867,14 +876,14 @@ input.addEventListener('blur', () => {
 
              <div class="col-sm-6">
         <label for="telFijo" class="form-label">Teléfono fijo</label>
-        <input type="number" class="form-control" id="telFijo" name="telFijo" placeholder="" >
+        <input type="number" class="form-control" id="telFijoS" name="telFijo" placeholder="" >
         <div class="invalid-feedback">Se requiere un número de teléfono fijo válido.</div>
     </div>
     
 
     <div class="col-sm-6">
         <label for="telCelular" class="form-label">Teléfono celular</label>
-        <input type="number" class="form-control" id="telCelular" name="telCelular" placeholder="">
+        <input type="number" class="form-control" id="telCelularS" name="telCelular" placeholder="">
         <div class="invalid-feedback">Se requiere un número de teléfono celular válido.</div>
     </div>
 
@@ -882,7 +891,7 @@ input.addEventListener('blur', () => {
         <label for="email" class="form-label">Correo electrónico</label>
         <div class="input-group has-validation">
         <span class="input-group-text">@</span>
-        <input type="email" class="form-control" maxlength="50" id="email" name="email" placeholder="Correo electrónico">
+        <input type="email" class="form-control" maxlength="50" id="emailS" name="email" placeholder="Correo electrónico">
         <div class="invalid-feedback">Se requiere una dirección de correo electrónico válida.</div>
         </div>
     </div>
@@ -891,7 +900,7 @@ input.addEventListener('blur', () => {
         <label for="emailRespaldo" class="form-label">Correo electrónico de respaldo<span class="text-body-secondary">(Opcional)</span></label>
         <div class="input-group has-validation">
         <span class="input-group-text">@</span>
-        <input type="email" class="form-control" maxlength="50" id="emailRespaldo" name="emailRespaldo" placeholder="Correo electrónico">
+        <input type="email" class="form-control" maxlength="50" id="emailRespaldoS" name="emailRespaldo" placeholder="Correo electrónico">
     </div>
 </DIV>
 
@@ -899,7 +908,7 @@ input.addEventListener('blur', () => {
    
     <div class="col-sm-6">
         <label for="telConfianza" class="form-label">Teléfono de confianza</label>
-        <input type="number" class="form-control" id="telConfianza" name="telConfianza" placeholder="">
+        <input type="number" class="form-control" id="telConfianzaS" name="telConfianza" placeholder="">
         <div class="invalid-feedback">Se requiere un número de teléfono de confianza válido.</div>
     </div>
 
@@ -933,7 +942,7 @@ input.addEventListener('blur', () => {
 </div>
 
 
- <h4>Datos de Orientacion Social</h4>
+ <h4>Datos de Orientacion Sexual</h4>
             <hr class="my-4">
 
            <div class="col-sm-6">
@@ -984,16 +993,16 @@ input.addEventListener('blur', () => {
   <label for="estadoCivil" class="form-label">ESTADO CIVIL</label>
   <select class="form-select" id="estadoCivil" name="estadocivil" >
     <option selected disabled value="">SELECCIONAR ESTADO CIVIL...</option>
-    <option value="SOLTERO">SOLTERO/A</option>
-    <option value="CASADO">CASADO/A</option>
-    <option value="DIVORCIADO">DIVORCIADO/A</option>
-    <option value="VIUDO">VIUDO/A</option>
+    <option value="SOLTERA">SOLTERO/A</option>
+    <option value="CASADA">CASADO/A</option>
+    <option value="DIVORCIADA">DIVORCIADO/A</option>
+    <option value="VIUDA">VIUDO/A</option>
     <option value="UNION_LIBRE">UNIÓN LIBRE</option>
-    <option value="SEPARADO">SEPARADO/A</option>
-    <option value="COMPROMETIDO">COMPROMETIDO/A</option>
-    <option value="CONCUBINATO">CONCUBINATO</option>
-    <option value="PAREJA_DE_HECHO">PAREJA DE HECHO</option>
-    <option value="ANULADO">MATRIMONIO ANULADO</option>
+    <option value="SEPARADA">SEPARADO/A</option>
+    <option value="COMPROMETIDA">COMPROMETIDO/A</option>
+    <option value="CONCUBINATA">CONCUBINATO</option>
+    <option value="PAREJA_DE_HECHA">PAREJA DE HECHO</option>
+    <option value="ANULADA">MATRIMONIO ANULADO</option>
     <option value="OTRO">OTRO</option>
   </select>
   <div class="invalid-feedback">
@@ -1600,43 +1609,66 @@ function generarCamposHijos() {
     </div>
 
 
-    <div class="col-sm-6">
+
+
+
+
+
+<div class="col-sm-6">
   <label class="form-label">¿PRESENTA ALGUNA DISCAPACIDAD?</label>
+
   <div class="form-check">
-    <input class="form-check-input" type="radio" name="discapacidads" id="discapacidadSi" value="SI" onclick="showDiscapacidadSelect()">
+    <input class="form-check-input" type="radio" name="discapacidads" id="discapacidadSi" value="SI"
+      onclick="showDiscapacidadCheckbox()">
     <label class="form-check-label" for="discapacidadSi">SÍ</label>
   </div>
+
   <div class="form-check">
-    <input class="form-check-input" type="radio" name="discapacidads" id="discapacidadNo" value="NO" onclick="hideDiscapacidadSelect()">
+    <input class="form-check-input" type="radio" name="discapacidads" id="discapacidadNo" value="NO"
+      onclick="hideDiscapacidadCheckbox()">
     <label class="form-check-label" for="discapacidadNo">NO</label>
   </div>
 </div>
 
-<div class="col-sm-6" id="discapacidadSelectContainer" style="display: none;">
-  <label for="tipoDiscapacidad" class="form-label">¿CUÁL?</label>
-  <select class="form-select" id="tipoDiscapacidad" name="discapacidad">
-    <option selected disabled value="">SELECCIONAR TIPO...</option>
-    <option value="MOTRIZ">MOTRIZ</option>
-    <option value="VISUAL">VISUAL</option>
-    <option value="AUDITIVA">AUDITIVA</option>
-    <option value="INTELECTUAL">INTELECTUAL</option>
-    <option value="DEL LENGUAJE">DEL LENGUAJE</option>
-    <option value="PSICOSOCIAL">PSICOSOCIAL</option>
-    <option value="MULTIPLE">MÚLTIPLE</option>
-    <option value="OTRA">OTRA</option>
-  </select>
+<div class="col-sm-6" id="discapacidadCheckboxContainer" style="display: none;">
+  <label class="form-label">¿CUÁL?</label><br>
+
+  <?php
+    $listaDiscapacidades = [
+      "MOTRIZ",
+      "VISUAL",
+      "AUDITIVA",
+      "INTELECTUAL",
+      "DEL LENGUAJE",
+      "PSICOSOCIAL",
+      "MULTIPLE",
+      "OTRA"
+    ];
+
+    foreach ($listaDiscapacidades as $opc):
+  ?>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="discapacidad[]" value="<?= $opc ?>">
+      <label class="form-check-label"><?= ucwords(strtolower($opc)) ?></label>
+    </div>
+  <?php endforeach; ?>
 </div>
 
 <script>
-  function showDiscapacidadSelect() {
-    document.getElementById('discapacidadSelectContainer').style.display = 'block';
+  function showDiscapacidadCheckbox() {
+    document.getElementById('discapacidadCheckboxContainer').style.display = 'block';
   }
 
-  function hideDiscapacidadSelect() {
-    document.getElementById('discapacidadSelectContainer').style.display = 'none';
-    document.getElementById('tipoDiscapacidad').value = ''; // Limpia selección
+  function hideDiscapacidadCheckbox() {
+    document.getElementById('discapacidadCheckboxContainer').style.display = 'none';
+
+    // Desmarcar todos los checkbox
+    document.querySelectorAll('#discapacidadCheckboxContainer input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+    });
   }
 </script>
+
 
 
     
@@ -2105,7 +2137,7 @@ function generarCamposHijos() {
   <label for="apoyosSociales" class="form-label">Otros Ingresos</label>
   <select class="form-select" id="apoyosSociales" name="apoyosSociales">
     <option value="">Selecciona una Opcion</option>
-    <option value="PROSPERA">PROSPERA</option>
+    <option value="APOYOS SOCIALES">APOYOS SOCIALES</option>
     <option value="PENSION_ADULTO_MAYOR">PENSIÓN ADULTO MAYOR</option>
     <option value="PENSION_DISCAPACIDAD">PENSIÓN DISCAPACIDAD</option>
      <option value="SUBSIDIO">SUBSIDIO</option>
@@ -2114,6 +2146,7 @@ function generarCamposHijos() {
     <option value="OTRO">OTRO</option>
   </select>
 </div>
+
 
 
 
@@ -3302,7 +3335,7 @@ function generarCamposHijos() {
 
     <?php
       try {
-          $sql = "SELECT ID_Tipo_Violencia, Nombre_tipo FROM Tipos_Violencia";
+          $sql = "SELECT ID_Tipo_Violencia, Nombre_tipo FROM tipos_violencia";
           $stmt = $conn->prepare($sql);
           $stmt->execute();
 

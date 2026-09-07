@@ -320,8 +320,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Donantes";
-    $countQuery = "SELECT COUNT(*) FROM Donantes";
+    $query = "SELECT * FROM donantes";
+    $countQuery = "SELECT COUNT(*) FROM donantes";
 
     $condiciones = [];
     $params = [];
@@ -370,7 +370,7 @@ try {
         echo "<td>{$donante['Telefono']}</td>";
 
         echo "<td>";
-        echo "<a href='../checkout/editar-donante.php?id={$donante['ID_Donante']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
+        echo "<a href='./../checkout/editar-donante.php?id={$donante['ID_Donante']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
         echo "<button class='btn btn-danger btn-sm eliminar-donante' data-id='{$donante['ID_Donante']}'><i class='bi bi-trash3-fill'></i></button>";
         echo "</td>";
         echo "</tr>";

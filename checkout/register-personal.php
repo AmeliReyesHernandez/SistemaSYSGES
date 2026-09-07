@@ -1,10 +1,8 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-<?php
 require_once __DIR__ . '/../db/config.php';
- $instituciones = $conn->query("SELECT ID_Institucion, NombreInstitucion FROM Instituciones ORDER BY NombreInstitucion ASC")->fetchAll(PDO::FETCH_ASSOC);
+ $instituciones = $conn->query("SELECT ID_Institucion, NombreInstitucion FROM instituciones ORDER BY NombreInstitucion ASC")->fetchAll(PDO::FETCH_ASSOC);
 // Verificamos si se recibieron datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recibimos los datos del formulario
@@ -64,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparamos la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Personal (ID_Rol, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Calle, NumInterior, NumExterior, CP, Estado, Municipio, Colonia, Region, PaisProcedencia, DireccionTemporal, Sexo, Genero, Email, Tel, NombreContactoEmergencia, TelContactoEmergencia, GradoAcademico, Institucion, AreaAsignada, EstatusPersonal, FechaIngreso, FechaTermino, ClasificacionPersonal, ProblemasSaludConsiderables, ProblemasMovilidad, Observaciones,foto, Password) 
+        $sql = "INSERT INTO personal (ID_Rol, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Calle, NumInterior, NumExterior, CP, Estado, Municipio, Colonia, Region, PaisProcedencia, DireccionTemporal, Sexo, Genero, Email, Tel, NombreContactoEmergencia, TelContactoEmergencia, GradoAcademico, Institucion, AreaAsignada, EstatusPersonal, FechaIngreso, FechaTermino, ClasificacionPersonal, ProblemasSaludConsiderables, ProblemasMovilidad, Observaciones,foto, Password) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         // Preparamos la sentencia
@@ -280,7 +278,7 @@ require_once __DIR__ . '/../pages/header.php';
 
     <div class="col-sm-6">
         <label for="calle" class="form-label">Calle</label>
-        <input type="text" class="form-control" id="calle" name="calle" placeholder="">
+        <input type="text" class="form-control" id="firstName" name="calle" placeholder="">
         <div class="invalid-feedback">Se requiere una calle válida.</div>
     </div>
 
@@ -782,7 +780,7 @@ function populateFields(details) {
     </div> -->
 <div class="mb-3">
   <label class="form-label">Institución</label>
-  <select name="institucion" id="institucion" class="form-select" required>
+  <select name="institucion" id="institucion" class="form-select">
     <option value="">-- Selecciona una institución --</option>
     <?php foreach($instituciones as $inst): ?>
       <option value="<?= htmlspecialchars($inst['ID_Institucion']) ?>">
@@ -920,7 +918,7 @@ function populateFields(details) {
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             // Consulta para obtener los roles disponibles
-            $sql = "SELECT ID_Rol, Descripcion FROM Rol";
+            $sql = "SELECT ID_Rol, Descripcion FROM rol";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 

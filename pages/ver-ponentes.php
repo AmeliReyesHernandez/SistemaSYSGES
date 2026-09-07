@@ -318,8 +318,8 @@ require_once __DIR__ . '/../db/config.php';
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Ponentes";
-    $countQuery = "SELECT COUNT(*) FROM Ponentes";
+    $query = "SELECT * FROM ponentes";
+    $countQuery = "SELECT COUNT(*) FROM ponentes";
 
     $condiciones = [];
     $params = [];
@@ -433,10 +433,10 @@ require_once __DIR__ . '/../db/config.php';
             $sql = "SELECT p.ID_Ponente, p.Nombre, p.ApellidoPaterno, p.ApellidoMaterno, 
                            p.Correo, p.Telefono, p.Biografia, p.Foto, p.RedesSociales,
                            e.NombreEspecialidad, t.NombreTitulo, i.NombreInstitucion
-                    FROM Ponentes p
-                    LEFT JOIN Especialidades e ON p.ID_Especialidad = e.ID_Especialidad
-                    LEFT JOIN TitulosProfesionales t ON p.ID_Titulo = t.ID_Titulo
-                    LEFT JOIN Instituciones i ON p.ID_Institucion = i.ID_Institucion";
+                    FROM ponentes p
+                    LEFT JOIN especialidades e ON p.ID_Especialidad = e.ID_Especialidad
+                    LEFT JOIN titulosprofesionales t ON p.ID_Titulo = t.ID_Titulo
+                    LEFT JOIN instituciones i ON p.ID_Institucion = i.ID_Institucion";
 
             if (isset($_GET['search']) && !empty($_GET['search'])) {
                 $search = $conn->real_escape_string($_GET['search']);
@@ -473,7 +473,7 @@ require_once __DIR__ . '/../db/config.php';
           <td><?= htmlspecialchars($row['Biografia'] ?? 'N/A') ?></td>
           <td><?= htmlspecialchars($row['RedesSociales'] ?? 'N/A') ?></td>
           <td>
-                <a href="/ERP/ERP_IRP/checkout/editar_ponente.php?id=<?= htmlspecialchars($row['ID_Ponente']) ?>" 
+                <a href="./../checkout/editar_ponente.php?id=<?= htmlspecialchars($row['ID_Ponente']) ?>" 
                    class="btn btn-primary btn-sm mb-1">
                    <i ></i> Editar....
                 </a>
@@ -590,7 +590,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
+<?php if (isset($_GET['status'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: "<?= $_GET['status'] === 'success' ? 'success' : 'error' ?>",
+            title: "<?= $_GET['status'] === 'success' ? 'Ponente Registrado correctamente' : 'Error al registrar' ?>",
+            text: "<?= $_GET['status'] === 'error' ? urldecode($_GET['msg']) : '' ?>",
+            showConfirmButton: false,
+            timer: 2000, // ⏱️ 2 segundos
+            timerProgressBar: true
+        });
+    </script>
+<?php endif; ?>
 
 
 

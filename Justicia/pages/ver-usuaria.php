@@ -379,8 +379,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Usuario";
-    $countQuery = "SELECT COUNT(*) FROM Usuario";
+    $query = "SELECT * FROM usuario";
+    $countQuery = "SELECT COUNT(*) FROM usuario";
 
     // Arreglo de condiciones
     $condiciones = [];

@@ -14,14 +14,14 @@ try {
     $query = "
         SELECT sp.ID_Asignacion, s.Nombre AS NombreSeminario, p.Nombre AS NombrePonente, sp.FechaAsignacion
         FROM asignacion_ponente_seminario sp
-        LEFT JOIN Seminarios s ON sp.ID_Seminario = s.ID_Seminario
-        LEFT JOIN Ponentes p ON sp.ID_Ponente = p.ID_Ponente
+        LEFT JOIN seminarios s ON sp.ID_Seminario = s.ID_Seminario
+        LEFT JOIN ponentes p ON sp.ID_Ponente = p.ID_Ponente
     ";
 
     $countQuery = "SELECT COUNT(*) 
                    FROM asignacion_ponente_seminario sp
-                   LEFT JOIN Seminarios s ON sp.ID_Seminario = s.ID_Seminario
-                   LEFT JOIN Ponentes p ON sp.ID_Ponente = p.ID_Ponente";
+                   LEFT JOIN seminarios s ON sp.ID_Seminario = s.ID_Seminario
+                   LEFT JOIN ponentes p ON sp.ID_Ponente = p.ID_Ponente";
 
     $condiciones = [];
     $params = [];

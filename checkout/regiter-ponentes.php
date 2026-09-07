@@ -156,13 +156,13 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Traer especialidades
-    $especialidades = $conn->query("SELECT ID_Especialidad, NombreEspecialidad FROM Especialidades ORDER BY NombreEspecialidad ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $especialidades = $conn->query("SELECT ID_Especialidad, NombreEspecialidad FROM especialidades ORDER BY NombreEspecialidad ASC")->fetchAll(PDO::FETCH_ASSOC);
 
     // Traer títulos profesionales
-    $titulos = $conn->query("SELECT ID_Titulo, NombreTitulo FROM TitulosProfesionales ORDER BY NombreTitulo ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $titulos = $conn->query("SELECT ID_Titulo, NombreTitulo FROM titulosprofesionales ORDER BY NombreTitulo ASC")->fetchAll(PDO::FETCH_ASSOC);
 
     // Traer instituciones
-    $instituciones = $conn->query("SELECT ID_Institucion, NombreInstitucion FROM Instituciones ORDER BY NombreInstitucion ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $instituciones = $conn->query("SELECT ID_Institucion, NombreInstitucion FROM instituciones ORDER BY NombreInstitucion ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     die("Error al conectar con la base de datos: " . $e->getMessage());
@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        $sql = "INSERT INTO Ponentes 
+        $sql = "INSERT INTO ponentes 
                 (Nombre, ApellidoPaterno, ApellidoMaterno, Correo, Telefono, ID_Especialidad, 
                  ID_Titulo, ID_Institucion, Biografia, Foto, RedesSociales) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -491,7 +491,7 @@ require_once __DIR__ . '/../pages/header.php';
 
         <div class="col-sm-6">
             <label class="form-label">Correo electrónico:</label>
-            <input type="email" class="form-control" name="email" required>
+            <input type="email" class="form-control" name="email" >
         </div>
 
         <div class="col-sm-6">
@@ -501,9 +501,10 @@ require_once __DIR__ . '/../pages/header.php';
 
           <!-- SELECT de especialidad -->
            <!-- Especialidad -->
-    <div class="mb-3">
+           
+    <div class="col-sm-6">
       <label class="form-label">Especialidad</label>
-      <select name="especialidad" id="especialidad" class="form-select" required>
+      <select name="especialidad" id="especialidad" class="form-select" >
         <option value="">-- Selecciona una especialidad --</option>
         <?php foreach ($especialidades as $esp): ?>
           <option value="<?= htmlspecialchars($esp['ID_Especialidad']) ?>">
@@ -516,9 +517,9 @@ require_once __DIR__ . '/../pages/header.php';
     </div>
 
 <!-- Título Profesional -->
-<div class="mb-3">
+<div class="col-sm-6">
   <label class="form-label">Título Profesional</label>
-  <select name="titulo_profesional" id="titulo_profesional" class="form-select" required>
+  <select name="titulo_profesional" id="titulo_profesional" class="form-select" >
     <option value="">-- Selecciona un título profesional --</option>
     <?php foreach ($titulos as $tit): ?>
       <option value="<?= htmlspecialchars($tit['ID_Titulo']) ?>">
@@ -532,9 +533,9 @@ require_once __DIR__ . '/../pages/header.php';
 
 
 <!-- Institución -->
-<div class="mb-3">
+<div class="col-sm-6">
   <label class="form-label">Institución</label>
-  <select name="institucion" id="institucion" class="form-select" required>
+  <select name="institucion" id="institucion" class="form-select" >
     <option value="">-- Selecciona una institución --</option>
     <?php foreach($instituciones as $inst): ?>
       <option value="<?= htmlspecialchars($inst['ID_Institucion']) ?>">
@@ -546,17 +547,17 @@ require_once __DIR__ . '/../pages/header.php';
   <div class="invalid-feedback">Selecciona una institución.</div>
     </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <label class="form-label">Biografía:</label>
             <textarea class="form-control" name="biografia" rows="3"></textarea>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <label class="form-label">Redes Sociales:</label>
             <textarea class="form-control" name="redes_sociales" rows="2"></textarea>
         </div>
 
-      <div class="mb-3">
+      <div class="col-sm-6">
   <label class="form-label">Foto</label><br>
   <?php if (!empty($ponente['Foto'])): ?>
     <img src="../uploads/ponentes/<?= htmlspecialchars($ponente['Foto']) ?>" 
@@ -1092,7 +1093,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nueva_especialidad'])
             $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $stmt = $conn->prepare("INSERT INTO Especialidades (NombreEspecialidad) VALUES (:nombre)");
+            $stmt = $conn->prepare("INSERT INTO especialidades (NombreEspecialidad) VALUES (:nombre)");
             $stmt->bindParam(':nombre', $nueva_especialidad, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -1108,7 +1109,7 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $especialidades = $conn->query("SELECT ID_Especialidad, NombreEspecialidad FROM Especialidades ORDER BY NombreEspecialidad")->fetchAll(PDO::FETCH_ASSOC);
+    $especialidades = $conn->query("SELECT ID_Especialidad, NombreEspecialidad FROM especialidades ORDER BY NombreEspecialidad")->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error de conexión: " . $e->getMessage();
 }

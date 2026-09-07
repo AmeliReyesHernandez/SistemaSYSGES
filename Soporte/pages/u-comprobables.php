@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/seccion.php';
 ?>
-
-
-
-
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head><script src="../assets/js/color-modes.js"></script>
@@ -323,8 +319,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Usuario";
-    $countQuery = "SELECT COUNT(*) FROM Usuario";
+    $query = "SELECT * FROM usuario";
+    $countQuery = "SELECT COUNT(*) FROM usuario";
 
     $condiciones = [];
     $params = [];

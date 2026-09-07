@@ -1,9 +1,10 @@
 <?php
 // conexion.php
+
 $host = 'localhost';
-$db   = 'oaxacaa';
-$user = 'root';
-$pass = '';
+$db = 'gesmujer_oaxaca';
+$user = 'gesmujer_sigdadmin';
+$pass = 'uU362-&Hfd';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

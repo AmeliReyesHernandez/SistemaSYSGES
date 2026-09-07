@@ -333,8 +333,8 @@ try {
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Personal";
-    $countQuery = "SELECT COUNT(*) FROM Personal";
+    $query = "SELECT * FROM personal";
+    $countQuery = "SELECT COUNT(*) FROM personal";
 
     $condiciones = [];
     $params = [];
@@ -403,7 +403,7 @@ echo "</td>";
         echo "<td>{$personal['Sexo']}</td>";
         echo "<td>{$personal['Genero']}</td>";
         echo "<td>";
-        echo "<a href='../checkout/editar-personal.php?id={$personal['ID_Personal']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
+        echo "<a href='./../checkout/editar-personal.php?id={$personal['ID_Personal']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
         echo "<button class='btn btn-danger btn-sm eliminar-personal' data-id='{$personal['ID_Personal']}'><i class='bi bi-trash3-fill'></i></button>";
         echo "</td>";
         echo "</tr>";
@@ -469,6 +469,21 @@ echo "</td>";
             icon: "<?= $_GET['status'] === 'success' ? 'success' : 'error' ?>",
             title: "<?= $_GET['status'] === 'success' ? 'Personal registrado correctamente' : 'Error al registrar' ?>",
             text: "<?= $_GET['status'] === 'error' ? urldecode($_GET['msg']) : '' ?>",
+            showConfirmButton: false,
+            timer: 2000, // ⏱️ 2 segundos
+            timerProgressBar: true
+        });
+    </script>
+<?php endif; ?>
+
+
+<?php if (isset($_GET['statuss'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: "<?= $_GET['statuss'] === 'success' ? 'success' : 'error' ?>",
+            title: "<?= $_GET['statuss'] === 'success' ? 'Personal Actualizado correctamente' : 'Error al registrar' ?>",
+            text: "<?= $_GET['statuss'] === 'error' ? urldecode($_GET['msg']) : '' ?>",
             showConfirmButton: false,
             timer: 2000, // ⏱️ 2 segundos
             timerProgressBar: true

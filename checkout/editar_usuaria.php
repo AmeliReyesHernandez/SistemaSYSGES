@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 ini_set('display_errors', 1);
@@ -15,7 +13,7 @@ try {
 
      $mensaje = "";
 $tipoMensaje = "";
-    $stmt = $conn->prepare("SELECT * FROM Usuario WHERE id = :id");
+    $stmt = $conn->prepare("SELECT * FROM usuario WHERE id = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -238,7 +236,20 @@ $vlDetalles              = $_POST['vlDetalles'];
         $escolaridad = $_POST['escolaridad'];
         $estadocivil = $_POST['estadocivil'];
         $orientacionSexual = $_POST['orientacionSexual'];
-        $discapacidad = $_POST['discapacidad'];
+        
+        
+        
+        if ($_POST['discapacidads'] == "SI") {
+    $discapacidad = implode(",", $_POST['discapacidad']);
+} else {
+    $discapacidad = "";
+}
+
+        
+        
+        
+        
+        //$discapacidad = $_POST['discapacidad'];
         
         $calle = $_POST['calle'];
         $numInterior = $_POST['numInterior'];
@@ -327,7 +338,7 @@ $vlDetalles              = $_POST['vlDetalles'];
             $id = $_GET['id'];
 
             // Preparar la consulta SQL de actualización
-            $query = "UPDATE Usuario SET
+            $query = "UPDATE usuario SET
             id_personal = :id_personal,
             Nombre = :nombre, 
             ApellidoPaterno = :apellidoPaterno, 
@@ -657,10 +668,21 @@ if ($stmt->execute($params)) {
         $id = $_GET['id'];
 
         // Preparar y ejecutar la consulta SQL para obtener los datos del usuario
-        $stmt = $conn->prepare("SELECT * FROM Usuario WHERE id = :id");
+        $stmt = $conn->prepare("SELECT * FROM usuario WHERE id = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+ 
+// SÍ / NO
+$discapacidadSN = isset($usuario['discapacidads']) ? strtoupper($usuario['discapacidads']) : 'NO';
+
+// Múltiples discapacidades (texto → arreglo)
+$discapacidadesSeleccionadas = [];
+
+if (!empty($usuario['discapacidad'])) {
+    $discapacidadesSeleccionadas = explode(',', strtoupper($usuario['discapacidad']));
+}
+
 
         // Verificar si se encontró un usuario con el ID especificado
         if ($usuario) {
@@ -1080,13 +1102,13 @@ input.addEventListener('blur', () => {
 
             <div class="col-sm-6">
         <label for="telCelular" class="form-label">Teléfono celular</label>
-        <input type="number" class="form-control" id="telCelular" name="telCelular" value="<?php echo $usuario['TelCelular']; ?>"><br>
+        <input type="number" class="form-control" id="telCelularS" name="telCelular" value="<?php echo $usuario['TelCelular']; ?>"><br>
         <div class="invalid-feedback">Se requiere un número de teléfono celular válido.</div>
     </div>
 
     <div class="col-sm-6">
         <label for="telFijo" class="form-label">Teléfono fijo</label>
-        <input type="number" class="form-control" id="telFijo" name="telFijo" value="<?php echo $usuario['TelFijo']; ?>"><br>
+        <input type="number" class="form-control" id="telFijoS" name="telFijo" value="<?php echo $usuario['TelFijo']; ?>"><br>
         <div class="invalid-feedback">Se requiere un número de teléfono fijo válido.</div>
     </div>
     
@@ -1095,7 +1117,7 @@ input.addEventListener('blur', () => {
         <label for="email" class="form-label">Correo electrónico</label>
         <div class="input-group has-validation">
         <span class="input-group-text">@</span>
-        <input type="text" class="form-control" maxlength="50" id="email" name="email" placeholder="Correo electrónico" value="<?php echo $usuario['Email']; ?>"><br>
+        <input type="text" class="form-control" maxlength="50" id="emailS" name="email" placeholder="Correo electrónico" value="<?php echo $usuario['Email']; ?>"><br>
         <div class="invalid-feedback">Se requiere una dirección de correo electrónico válida.</div>
         </div>
     </div>
@@ -1110,7 +1132,7 @@ input.addEventListener('blur', () => {
 
 <div class="col-sm-6">
         <label for="telConfianza" class="form-label">Teléfono de confianza</label>
-        <input type="number" class="form-control" id="telConfianza" name="telConfianza" value="<?php echo $usuario['TelConfianza']; ?>"><br>
+        <input type="number" class="form-control" id="telConfianzaS" name="telConfianza" value="<?php echo $usuario['TelConfianza']; ?>"><br>
         <div class="invalid-feedback">Se requiere un número de teléfono de confianza válido.</div>
     </div>
 
@@ -1149,7 +1171,7 @@ input.addEventListener('blur', () => {
 
 
 
- <h4>Datos de Orientacion Social</h4>
+ <h4>Datos de Orientacion Sexual</h4>
             <hr class="my-4">
 
 
@@ -1783,73 +1805,107 @@ function populateFields(details) {
 </div>
 
 
+<?php
+// SÍ / NO desde la BD:
+$discapacidadSN = isset($usuario['discapacidads']) ? strtoupper($usuario['discapacidads']) : 'NO';
+
+// Convertir lista de discapacidades a array
+$discapacidadesSeleccionadas = [];
+
+if (!empty($usuario['Discapacidad'])) {
+    $temp = explode(',', $usuario['Discapacidad']);
+
+    foreach ($temp as $d) {
+        $discapacidadesSeleccionadas[] = strtoupper(trim($d));
+    }
+}
+
+
+// Lista de discapacidades disponibles
+$listaDiscapacidades = [
+    "MOTRIZ",
+    "VISUAL",
+    "AUDITIVA",
+    "INTELECTUAL",
+    "DEL LENGUAJE",
+    "PSICOSOCIAL",
+    "MULTIPLE",
+    "OTRA"
+];
+
+
+
+?>
+
+
+
+
+
+
+
+
 
  <div class="col-sm-6">
   <label class="form-label">¿Presenta alguna discapacidad?</label>
-  
+
   <div class="form-check">
-    <input class="form-check-input" 
-           type="radio" 
-           name="discapacidads" 
-           id="discapacidadSi" 
-           value="SI" 
-           onclick="showDiscapacidadSelect()"
-           <?php echo (isset($usuario['discapacidads']) && strtoupper($usuario['discapacidads']) == 'SI') ? 'checked' : ''; ?>>
+    <input class="form-check-input"
+           type="radio"
+           name="discapacidads"
+           id="discapacidadSi"
+           value="SI"
+           onclick="showDiscapacidadCheckbox()"
+           <?= ($discapacidadSN == 'SI') ? 'checked' : ''; ?>>
     <label class="form-check-label" for="discapacidadSi">Sí</label>
   </div>
 
   <div class="form-check">
-    <input class="form-check-input" 
-           type="radio" 
-           name="discapacidads" 
-           id="discapacidadNo" 
-           value="NO" 
-           onclick="hideDiscapacidadSelect()"
-           <?php echo (isset($usuario['discapacidads']) && strtoupper($usuario['discapacidads']) == 'NO') ? 'checked' : ''; ?>>
+    <input class="form-check-input"
+           type="radio"
+           name="discapacidads"
+           id="discapacidadNo"
+           value="NO"
+           onclick="hideDiscapacidadCheckbox()"
+           <?= ($discapacidadSN == 'NO') ? 'checked' : ''; ?>>
     <label class="form-check-label" for="discapacidadNo">No</label>
   </div>
-
-  <?php if (!isset($usuario['discapacidad'])): ?>
-    <p class="text-muted mt-1">Sin datos</p>
-  <?php endif; ?>
 </div>
 
-<div class="col-sm-6" id="discapacidadSelectContainer" style="display: none;">
-  <label for="discapacidad" class="form-label">¿Cuál?</label>
-  <select class="form-select" id="discapacidad" name="discapacidad">
-    <option disabled value="">Seleccionar tipo...</option>
-    <option value="MOTRIZ"      <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'MOTRIZ') ? 'selected' : ''; ?>>Motriz</option>
-    <option value="VISUAL"      <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'VISUAL') ? 'selected' : ''; ?>>Visual</option>
-    <option value="AUDITIVA"    <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'AUDITIVA') ? 'selected' : ''; ?>>Auditiva</option>
-    <option value="INTELECTUAL" <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'INTELECTUAL') ? 'selected' : ''; ?>>Intelectual</option>
-    <option value="DEL LENGUAJE" <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'DEL LENGUAJE') ? 'selected' : ''; ?>>Del lenguaje</option>
-    <option value="PSICOSOCIAL" <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'PSICOSOCIAL') ? 'selected' : ''; ?>>Psicosocial</option>
-    <option value="MULTIPLE"    <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'MULTIPLE') ? 'selected' : ''; ?>>Múltiple</option>
-    <option value="OTRA"        <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'OTRA') ? 'selected' : ''; ?>>Otra</option>
-  </select>
+
+<div class="col-sm-6"
+     id="discapacidadCheckboxContainer"
+     style="display: <?= ($discapacidadSN == 'SI') ? 'block' : 'none'; ?>;">
+
+  <label class="form-label">¿Cuál?</label>
+
+  <?php foreach ($listaDiscapacidades as $opc): ?>
+    <div class="form-check">
+  <input class="form-check-input"
+         type="checkbox"
+         name="discapacidad[]"
+         value="<?= $opc ?>"
+         <?= in_array($opc, $discapacidadesSeleccionadas) ? 'checked' : '' ?>>
+  <label class="form-check-label"><?= ucwords(strtolower($opc)) ?></label>
+</div>
+
+  <?php endforeach; ?>
+
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const tieneDiscapacidad = "<?php echo isset($usuario['discapacidads']) ? strtoupper($usuario['discapacidads']) : ''; ?>";
-    if (tieneDiscapacidad === 'SI') {
-      showDiscapacidadSelect();
-    } else {
-      hideDiscapacidadSelect();
-    }
-  });
-
-  function showDiscapacidadSelect() {
-    document.getElementById('discapacidadSelectContainer').style.display = 'block';
+  function showDiscapacidadCheckbox() {
+    document.getElementById('discapacidadCheckboxContainer').style.display = 'block';
   }
 
-  function hideDiscapacidadSelect() {
-    document.getElementById('discapacidadSelectContainer').style.display = 'none';
-    document.getElementById('discapacidad').value = '';
+  function hideDiscapacidadCheckbox() {
+    document.getElementById('discapacidadCheckboxContainer').style.display = 'none';
+
+    // Desmarcar todos los checkbox cuando elige "NO"
+    document.querySelectorAll('#discapacidadCheckboxContainer input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+    });
   }
 </script>
-
-
 
     
 <div class="col-sm-12 mt-3">
@@ -2376,7 +2432,7 @@ function populateFields(details) {
   <label for="apoyosSociales" class="form-label">Otros Ingresos</label>
   <select class="form-select" id="apoyosSociales" name="apoyosSociales">
     <option value="" disabled <?php echo empty($usuario['apoyosSociales']) ? 'selected' : 'SIN DATOS'; ?>>Selecciona una opción</option>
-    <option value="PROSPERA" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'PROSPERA') ? 'selected' : ''; ?>>PROSPERA</option>
+    <option value="APOYOS SOCIALES" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'APOYOS SOCIALES') ? 'selected' : ''; ?>>APOYOS SOCIALES</option>
     <option value="PENSION_ADULTO_MAYOR" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'PENSION_ADULTO_MAYOR') ? 'selected' : ''; ?>>PENSIÓN ADULTO MAYOR</option>
     <option value="PENSION_DISCAPACIDAD" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'PENSION_DISCAPACIDAD') ? 'selected' : ''; ?>>PENSIÓN DISCAPACIDAD</option>
     <option value="SUBSIDIO" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'SUBSIDIO') ? 'selected' : ''; ?>>SUBSIDIO</option>

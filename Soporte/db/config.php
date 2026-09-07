@@ -1,9 +1,10 @@
 <?php
 // Definir las credenciales de la base de datos
 $host = 'localhost';
-$dbname = 'sysges';
-$username = 'root';
-$password = '';
+$dbname = 'gesmujer_sigd2';
+$username = 'gesmujer_sigdadmin';
+$password = 'uU362-&Hfd';
+
 
 try {
     // Crear una nueva instancia de PDO para conectar a la base de datos

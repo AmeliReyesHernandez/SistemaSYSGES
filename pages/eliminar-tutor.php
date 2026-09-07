@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 // Función para eliminar un usuario
 function eliminarUsuario($id) {

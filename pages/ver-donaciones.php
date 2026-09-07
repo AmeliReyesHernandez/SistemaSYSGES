@@ -318,22 +318,22 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base con JOIN
-    $query = "SELECT Donativos.ID_Donativo, 
-                     CONCAT(Donantes.Nombre, ' ', Donantes.ApellidoPaterno, ' ', Donantes.ApellidoMaterno) AS NombreCompleto, 
-                     Donativos.MontoDonacion, Donativos.TipoDonacion 
-              FROM Donativos 
-              INNER JOIN Donantes ON Donativos.ID_Donante = Donantes.ID_Donante";
+    $query = "SELECT donativos.ID_Donativo, 
+                     CONCAT(donantes.Nombre, ' ', donantes.ApellidoPaterno, ' ', donantes.ApellidoMaterno) AS NombreCompleto, 
+                     donativos.MontoDonacion, donativos.TipoDonacion 
+              FROM donativos 
+              INNER JOIN donantes ON donativos.ID_Donante = donantes.ID_Donante";
 
     $countQuery = "SELECT COUNT(*) 
-                   FROM Donativos 
-                   INNER JOIN Donantes ON Donativos.ID_Donante = Donantes.ID_Donante";
+                   FROM donativos 
+                   INNER JOIN donantes ON donativos.ID_Donante = donantes.ID_Donante";
 
     $condiciones = [];
     $params = [];
 
     // Búsqueda
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-        $condiciones[] = "CONCAT(Donantes.Nombre, ' ', Donantes.ApellidoPaterno, ' ', Donantes.ApellidoMaterno) LIKE :search";
+        $condiciones[] = "CONCAT(donantes.Nombre, ' ', donantes.ApellidoPaterno, ' ', donantes.ApellidoMaterno) LIKE :search";
         $params[':search'] = "%{$_GET['search']}%";
     }
 
@@ -374,7 +374,7 @@ try {
         echo "<td>{$donativo['MontoDonacion']}</td>";
         echo "<td>{$donativo['TipoDonacion']}</td>";
         echo "<td>";
-         echo "<a href='../checkout/editar-donativo.php?id={$donativo['ID_Donativo']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
+         echo "<a href='./../checkout/editar-donativo.php?id={$donativo['ID_Donativo']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
         echo "<button class='btn btn-danger btn-sm eliminar-donativo' data-id='{$donativo['ID_Donativo']}'><i class='bi bi-trash3-fill'></i></button>";
         echo "</td>";
         echo "</tr>";

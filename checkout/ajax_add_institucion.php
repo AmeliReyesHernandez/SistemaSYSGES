@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
 
-<?php
 // ajax_add_institucion.php
 header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../db/config.php';
@@ -28,7 +26,7 @@ try {
     ]);
 
     // Evitar duplicados (case-insensitive)
-    $stmt = $pdo->prepare("SELECT ID_Institucion FROM Instituciones WHERE LOWER(NombreInstitucion) = LOWER(?)");
+    $stmt = $pdo->prepare("SELECT ID_Institucion FROM instituciones WHERE LOWER(NombreInstitucion) = LOWER(?)");
     $stmt->execute([$nombre]);
     $existe = $stmt->fetchColumn();
 
@@ -38,7 +36,7 @@ try {
     }
 
     // Insertar nueva institución
-    $ins = $pdo->prepare("INSERT INTO Instituciones (NombreInstitucion, Descripcion) VALUES (?, ?)");
+    $ins = $pdo->prepare("INSERT INTO instituciones (NombreInstitucion, Descripcion) VALUES (?, ?)");
     $ins->execute([$nombre, $descripcion]);
     $id = $pdo->lastInsertId();
 

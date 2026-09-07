@@ -14,7 +14,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_detalle = $_GET['id'];
 
 // Obtener los datos del detalle de atención
-$stmt = $conn->prepare("SELECT * FROM detalles_atencionA WHERE ID_Detalle = ?");
+$stmt = $conn->prepare("SELECT * FROM detalles_atenciona WHERE ID_Detalle = ?");
 $stmt->execute([$id_detalle]);
 $atencion = $stmt->fetch(PDO::FETCH_ASSOC);
 

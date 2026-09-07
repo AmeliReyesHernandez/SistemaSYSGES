@@ -1,8 +1,13 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/autoload.php';
+require_once __DIR__ . './../pages/seccion.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../db/config.php';
 
 $error = "";
 $mensajeEnviado = false;
@@ -16,22 +21,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $mail = new PHPMailer(true);
 
-            // Configuración SMTP
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'isaireyes2003@gmail.com';
-            $mail->Password = 'ratxpqaxfklpenxl'; // ⚠️ Cambia esto por tu password o app password
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
+            $mail->Host       = 'mail.gesmujer.org';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'soporte@gesmujer.org'; // ✔ Tu nuevo correo REAL
+            $mail->Password   = 'G3smujer2025';     // ✔ Coloca la contraseña REAL
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port       = 465;
 
-            // Remitente y destinatario
-            $mail->setFrom($email, $nombre);
-            $mail->addAddress('isaireyes2003@gmail.com', 'Soporte');
+            // Remitente REAL (obligatorio)
+            $mail->setFrom('soporte@gesmujer.org', 'Formulario GesMujer');
+
+            // Destinatario (puede ser el mismo)
+            $mail->addAddress('soporte@gesmujer.org');
+
+            // Para contestar al usuario
+            $mail->addReplyTo($email, $nombre);
 
             // Contenido
             $mail->isHTML(true);
-            $mail->Subject = 'Nuevo mensaje de soporte';
+            $mail->Subject = 'Nuevo mensaje desde el formulario';
             $mail->Body = "
                 <strong>Nombre:</strong> {$nombre}<br>
                 <strong>Email:</strong> {$email}<br>
@@ -63,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.122.0">
     <title>Registro de Cita</title>
-    <script src="register.js"></script>
+    
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/checkout/">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
     <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -193,22 +202,51 @@ require_once __DIR__ . '/../pages/header.php';
     <?php elseif ($error): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
+    
+    
+    <?php
+require_once __DIR__ . '/../db/config.php';
+$user_id = $_SESSION['user_id'];
+
+$sql = "SELECT 
+            CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo,
+            Email
+        FROM personal
+        WHERE ID_Personal = :user_id";
+
+$stmt = $conn->prepare($sql);
+$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+
+$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$nombreCompleto = $usuario['nombre_completo'] ?? '';
+$correo = $usuario['Email'] ?? '';   // ← CORREGIDO
+?>
+
 
     <form method="POST">
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" name="nombre" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Correo electrónico</label>
-            <input type="email" name="email" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Mensaje</label>
-            <textarea name="mensaje" class="form-control" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-success">Enviar Correo</button>
-    </form>
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" name="nombre" class="form-control"
+               value="<?php echo htmlspecialchars($nombreCompleto); ?>" required readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" name="email" class="form-control"
+               value="<?php echo htmlspecialchars($correo); ?>" required readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Mensaje</label>
+        <textarea name="mensaje" class="form-control" rows="5" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Enviar Correo</button>
+</form>
+
+
 </div>
 
 
@@ -266,6 +304,8 @@ Swal.fire({
     <script src="checkout.js"></script>
     <script src="validation-citas.js"></script></body>
         </html>
+
+
 
 
 

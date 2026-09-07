@@ -333,7 +333,7 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Usuario";
+    $query = "SELECT * FROM usuario";
     $search = '';
     if (isset($_GET['search']) && !empty($_GET['search'])) {
         $search = $_GET['search'];

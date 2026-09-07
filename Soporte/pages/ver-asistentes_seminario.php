@@ -19,16 +19,16 @@ try {
             p.Nombre AS NombrePonente, 
             aps.FechaAsignacion
         FROM asignacion_ponente_seminario aps
-        LEFT JOIN Seminarios s ON aps.ID_Seminario = s.ID_Seminario
-        LEFT JOIN Ponentes p ON aps.ID_Ponente = p.ID_Ponente
+        LEFT JOIN seminarios s ON aps.ID_Seminario = s.ID_Seminario
+        LEFT JOIN ponentes p ON aps.ID_Ponente = p.ID_Ponente
     ";
 
     // Consulta para contar registros (también con JOIN si hay búsqueda)
     $countQuery = "
         SELECT COUNT(DISTINCT aps.ID_Asignacion)
         FROM asignacion_ponente_seminario aps
-        LEFT JOIN Seminarios s ON aps.ID_Seminario = s.ID_Seminario
-        LEFT JOIN Ponentes p ON aps.ID_Ponente = p.ID_Ponente
+        LEFT JOIN seminarios s ON aps.ID_Seminario = s.ID_Seminario
+        LEFT JOIN ponentes p ON aps.ID_Ponente = p.ID_Ponente
     ";
 
     $condiciones = [];

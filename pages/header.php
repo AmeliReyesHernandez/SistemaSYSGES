@@ -30,8 +30,14 @@ $usuarios3 = $stmt2->fetch(PDO::FETCH_ASSOC);
 // Si no hay foto guardada, usar una por defecto
 
 
-// Si no hay foto guardada, usar una por defecto
-$foto = !empty($usuarios3['foto']) ? $usuarios3['foto'] : 'default.png';
+$fotoBD = trim($usuarios3['foto'] ?? '');
+
+// Si no hay foto o dice "Sin datos", usar una por defecto
+if ($fotoBD === '' || strcasecmp($fotoBD, 'SIN DATOS') === 0) {
+    $foto = 'default.png';
+} else {
+    $foto = $fotoBD;
+}
 
 // Verificar si la ruta ya incluye "uploads/"
 if (strpos($foto, "uploads/") !== false) {

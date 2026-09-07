@@ -314,9 +314,9 @@ require_once __DIR__ . '/../pages/footer.php';
                                     c.Fecha, 
                                     c.Hora, 
                                     DAY(c.Fecha) as Dia 
-                            FROM Citas c 
-                            LEFT JOIN Usuario u ON c.ID_Usuario = u.id 
-                            LEFT JOIN Personal p ON c.ID_Personal = p.ID_Personal 
+                            FROM citas c 
+                            LEFT JOIN usuario u ON c.ID_Usuario = u.id 
+                            LEFT JOIN personal p ON c.ID_Personal = p.ID_Personal 
                             WHERE MONTH(c.Fecha) = $mes AND YEAR(c.Fecha) = $año_actual";
                 $resultado = $conn->query($consulta);
 

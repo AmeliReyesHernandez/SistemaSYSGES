@@ -1,19 +1,15 @@
-
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once __DIR__ . '/../pages/seccion.php';
-
-?>
-
-<?php
 require_once __DIR__ . '/../db/config.php';
-
 // Función para eliminar un registro de personal
 function eliminarPersonal($id) {
     global $conn; // Acceder a la conexión con la base de datos
 
     try {
         // Preparar y ejecutar la consulta SQL para eliminar el registro de personal
-        $query = "DELETE FROM Feminicidios WHERE ID = :id";
+        $query = "DELETE FROM feminicidios WHERE ID = :id";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -29,7 +25,6 @@ function eliminarPersonal($id) {
         return false; // Error al intentar eliminar el registro de personal
     }
 }
-
 // Verificar si se ha enviado una solicitud para eliminar un registro de personal
 if(isset($_GET['eliminar_id'])) {
     $id = $_GET['eliminar_id'];

@@ -313,13 +313,13 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     $query = "SELECT a.ID_Asignacion, CONCAT(u.Nombre, ' ', u.ApellidoPaterno, ' ', u.ApellidoMaterno) AS NombreCompleto, p.NombreProyecto 
-              FROM Asignaciones a 
-              INNER JOIN Usuario u ON a.ID_Usuario = u.id 
-              INNER JOIN Proyectos p ON a.ID_Proyecto = p.ID_Proyecto";
+              FROM asignaciones a 
+              INNER JOIN usuario u ON a.ID_Usuario = u.id 
+              INNER JOIN proyectos p ON a.ID_Proyecto = p.ID_Proyecto";
     
-    $countQuery = "SELECT COUNT(*) FROM Asignaciones a 
-                   INNER JOIN Usuario u ON a.ID_Usuario = u.id 
-                   INNER JOIN Proyectos p ON a.ID_Proyecto = p.ID_Proyecto";
+    $countQuery = "SELECT COUNT(*) FROM asignaciones a 
+                   INNER JOIN usuario u ON a.ID_Usuario = u.id 
+                   INNER JOIN proyectos p ON a.ID_Proyecto = p.ID_Proyecto";
 
     $condiciones = [];
     $params = [];

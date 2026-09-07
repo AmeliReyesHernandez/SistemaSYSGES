@@ -186,13 +186,13 @@ hr {
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-tutor-adolecente.php">
                 <svg class="bi"><use xlink:href="#personita"/></svg>
-                Registrar Nueva Usuaria Adolecente
+                Registrar Nueva Usuaria Adolescente
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-usuario-adolecente.php">
                 <svg class="bi"><use xlink:href="#people"/></svg>
-                Lista de Usuarias Adolecentes
+                Lista de Usuarias Adolescentes
               </a>
             </li>
           
@@ -203,25 +203,25 @@ hr {
           <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-citaa.php">
               <i class="bi bi-calendar-check-fill"></i>
-                Registrar Cita Adolecente
+                Registrar Cita Adolescente
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-atenciona.php">
               <i class="bi bi-clipboard2-fill"></i>
-                Registrar Atención Adolecente
+                Registrar Atención Adolescente
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-citasa.php">
               <i class="bi bi-calendar3"></i>
-                Ver Citas Adolecente
+                Ver Citas Adolescente
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-atencionesa.php">
               <i class="bi bi-journal-bookmark-fill"></i>
-                Historial de atenciones Adolecente
+                Historial de atenciones Adolescente
               </a>
             </li>
 

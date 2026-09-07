@@ -61,7 +61,7 @@ try {
 
 // cargar seminarios y ponentes (para selects)
 $seminariosRows = $conn->query("SELECT * FROM seminarios ORDER BY fecha ASC")->fetchAll(PDO::FETCH_ASSOC);
-$ponentesRows   = $conn->query("SELECT * FROM Ponentes ORDER BY Nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
+$ponentesRows   = $conn->query("SELECT * FROM ponentes ORDER BY Nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 // mapas para mostrar nombres en la tabla
 $seminariosMap = [];

@@ -318,13 +318,8 @@ require_once __DIR__ . '/../pages/header.php';
 
 
 <?php
- 
 require_once __DIR__ . '/../pages/footer.php';
-?>
 
-
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 // Validar ID de seminario

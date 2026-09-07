@@ -336,9 +336,9 @@ try {
     $query = "SELECT u.id AS usuario_id, u.Nombre AS usuario_nombre, u.ApellidoPaterno AS usuario_apellido_paterno, u.ApellidoMaterno AS usuario_apellido_materno, u.TelCelular, u.TelFijo, u.TelConfianza, u.Email, u.EmailRespaldo,
               h.ID_Hijo, h.Nombre AS hijo_nombre, h.ApellidoPaterno AS hijo_apellido_paterno, h.ApellidoMaterno AS hijo_apellido_materno, h.FechaNacimiento, h.Sexo, h.Escolaridad, h.Condicion
               FROM tutor u
-              INNER JOIN Hijos_tutor h ON u.id = h.ID_tutor";
+              INNER JOIN hijos_tutor h ON u.id = h.ID_tutor";
 
-    $countQuery = "SELECT COUNT(*) FROM tutor u INNER JOIN Hijos_tutor h ON u.id = h.ID_tutor";
+    $countQuery = "SELECT COUNT(*) FROM tutor u INNER JOIN hijos_tutor h ON u.id = h.ID_tutor";
 
     $condiciones = [];
     $params = [];

@@ -341,8 +341,8 @@ try {
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Talleres";
-    $countQuery = "SELECT COUNT(*) FROM Talleres";
+    $query = "SELECT * FROM talleres";
+    $countQuery = "SELECT COUNT(*) FROM talleres";
 
     $condiciones = [];
     $params = [];
@@ -412,7 +412,7 @@ echo $duracion->format('%h horas %i minutos');
 
           <td><?= htmlspecialchars($t['Lugar']) ?></td>
           <td>
-            <a href="../checkout/editar_taller.php?id=<?= $t['ID_Taller'] ?>" class="btn btn-sm btn-warning">Editar</a>
+            <a href="./../checkout/editar_taller.php?id=<?= $t['ID_Taller'] ?>" class="btn btn-sm btn-warning">Editar</a>
             <button class="btn btn-sm btn-danger eliminar-taller" data-id="<?= $t['ID_Taller'] ?>">Eliminar</button>
           </td>
         </tr>
@@ -483,7 +483,7 @@ echo $duracion->format('%h horas %i minutos');
     <script>
         Swal.fire({
             icon: "<?= $_GET['msg'] === 'success' ? 'success' : 'error' ?>",
-            title: "<?= $_GET['msg'] === 'success' ? 'Usuario Eliminado correctamente' : 'Error al registrar' ?>",
+            title: "<?= $_GET['msg'] === 'success' ? 'Taller Eliminado correctamente' : 'Error al registrar' ?>",
             text: "<?= $_GET['msg'] === 'error' ? urldecode($_GET['msg']) : '' ?>",
             showConfirmButton: false,
             timer: 2000, // ⏱️ 2 segundos
@@ -535,7 +535,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Eliminado!',
-                        text: 'La donación fue eliminada correctamente.',
+                        text: 'El Taller fue eliminada correctamente.',
                         timer: 2000,
                         showConfirmButton: false
                     
@@ -545,7 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Swal.fire({
                         icon: 'info',
                         title: 'Cancelado',
-                        text: 'La donación no fue eliminada 🙂',
+                        text: 'El Taller no fue eliminada 🙂',
                         timer: 2000,
                         showConfirmButton: false
                     });

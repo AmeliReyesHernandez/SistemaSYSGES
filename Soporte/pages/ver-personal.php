@@ -320,8 +320,8 @@ try {
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Personal";
-    $countQuery = "SELECT COUNT(*) FROM Personal";
+    $query = "SELECT * FROM personal";
+    $countQuery = "SELECT COUNT(*) FROM personal";
 
     $condiciones = [];
     $params = [];

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../pages/seccion.php';
 require_once __DIR__ . '/../db/config.php';
 
 // Obtener el último ID de usuario registrado
-$sql_last_user_id = "SELECT MAX(id) AS ultimo_id_usuario FROM Usuario";
+$sql_last_user_id = "SELECT MAX(id) AS ultimo_id_usuario FROM usuario";
 $result_last_user_id = $conn->query($sql_last_user_id);
 
 if ($result_last_user_id) {
@@ -21,7 +21,7 @@ if ($result_last_user_id) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["cantidad_hijos"])) {
     if(isset($_POST["hijos"]) && is_array($_POST["hijos"])) {
         // Consulta preparada para insertar un nuevo hijo asociado al último usuario registrado
-        $sql_insert_hijo = "INSERT INTO Hijos_Usuario (ID_Usuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Sexo, Escolaridad, Condicion)
+        $sql_insert_hijo = "INSERT INTO hijos_usuario (ID_Usuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Sexo, Escolaridad, Condicion)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Recorremos todos los hijos enviados desde el formulario
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id_tipo_violencia"])) 
         // Procesar el formulario
         try {
             // Preparar la consulta para insertar cada tipo de violencia seleccionado
-            $query = "INSERT INTO Usuarios_Tipos_Violencia (ID_Usuario, ID_Tipo_Violencia) VALUES (?, ?)";
+            $query = "INSERT INTO usuarios_tipos_violencia (ID_Usuario, ID_Tipo_Violencia) VALUES (?, ?)";
             $stmt = $conn->prepare($query);
             
             // Iterar sobre cada tipo de violencia seleccionado y ejecutar la consulta

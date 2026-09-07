@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 // Validar ID del diplomado
@@ -25,7 +22,7 @@ SELECT ID_Usuario, NombreCompleto, Email, FechaAsignacion, TipoUsuario FROM (
         u.Nombre AS NombreCompleto,
         u.Email,
         ad.FechaAsignacion,
-        'Usuario' AS TipoUsuario
+        'usuario' AS TipoUsuario
     FROM asignacionesdiplomado ad
     INNER JOIN usuario u ON ad.ID_Usuario = u.ID
     WHERE ad.ID_Diplomado = :id1
@@ -38,7 +35,7 @@ SELECT ID_Usuario, NombreCompleto, Email, FechaAsignacion, TipoUsuario FROM (
         p.Nombre AS NombreCompleto,
         p.Email,
         ad.FechaAsignacion,
-        'Participante' AS TipoUsuario
+        'participante' AS TipoUsuario
     FROM asignacionesdiplomado ad
     INNER JOIN participante p ON ad.ID_Usuario = p.ID_Participante
     WHERE ad.ID_Diplomado = :id2
@@ -51,7 +48,7 @@ SELECT ID_Usuario, NombreCompleto, Email, FechaAsignacion, TipoUsuario FROM (
         pe.Nombre AS NombreCompleto,
         pe.Email,
         ad.FechaAsignacion,
-        'Personal' AS TipoUsuario
+        'personal' AS TipoUsuario
     FROM asignacionesdiplomado ad
     INNER JOIN personal pe ON ad.ID_Usuario = pe.ID_Personal
     WHERE ad.ID_Diplomado = :id3
@@ -574,7 +571,7 @@ foreach ($stmtAsis->fetchAll(PDO::FETCH_ASSOC) as $a) {
               <?= htmlspecialchars($mod['nombre']) ?>
             </th>
           <?php endforeach; ?>
-          <!--<th rowspan="2">Acciones</th> -->
+          <th rowspan="2">Acciones</th>
         </tr>
 
         <!-- Encabezado: Secciones -->
@@ -595,6 +592,7 @@ foreach ($stmtAsis->fetchAll(PDO::FETCH_ASSOC) as $a) {
             <td><?= htmlspecialchars($asistente['TipoUsuario']) ?></td>
             <td><?= htmlspecialchars($asistente['FechaAsignacion']) ?></td>
 
+         
             <?php foreach ($modulos as $mod): ?>
     <?php foreach ($mod['secciones'] as $sec): ?>
         <td>
@@ -611,8 +609,7 @@ foreach ($stmtAsis->fetchAll(PDO::FETCH_ASSOC) as $a) {
     <?php endforeach; ?>
 <?php endforeach; ?>
 
-
-           <!-- <td>
+            <td>
               <a href="../checkout/editar-asistente-diplomado.php?id_persona=<?= $asistente['ID_Usuario'] ?>&tipo=<?= $asistente['TipoUsuario'] ?>&id_taller=<?= $idDiplomado ?>" 
                  class="btn btn-primary btn-sm">
                 <i class="bi bi-pencil-square"></i>
@@ -624,7 +621,6 @@ foreach ($stmtAsis->fetchAll(PDO::FETCH_ASSOC) as $a) {
                 <i class="bi bi-trash3-fill"></i>
               </button>
             </td>
-              -->
           </tr>
         <?php endforeach; ?>
       </tbody>

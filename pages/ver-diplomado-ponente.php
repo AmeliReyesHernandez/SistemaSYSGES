@@ -15,8 +15,8 @@ try {
     $query = "
         SELECT ap.ID_Asignacion, d.NombreDiplomado, p.Nombre, ap.FechaAsignacion
         FROM asignacionponente ap
-        LEFT JOIN Diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
-        LEFT JOIN Ponentes p ON ap.ID_Ponente = p.ID_Ponente
+        LEFT JOIN diplomados d ON ap.ID_Diplomado = d.ID_Diplomado
+        LEFT JOIN ponentes p ON ap.ID_Ponente = p.ID_Ponente
     ";
     $countQuery = "SELECT COUNT(*) FROM asignacionponente ap";
 

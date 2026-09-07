@@ -20,15 +20,15 @@ try {
         p.Nombre AS NombrePonente, 
         at.FechaAsignacion
     FROM asignacion_ponentes_taller at
-    LEFT JOIN Talleres t ON at.ID_Taller = t.ID_Taller
-    LEFT JOIN Ponentes p ON at.ID_Ponente = p.ID_Ponente
+    LEFT JOIN talleres t ON at.ID_Taller = t.ID_Taller
+    LEFT JOIN ponentes p ON at.ID_Ponente = p.ID_Ponente
 ";
 
 
     $countQuery = "SELECT COUNT(*) 
                    FROM asignacion_ponentes_taller at
-                   LEFT JOIN Talleres t ON at.ID_Taller = t.ID_Taller
-                   LEFT JOIN Ponentes p ON at.ID_Ponente = p.ID_Ponente";
+                   LEFT JOIN talleres t ON at.ID_Taller = t.ID_Taller
+                   LEFT JOIN ponentes p ON at.ID_Ponente = p.ID_Ponente";
 
     $condiciones = [];
     $params = [];

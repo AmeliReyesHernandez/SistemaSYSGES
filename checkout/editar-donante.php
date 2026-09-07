@@ -20,7 +20,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Obtener datos actuales del donante
-    $stmt = $conn->prepare("SELECT * FROM Donantes WHERE ID_Donante = :id");
+    $stmt = $conn->prepare("SELECT * FROM donantes WHERE ID_Donante = :id");
     $stmt->bindParam(':id', $idDonante, PDO::PARAM_INT);
     $stmt->execute();
 
@@ -40,7 +40,7 @@ try {
       
 
         $update = $conn->prepare("
-            UPDATE Donantes SET
+            UPDATE donantes SET
                 Nombre = :nombre,
                 ApellidoPaterno = :apellido_paterno,
                 ApellidoMaterno = :apellido_materno,

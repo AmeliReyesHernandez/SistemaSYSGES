@@ -47,7 +47,7 @@
                 Registrar Personal 
               </a>
             </li>
--->
+
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-personal.php">
               <i class="bi bi-person-lines-fill"></i>
@@ -57,6 +57,8 @@
         
 
           <hr class="my-3">
+          
+          -->
 <!--
           <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-cita.php">
@@ -345,7 +347,10 @@
 
 
             </ul>
-
+            
+            
+            
+          
           <hr class="my-3">
 
           <ul class="nav flex-column mb-auto">

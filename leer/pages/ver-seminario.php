@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/seccion.php';
 
-
-
 require_once __DIR__ . '/../db/config.php';
 
 try {
@@ -21,7 +19,7 @@ try {
             s.Estado,
             p.Nombre AS NombrePonente, 
             p.ApellidoPaterno AS ApellidoPonente
-        FROM Seminarios s
+        FROM seminarios s
         LEFT JOIN asignacion_ponente_seminario aps ON s.ID_Seminario = aps.ID_Seminario
         LEFT JOIN ponentes p ON aps.ID_Ponente = p.ID_Ponente
     ";
@@ -29,7 +27,7 @@ try {
     // Consulta para contar registros (también con JOIN si hay búsqueda)
     $countQuery = "
         SELECT COUNT(DISTINCT s.ID_Seminario) 
-        FROM Seminarios s
+        FROM seminarios s
         LEFT JOIN asignacion_ponente_seminario aps ON s.ID_Seminario = aps.ID_Seminario
         LEFT JOIN ponentes p ON aps.ID_Ponente = p.ID_Ponente
     ";
@@ -362,8 +360,8 @@ try {
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Seminarios";
-    $countQuery = "SELECT COUNT(*) FROM Seminarios";
+    $query = "SELECT * FROM seminarios";
+    $countQuery = "SELECT COUNT(*) FROM seminarios";
 
     $condiciones = [];
     $params = [];

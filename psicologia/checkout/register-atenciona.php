@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-<?php
+
 require_once __DIR__ . '/../db/config.php';
 
 
@@ -40,7 +39,7 @@ $tipoMensaje = "";
  
     try {
         // Preparamos la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Detalles_Atenciona (ID_tutor, ID_Personal, TipoAtencion, Modalidad, Demanda, Juzgado, NumExpediente, Auxiliar, PorcentajeAvance, Herramientas, Transtorno, Sindrome, EstadoCaso, EstadoCita, Descripcion, Horas, FechaRegistro, Donde) 
+        $sql = "INSERT INTO detalles_atenciona (ID_tutor, ID_Personal, TipoAtencion, Modalidad, Demanda, Juzgado, NumExpediente, Auxiliar, PorcentajeAvance, Herramientas, Transtorno, Sindrome, EstadoCaso, EstadoCita, Descripcion, Horas, FechaRegistro, Donde) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         // Preparamos la sentencia

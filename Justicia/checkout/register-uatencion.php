@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 // Verificamos si se recibieron datos del formulario
@@ -32,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
     try {
         // Preparamos la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Detalles_Atencion (ID_Usuario, ID_Personal, TipoAtencion, Modalidad, Demanda, Juzgado, NumExpediente, Auxiliar, PorcentajeAvance, Herramientas, Transtorno, Sindrome, EstadoCaso, EstadoCita, Descripcion, Horas, FechaRegistro, Donde) 
+        $sql = "INSERT INTO detalles_atencion (ID_Usuario, ID_Personal, TipoAtencion, Modalidad, Demanda, Juzgado, NumExpediente, Auxiliar, PorcentajeAvance, Herramientas, Transtorno, Sindrome, EstadoCaso, EstadoCita, Descripcion, Horas, FechaRegistro, Donde) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         // Preparamos la sentencia
@@ -60,11 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Ejecutamos la consulta
         $stmt->execute();
-              header("Location: ../pages/ver-atenciones.php?status=success");
+              header("Location: ../pages/ver-atenciones.php?statuss=success");
 exit();
     } catch (PDOException $e) {
        $conn->rollBack();
-        header("Location: ../pages/ver-atenciones.php?status=error&msg=" . urlencode($e->getMessage()));
+        header("Location: ../pages/ver-atenciones.php?statuss=error&msg=" . urlencode($e->getMessage()));
 exit();
     }
 
@@ -198,7 +195,7 @@ require_once __DIR__ . '/../pages/header.php';
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             // Consultar la base de datos para obtener los IDs de personal
-            $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo FROM Personal";
+            $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo FROM personal";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
@@ -378,7 +375,7 @@ require_once __DIR__ . '/../pages/header.php';
 
             <hr class="my-4">
 
-    <button class="w-100 btn btn-primary btn-lg" type="submit"  onclick="return confirmarEnvio();">Registrar</button>
+    <button class="w-100 btn btn-primary btn-lg" type="submit"  >Registrar</button>
     </form>
     </div>
     </div>

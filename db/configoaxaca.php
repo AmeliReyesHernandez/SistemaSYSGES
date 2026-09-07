@@ -1,7 +1,7 @@
 <?php
 // conexion.php
 $host = 'localhost';
-$db   = 'oaxacaa';
+$db = 'gesmujer_oaxaca';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';

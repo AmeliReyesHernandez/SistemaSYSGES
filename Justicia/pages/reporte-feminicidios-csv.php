@@ -273,8 +273,8 @@ $offset = ($pagina - 1) * $registrosPorPagina;
 
 // Consulta base
 // Consulta base
-$query = "SELECT *, YEAR(FechaHecho) AS Anio FROM Feminicidios";
-$countQuery = "SELECT COUNT(*) FROM Feminicidios";
+$query = "SELECT *, YEAR(FechaHecho) AS Anio FROM feminicidios";
+$countQuery = "SELECT COUNT(*) FROM feminicidios";
 
 $condiciones = [];
 $params = [];

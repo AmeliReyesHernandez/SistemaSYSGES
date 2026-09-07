@@ -320,8 +320,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Donantes";
-    $countQuery = "SELECT COUNT(*) FROM Donantes";
+    $query = "SELECT * FROM donantes";
+    $countQuery = "SELECT COUNT(*) FROM donantes";
 
     $condiciones = [];
     $params = [];

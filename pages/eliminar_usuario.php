@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 // Función para eliminar un usuario
 function eliminarUsuario($id) {
@@ -12,7 +8,7 @@ function eliminarUsuario($id) {
 
     try {
         // Preparar y ejecutar la consulta SQL para eliminar el usuario
-        $query = "DELETE FROM Usuario WHERE id = :id";
+        $query = "DELETE FROM usuario WHERE id = :id";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

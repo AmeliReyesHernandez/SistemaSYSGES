@@ -1,0 +1,443 @@
+[12-Nov-2025 03:16:09 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:15
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(15): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 15
+[12-Nov-2025 03:16:23 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:15
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(15): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 15
+[12-Nov-2025 03:18:40 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:15
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(15): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 15
+[12-Nov-2025 03:18:44 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:15
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(15): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 15
+[12-Nov-2025 03:18:46 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:15
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(15): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 15
+[12-Nov-2025 03:18:46 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:15
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(15): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 15
+[12-Nov-2025 03:18:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:15
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(15): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 15
+[12-Nov-2025 18:50:04 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Donantes' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php:161
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php(161): PDO->query('SELECT ID_Donan...')
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php on line 161
+[12-Nov-2025 18:50:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Donantes' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php:161
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php(161): PDO->query('SELECT ID_Donan...')
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php on line 161
+[12-Nov-2025 18:52:16 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Donantes' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php:161
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php(161): PDO->query('SELECT ID_Donan...')
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php on line 161
+[12-Nov-2025 18:52:20 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Donantes' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php:161
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php(161): PDO->query('SELECT ID_Donan...')
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-donativo.php on line 161
+[12-Nov-2025 19:31:34 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.detalles_atencionA' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-atencionesa.php:18
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-atencionesa.php(18): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-atencionesa.php on line 18
+[12-Nov-2025 19:36:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 29
+[12-Nov-2025 19:38:28 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 29
+[12-Nov-2025 19:40:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 26
+[12-Nov-2025 19:41:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 29
+[12-Nov-2025 19:41:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 29
+[12-Nov-2025 19:41:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 29
+[12-Nov-2025 19:52:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 19:57:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 19:57:24 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 19:59:09 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 38
+[12-Nov-2025 19:59:19 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 38
+[12-Nov-2025 19:59:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:00:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:01:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:02:25 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:12:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:13:19 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:13:37 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:23:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:25:21 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:25:27 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:25:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:32:28 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[12-Nov-2025 20:32:28 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[12-Nov-2025 20:33:19 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:33:46 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:33:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:35:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:35:24 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:38:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:38:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:41:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 36
+[12-Nov-2025 20:46:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:47:33 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 26
+[12-Nov-2025 20:47:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 26
+[12-Nov-2025 20:48:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 26
+[12-Nov-2025 20:48:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 29
+[12-Nov-2025 20:51:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:56:48 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 20:57:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 30
+[12-Nov-2025 20:57:54 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 30
+[12-Nov-2025 20:58:12 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 30
+[12-Nov-2025 21:02:38 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 21:03:27 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 21:09:54 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 21:10:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[12-Nov-2025 23:59:38 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:15:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:21:27 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:21:44 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:27:23 UTC] PHP Warning:  require_once(/home/gesmujer/public_html/SYSGES/checkout/../../db/config.php): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 11
+[13-Nov-2025 00:27:23 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/gesmujer/public_html/SYSGES/checkout/../../db/config.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:11
+Stack trace:
+#0 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 11
+[13-Nov-2025 00:27:50 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 64
+[13-Nov-2025 00:28:33 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 64
+[13-Nov-2025 00:30:02 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:30:28 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:30:44 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:31:21 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:31:34 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:5) in /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php on line 33
+[13-Nov-2025 00:34:09 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 00:34:09 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 00:34:13 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 00:34:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 00:34:19 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 00:34:19 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/asignacion-proyecto.php:1) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 7
+[13-Nov-2025 00:53:20 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:276) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 332
+[13-Nov-2025 00:56:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:276) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 332
+[13-Nov-2025 01:01:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:276) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 332
+[13-Nov-2025 01:07:20 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:276) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 332
+[13-Nov-2025 01:10:24 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:276) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 331
+[13-Nov-2025 01:13:03 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:276) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 331
+[13-Nov-2025 01:13:54 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:276) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 331
+[13-Nov-2025 01:15:48 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 27
+[13-Nov-2025 01:15:48 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 32
+[13-Nov-2025 01:15:48 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 34
+[13-Nov-2025 01:15:48 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 43
+[13-Nov-2025 01:15:48 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-f.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 98
+[13-Nov-2025 01:16:55 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 27
+[13-Nov-2025 01:16:55 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 32
+[13-Nov-2025 01:16:55 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 34
+[13-Nov-2025 01:16:55 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 43
+[13-Nov-2025 01:16:55 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-f.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 98
+[13-Nov-2025 01:17:00 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 27
+[13-Nov-2025 01:17:00 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 32
+[13-Nov-2025 01:17:00 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 34
+[13-Nov-2025 01:17:00 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 43
+[13-Nov-2025 01:17:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-f.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 98
+[13-Nov-2025 01:18:30 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 27
+[13-Nov-2025 01:18:30 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 32
+[13-Nov-2025 01:18:30 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 34
+[13-Nov-2025 01:18:30 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 43
+[13-Nov-2025 01:18:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-f.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 98
+[13-Nov-2025 01:23:53 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 27
+[13-Nov-2025 01:23:53 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 32
+[13-Nov-2025 01:23:53 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 34
+[13-Nov-2025 01:23:53 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 43
+[13-Nov-2025 01:23:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-f.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-f.php on line 98
+[13-Nov-2025 01:25:30 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 27
+[13-Nov-2025 01:25:30 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 32
+[13-Nov-2025 01:25:30 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 34
+[13-Nov-2025 01:25:30 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 43
+[13-Nov-2025 01:25:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-fem.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 98
+[13-Nov-2025 01:26:53 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 27
+[13-Nov-2025 01:26:53 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 32
+[13-Nov-2025 01:26:53 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 34
+[13-Nov-2025 01:26:53 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 43
+[13-Nov-2025 01:26:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-fem.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 98
+[13-Nov-2025 01:28:26 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 27
+[13-Nov-2025 01:28:26 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 32
+[13-Nov-2025 01:28:26 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 34
+[13-Nov-2025 01:28:26 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 43
+[13-Nov-2025 01:28:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-fem.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 98
+[13-Nov-2025 01:29:04 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 30
+[13-Nov-2025 01:29:04 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 35
+[13-Nov-2025 01:29:04 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 37
+[13-Nov-2025 01:29:04 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 46
+[13-Nov-2025 01:29:04 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-fem.php:8) in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 100
+[13-Nov-2025 01:29:18 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 30
+[13-Nov-2025 01:29:18 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 35
+[13-Nov-2025 01:29:18 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 37
+[13-Nov-2025 01:29:18 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 46
+[13-Nov-2025 01:29:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-fem.php:8) in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 100
+[13-Nov-2025 01:31:43 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 30
+[13-Nov-2025 01:31:43 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 35
+[13-Nov-2025 01:31:43 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 37
+[13-Nov-2025 01:31:43 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 46
+[13-Nov-2025 01:31:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-fem.php:8) in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 100
+[13-Nov-2025 01:32:00 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 30
+[13-Nov-2025 01:32:00 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 35
+[13-Nov-2025 01:32:00 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 37
+[13-Nov-2025 01:32:00 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 46
+[13-Nov-2025 01:32:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-fem.php:8) in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 100
+[13-Nov-2025 01:36:19 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 26
+[13-Nov-2025 01:36:19 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 31
+[13-Nov-2025 01:36:19 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 33
+[13-Nov-2025 01:36:19 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 42
+[13-Nov-2025 01:48:47 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/checkout/editar-atenciones.php on line 209
+[13-Nov-2025 01:48:47 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/checkout/editar-atenciones.php on line 214
+[13-Nov-2025 01:57:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-tutor-adolecente.php:465) in /home/gesmujer/public_html/SYSGES/checkout/register-tutor-adolecente.php on line 473
+[13-Nov-2025 02:00:10 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-tutor-adolecente.php:465) in /home/gesmujer/public_html/SYSGES/checkout/register-tutor-adolecente.php on line 473
+[13-Nov-2025 02:06:24 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-ucitaa.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-ucitaa.php on line 37
+[13-Nov-2025 03:23:19 UTC] PHP Warning:  move_uploaded_file(/home/gesmujer/public_html/SYSGES/checkout../uploads/personal/1763004199_oaxaca-street-photography.jpg): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 61
+[13-Nov-2025 03:23:19 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpQYMFu6&quot; to &quot;/home/gesmujer/public_html/SYSGES/checkout../uploads/personal/1763004199_oaxaca-street-photography.jpg&quot; in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 61
+[13-Nov-2025 03:24:24 UTC] PHP Warning:  move_uploaded_file(/home/gesmujer/public_html/SYSGES/checkout../uploads/personal/1763004264_OIP.jpg): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 61
+[13-Nov-2025 03:24:24 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpWSLFzv&quot; to &quot;/home/gesmujer/public_html/SYSGES/checkout../uploads/personal/1763004264_OIP.jpg&quot; in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 61
+[13-Nov-2025 04:38:27 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Personal' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php:16
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php(16): PDOStatement->execute()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 16
+[13-Nov-2025 04:56:28 UTC] PHP Warning:  mkdir(): Permission denied in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 43
+[13-Nov-2025 04:56:28 UTC] PHP Warning:  move_uploaded_file(/../uploads/personal/691564fc7d935_oaxaca-street-photography.jpg): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 48
+[13-Nov-2025 04:56:28 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpSNvAd8&quot; to &quot;/../uploads/personal/691564fc7d935_oaxaca-street-photography.jpg&quot; in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 48
+[13-Nov-2025 04:56:58 UTC] PHP Warning:  mkdir(): Permission denied in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 43
+[13-Nov-2025 04:56:58 UTC] PHP Warning:  move_uploaded_file(/../uploads/personal/6915651a4caae_Gemini_Generated_Image_uz5ixluz5ixluz5i.png): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 48
+[13-Nov-2025 04:56:58 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpBaJASg&quot; to &quot;/../uploads/personal/6915651a4caae_Gemini_Generated_Image_uz5ixluz5ixluz5i.png&quot; in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 48
+[13-Nov-2025 04:59:09 UTC] PHP Warning:  mkdir(): Permission denied in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 41
+[13-Nov-2025 04:59:09 UTC] PHP Warning:  move_uploaded_file(/../uploads/personal/6915659d53123_oaxaca-street-photography.jpg): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 46
+[13-Nov-2025 04:59:09 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpb12zYt&quot; to &quot;/../uploads/personal/6915659d53123_oaxaca-street-photography.jpg&quot; in /home/gesmujer/public_html/SYSGES/checkout/editar-personal.php on line 46
+[13-Nov-2025 15:38:31 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 26
+[13-Nov-2025 15:38:31 UTC] PHP Warning:  Undefined array key "tipo_arma" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 31
+[13-Nov-2025 15:38:31 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 33
+[13-Nov-2025 15:38:31 UTC] PHP Warning:  Undefined array key "sexenio" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 42
+[13-Nov-2025 15:38:59 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/checkout/editar-fem.php on line 783
+[13-Nov-2025 15:38:59 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/gesmujer/public_html/SYSGES/checkout/editar-fem.php on line 841
+[13-Nov-2025 15:45:27 UTC] PHP Warning:  Undefined variable $servername in /home/gesmujer/public_html/SYSGES/checkout/register-atencion-psicologia.php on line 178
+[13-Nov-2025 15:45:27 UTC] PHP Warning:  Undefined variable $servername in /home/gesmujer/public_html/SYSGES/checkout/register-atencion-psicologia.php on line 214
+[13-Nov-2025 15:46:39 UTC] PHP Warning:  Undefined variable $servername in /home/gesmujer/public_html/SYSGES/checkout/register-atencion-psicologia.php on line 176
+[13-Nov-2025 15:46:39 UTC] PHP Warning:  Undefined variable $servername in /home/gesmujer/public_html/SYSGES/checkout/register-atencion-psicologia.php on line 212
+[13-Nov-2025 15:54:55 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:13:48 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:13:55 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:15:33 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:15:34 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:15:35 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:15:38 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:21:56 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:22:05 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:22:07 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:22:10 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 16:22:14 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 17:00:06 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 17:07:27 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 17:18:14 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.33. in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php:26
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/vendor/composer/autoload_real.php(25): require()
+#1 /home/gesmujer/public_html/SYSGES/vendor/autoload.php(22): ComposerAutoloaderInit95f9d89bce92f7353889b4816bf6bb4e::getLoader()
+#2 /home/gesmujer/public_html/SYSGES/checkout/correo.php(5): require('/home/gesmujer/...')
+#3 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/vendor/composer/platform_check.php on line 26
+[13-Nov-2025 17:21:48 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:21:48 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:23:48 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:23:48 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:23:52 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:23:52 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:25:24 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:25:24 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:29:28 UTC] PHP Warning:  require_once(/home/gesmujer/public_html/SYSGES/checkout../vendor/autoload.php): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 5
+[13-Nov-2025 17:29:28 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/gesmujer/public_html/SYSGES/checkout../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/gesmujer/public_html/SYSGES/checkout/correo.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 5
+[13-Nov-2025 17:30:35 UTC] PHP Warning:  require_once(/home/gesmujer/public_html/SYSGES/checkout../vendor/autoload.php): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 5
+[13-Nov-2025 17:30:35 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/gesmujer/public_html/SYSGES/checkout../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/gesmujer/public_html/SYSGES/checkout/correo.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 5
+[13-Nov-2025 17:30:55 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:30:55 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:35:53 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:35:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:36:05 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:36:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:37:52 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:37:52 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:38:01 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:38:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:38:08 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:38:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:52) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:41:38 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:41:38 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:57) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:51:38 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:51:38 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:57) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:51:42 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:51:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:57) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:54:24 UTC] PHP Warning:  require_once(/home/gesmujer/public_html/SYSGES/checkout../vendor/autoload.php): Failed to open stream: No such file or directory in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 10
+[13-Nov-2025 17:54:24 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/gesmujer/public_html/SYSGES/checkout../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/gesmujer/public_html/SYSGES/checkout/correo.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 10
+[13-Nov-2025 17:54:52 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 2
+[13-Nov-2025 17:54:52 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/correo.php:57) in /home/gesmujer/public_html/SYSGES/pages/seccion.php on line 6
+[13-Nov-2025 17:56:37 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 17:59:01 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 18:10:27 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 18:24:57 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 18:28:17 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Ponentes' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/asignar-seminario-ponente.php:64
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/asignar-seminario-ponente.php(64): PDO->query('SELECT * FROM P...')
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/asignar-seminario-ponente.php on line 64
+[13-Nov-2025 18:33:41 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gesmujer_sigd2.Ponentes' doesn't exist in /home/gesmujer/public_html/SYSGES/checkout/asignar-taller-ponente.php:67
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/asignar-taller-ponente.php(67): PDO->query('SELECT * FROM P...')
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/checkout/asignar-taller-ponente.php on line 67
+[13-Nov-2025 18:41:52 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 18:45:51 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 18:47:12 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:268) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 331
+[13-Nov-2025 18:48:03 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:266) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 329
+[13-Nov-2025 18:48:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:266) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 329
+[13-Nov-2025 18:48:19 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php:266) in /home/gesmujer/public_html/SYSGES/checkout/register-usuaria.php on line 329
+[13-Nov-2025 19:03:05 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 19:03:05 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 19:03:05 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 19:03:05 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 19:06:40 UTC] PHP Warning:  Undefined variable $tipoMensaje in /home/gesmujer/public_html/SYSGES/checkout/correo.php on line 257
+[13-Nov-2025 19:06:43 UTC] PHP Warning:  Undefined array key "desaparecida" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 26
+[13-Nov-2025 19:06:43 UTC] PHP Warning:  Undefined array key "descendencia" in /home/gesmujer/public_html/SYSGES/checkout/register-fem.php on line 33
+[13-Nov-2025 19:55:39 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/gesmujer/public_html/SYSGES/pages/header.php:25
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/register-donante.php(95): require_once()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 25
+[13-Nov-2025 19:58:52 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/gesmujer/public_html/SYSGES/pages/header.php:25
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/register-donante.php(95): require_once()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 25
+[13-Nov-2025 20:00:08 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/gesmujer/public_html/SYSGES/pages/header.php:25
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/register-donante.php(93): require_once()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 25
+[13-Nov-2025 20:00:13 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/gesmujer/public_html/SYSGES/pages/header.php:25
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/register-donante.php(93): require_once()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 25
+[13-Nov-2025 20:00:51 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/gesmujer/public_html/SYSGES/pages/header.php:25
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/register-donante.php(90): require_once()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 25
+[13-Nov-2025 20:00:56 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/gesmujer/public_html/SYSGES/pages/header.php:25
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/register-donante.php(90): require_once()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 25
+[13-Nov-2025 20:00:58 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/gesmujer/public_html/SYSGES/pages/header.php:25
+Stack trace:
+#0 /home/gesmujer/public_html/SYSGES/checkout/register-donante.php(90): require_once()
+#1 {main}
+  thrown in /home/gesmujer/public_html/SYSGES/pages/header.php on line 25
+[13-Nov-2025 20:02:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/gesmujer/public_html/SYSGES/checkout/register-donativo.php:5) in /home/gesmujer/public_html/SYSGES/checkout/register-donativo.php on line 32

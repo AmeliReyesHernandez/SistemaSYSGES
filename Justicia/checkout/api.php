@@ -1,10 +1,10 @@
 <?php
 // --- 1. CONFIGURACIÓN DE LA BASE DE DATOS ---
 $host = 'localhost';
-// *** ¡Nombre de BD correcto! ***
-$db   = 'oaxacaa';
-$user = 'root';
-$pass = ''; // Ajusta si tu MySQL tiene contraseña
+$db = 'gesmujer_oaxaca';
+$user = 'gesmujer_sigdadmin';
+$pass = 'uU362-&Hfd';
+
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

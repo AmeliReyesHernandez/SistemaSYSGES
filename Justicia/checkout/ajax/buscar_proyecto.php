@@ -16,7 +16,7 @@ try {
     }
 
     $stmt = $conn->prepare("SELECT ID_Proyecto, NombreProyecto
-                            FROM Proyectos
+                            FROM proyectos
                             WHERE NombreProyecto LIKE :q
                             LIMIT 10");
     $stmt->execute(['q' => "%$q%"]);

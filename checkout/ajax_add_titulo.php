@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../db/config.php';
 
@@ -31,7 +27,7 @@ try {
     );
 
     // Evitar duplicados (case-insensitive)
-    $stmt = $pdo->prepare("SELECT ID_Titulo FROM TitulosProfesionales WHERE LOWER(NombreTitulo) = LOWER(?)");
+    $stmt = $pdo->prepare("SELECT ID_Titulo FROM titulosprofesionales WHERE LOWER(NombreTitulo) = LOWER(?)");
     $stmt->execute([$nombre]);
     $existe = $stmt->fetchColumn();
 
@@ -41,7 +37,7 @@ try {
     }
 
     // Insertar nuevo título
-    $ins = $pdo->prepare("INSERT INTO TitulosProfesionales (NombreTitulo, Descripcion) VALUES (?, ?)");
+    $ins = $pdo->prepare("INSERT INTO titulosprofesionales (NombreTitulo, Descripcion) VALUES (?, ?)");
     $ins->execute([$nombre, $descripcion]);
     $id = $pdo->lastInsertId();
 

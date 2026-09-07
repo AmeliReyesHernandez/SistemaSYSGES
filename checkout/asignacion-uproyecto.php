@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparar la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Asignaciones (ID_Usuario, ID_Proyecto) VALUES (?, ?)";
+        $sql = "INSERT INTO asignaciones (ID_Usuario, ID_Proyecto) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
 
         // Vincular los parámetros
@@ -29,8 +29,7 @@ exit();
 exit();
     }
 
-    // Cerrar la conexión
-    $conn = null;
+ 
 }
 
 // Recuperar los parámetros de la URL
@@ -152,7 +151,7 @@ require_once __DIR__ . '/../pages/header.php';
         <select name="id_proyecto" class="form-select"  id="id_proyecto">
         <?php
                 try {
-                    $sql = "SELECT ID_Proyecto, NombreProyecto FROM Proyectos";
+                    $sql = "SELECT ID_Proyecto, NombreProyecto FROM proyectos";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
 

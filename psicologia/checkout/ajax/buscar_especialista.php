@@ -17,7 +17,7 @@ try {
 
     $stmt = $conn->prepare("
         SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo
-        FROM Personal
+        FROM personal
         WHERE Nombre LIKE :q OR ApellidoPaterno LIKE :q OR ApellidoMaterno LIKE :q
         LIMIT 10
     ");

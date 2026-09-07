@@ -13,25 +13,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_proyecto = $_POST["id_proyecto"];
 
     try {
-        // Preparar la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Asignaciones (ID_Usuario, ID_Proyecto) VALUES (?, ?)";
-        $stmt = $conn->prepare($sql);
+       // Obtener solo la fecha actual (sin hora)
+$fecha_actual = date("Y-m-d");
 
-        // Vincular los parÃ¡metros
-        $stmt->bindParam(1, $id_usuario);
-        $stmt->bindParam(2, $id_proyecto);
+// Preparar la consulta SQL para insertar los datos
+$sql = "INSERT INTO asignaciones (ID_Usuario, ID_Proyecto, FechaRegistro) VALUES (?, ?, ?)";
+$stmt = $conn->prepare($sql);
+
+// Vincular los par¨¢metros
+$stmt->bindParam(1, $id_usuario);
+$stmt->bindParam(2, $id_proyecto);
+$stmt->bindParam(3, $fecha_actual);
+
+
+
 
         // Ejecutar la consulta
-        $stmt->execute();
-               header("Location: ../pages/ver-proyectos-asignados.php?statuss=success");
-exit();
+       $stmt->execute();
+     header("Location: ../pages/ver-proyectos-asignados.php?statuss=success");
+     
+
+
+    exit(); // 
+
     } catch (PDOException $e) {
-       header("Location: ../pages/ver-proyectos-asignados.php?statuss=error&msg=" . urlencode($e->getMessage()));
-exit();
+header("Location: ../pages/ver-proyectos-asignados.php?statuss=error&msg=" . urlencode($e->getMessage()));
+
+  exit(); 
     }
 
-    // Cerrar la conexiÃ³n
-    $conn = null;
+    
 }
 ?>
 
@@ -128,7 +139,7 @@ require_once __DIR__ . '/../pages/header.php';
     <div class="row g-5">
     <div class="col-xxl-12 col-xxl-12">
         <h4 class="mb-3">Datos Generales</h4>
-        <form class="needs-validation" action="asignacion-proyecto.php" method="POST" enctype="multipart/form-data"  novalidate>
+        <form class="needs-validation" action="guardar-asignacion.php" method="POST" enctype="multipart/form-data"  novalidate>
     <div class="row g-3">
 
     <div class="col-sm-12">

@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 // Función para eliminar un registro de personal
@@ -12,7 +9,7 @@ function eliminarPersonal($id) {
 
     try {
         // Preparar y ejecutar la consulta SQL para eliminar el registro de personal
-        $query = "DELETE FROM Personal WHERE ID_Personal = :id";
+        $query = "DELETE FROM personal WHERE ID_Personal = :id";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -35,7 +32,7 @@ if(isset($_GET['eliminar_id'])) {
 
     // Llamar a la función para eliminar el registro de personal
     if(eliminarPersonal($id)) {
-         header("Location: ./ver-personal.php?msg=success");
+         header("Location: ../pages/ver-personal.php?msg=success");
         exit();
     } else {
         header("Location: ./ver-personal.php?msg=error");

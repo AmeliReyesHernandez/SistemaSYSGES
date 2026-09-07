@@ -13,15 +13,15 @@ try {
         SELECT apt.ID, t.ID_Taller, t.Nombre AS NombreTaller, 
                p.Nombre AS NombrePonente, apt.FechaAsignacion
         FROM asignacion_ponentes_taller apt
-        LEFT JOIN Talleres t ON apt.ID_Taller = t.ID_Taller
-        LEFT JOIN Ponentes p ON apt.ID_Ponente = p.ID_Ponente
+        LEFT JOIN talleres t ON apt.ID_Taller = t.ID_Taller
+        LEFT JOIN ponentes p ON apt.ID_Ponente = p.ID_Ponente
     ";
 
     $countQuery = "
         SELECT COUNT(*)
         FROM asignacion_ponentes_taller apt
-        LEFT JOIN Talleres t ON apt.ID_Taller = t.ID_Taller
-        LEFT JOIN Ponentes p ON apt.ID_Ponente = p.ID_Ponente
+        LEFT JOIN talleres t ON apt.ID_Taller = t.ID_Taller
+        LEFT JOIN ponentes p ON apt.ID_Ponente = p.ID_Ponente
     ";
 
     $condiciones = [];

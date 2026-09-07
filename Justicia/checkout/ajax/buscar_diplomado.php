@@ -17,7 +17,7 @@ try {
 
     $stmt = $conn->prepare("
         SELECT ID_Diplomado, NombreDiplomado
-        FROM Diplomados
+        FROM diplomados
         WHERE NombreDiplomado LIKE :q
         LIMIT 10
     ");

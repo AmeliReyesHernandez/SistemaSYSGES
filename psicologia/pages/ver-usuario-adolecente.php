@@ -463,7 +463,7 @@ try {
     echo "<div class='row g-1'>";
 
     echo "<div class='col-6'><a href='../checkout/editar-tutor.php?id={$usuario['id']}' class='btn btn-primary btn-sm w-100'><i class='bi bi-pencil-square'></i></a></div>";
-    echo "<div class='col-6'><button class='btn btn-danger btn-sm w-100 eliminar-usuario' data-id='{$usuario['id']}'><i class='bi bi-trash3-fill'></i></button></div>";
+   // echo "<div class='col-6'><button class='btn btn-danger btn-sm w-100 eliminar-usuario' data-id='{$usuario['id']}'><i class='bi bi-trash3-fill'></i></button></div>";
     echo "<div class='col-6'><button class='btn btn-success btn-sm w-100 registrar-cita' data-id='{$usuario['id']}' data-nombre='{$usuario['nombre2']} {$usuario['apellidoPaterno2']} {$usuario['apellidoMaterno2']}'>Registrar Citas Adolecentes</button></div>";
     echo "<div class='col-6'><button class='btn btn-warning btn-sm w-100 registrar-atencion' data-id='{$usuario['id']}' data-nombre='{$usuario['nombre2']} {$usuario['apellidoPaterno2']} {$usuario['apellidoMaterno2']}'>Registrar Atención</button></div>";
    // echo "<div class='col-6'><button class='btn btn-secondary btn-sm w-100 registrar-proyecto' data-id='{$usuario['id']}' data-nombre='{$usuario['nombre2']} {$usuario['apellidoPaterno2']} {$usuario['apellidoMaterno2']}'>Asignar Proyecto</button></div>";

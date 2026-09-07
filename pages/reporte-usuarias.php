@@ -409,7 +409,7 @@ try {
     // Iterar sobre cada campo para obtener los totales de usuarios
     foreach ($fields as $field => $title) {
         // Construir la consulta SQL con filtros de fecha
-        $query = "SELECT $field AS Opcion, COUNT(*) AS TotalUsuarios FROM Usuario WHERE $field IS NOT NULL";
+        $query = "SELECT $field AS Opcion, COUNT(*) AS TotalUsuarios FROM usuario WHERE $field IS NOT NULL";
 
         if (!empty($year)) {
             $query .= " AND YEAR(FechaRegistro) = :year";
@@ -463,7 +463,7 @@ try {
     }
 
     // Consulta SQL para obtener el total de usuarios con filtros de fecha
-    $query_total_usuarios = "SELECT COUNT(*) AS TotalUsuarios FROM Usuario WHERE 1";
+    $query_total_usuarios = "SELECT COUNT(*) AS TotalUsuarios FROM usuario WHERE 1";
 
     if (!empty($year)) {
         $query_total_usuarios .= " AND YEAR(FechaRegistro) = :year";

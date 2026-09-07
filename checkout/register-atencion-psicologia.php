@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 // Verificamos si se recibieron datos del formulario
@@ -29,7 +27,7 @@ $tipoMensaje = "";
 
     try {
         // Preparamos la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Detalles_APsicologico (ID_Usuario, ID_Personal, TipoAtencion, MotivoAtencion, Modalidad, Herramientas, Transtorno, Sindrome, Canalizacion, Donde, PorcentajeAvance, EstadoCaso, EstadoCita, Horas, Descripcion, FechaRegistro) 
+        $sql = "INSERT INTO detalles_psicologico (ID_Usuario, ID_Personal, TipoAtencion, MotivoAtencion, Modalidad, Herramientas, Transtorno, Sindrome, Canalizacion, Donde, PorcentajeAvance, EstadoCaso, EstadoCita, Horas, Descripcion, FechaRegistro) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         // Preparamos la sentencia
@@ -180,7 +178,7 @@ require_once __DIR__ . '/../pages/header.php';
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         // Consulta para obtener los IDs de usuario con el nombre completo
-        $sql = "SELECT id, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto FROM Usuario";
+        $sql = "SELECT id, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto FROM usuario";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 
@@ -216,7 +214,7 @@ require_once __DIR__ . '/../pages/header.php';
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             // Consultar la base de datos para obtener los IDs de personal
-            $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo FROM Personal";
+            $sql = "SELECT ID_Personal, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS nombre_completo FROM personal";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 

@@ -315,15 +315,15 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base con JOIN
-    $query = "SELECT Donativos.ID_Donativo, 
-                     CONCAT(Donantes.Nombre, ' ', Donantes.ApellidoPaterno, ' ', Donantes.ApellidoMaterno) AS NombreCompleto, 
-                     Donativos.MontoDonacion, Donativos.TipoDonacion 
-              FROM Donativos 
-              INNER JOIN Donantes ON Donativos.ID_Donante = Donantes.ID_Donante";
+    $query = "SELECT donativos.ID_Donativo, 
+                     CONCAT(donantes.Nombre, ' ', donantes.ApellidoPaterno, ' ', donantes.ApellidoMaterno) AS NombreCompleto, 
+                     donativos.MontoDonacion, donativos.TipoDonacion 
+              FROM donativos 
+              INNER JOIN donantes ON donativos.ID_Donante = donantes.ID_Donante";
 
     $countQuery = "SELECT COUNT(*) 
-                   FROM Donativos 
-                   INNER JOIN Donantes ON Donativos.ID_Donante = Donantes.ID_Donante";
+                   FROM donativos 
+                   INNER JOIN donantes ON donativos.ID_Donante = donantes.ID_Donante";
 
     $condiciones = [];
     $params = [];

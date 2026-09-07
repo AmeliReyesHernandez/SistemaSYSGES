@@ -320,8 +320,8 @@ try {
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Personal";
-    $countQuery = "SELECT COUNT(*) FROM Personal";
+    $query = "SELECT * FROM personal";
+    $countQuery = "SELECT COUNT(*) FROM personal";
 
     $condiciones = [];
     $params = [];
@@ -365,7 +365,7 @@ try {
         echo "<tr>";
         echo "<td>{$personal['ID_Personal']}</td>";
     echo "<td>";
-$foto = !empty($personal['foto']) ? $personal['foto'] : '../../uploads/personal/default.png';
+$foto = !empty($personal['foto']) ? $personal['foto'] : 'default.png';
 // Verifica si la ruta ya incluye "uploads/"
 if (strpos($foto, "uploads/") !== false) {
     echo '<img src="../../' . htmlspecialchars($foto) . '" alt="Foto Personal" class="foto-ponente" width="80">';

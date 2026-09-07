@@ -314,9 +314,9 @@ require_once __DIR__ . '/../pages/footer.php';
                                     c.Fecha, 
                                     c.Hora, 
                                     DAY(c.Fecha) as Dia 
-                            FROM Citasa c 
+                            FROM citasa c 
                             LEFT JOIN tutor u ON c.ID_tutor = u.id 
-                            LEFT JOIN Personal p ON c.ID_Personal = p.ID_Personal 
+                            LEFT JOIN personal p ON c.ID_Personal = p.ID_Personal 
                             WHERE MONTH(c.Fecha) = $mes_actual AND YEAR(c.Fecha) = $año_actual";
                 $resultado = $conn->query($consulta);
 
@@ -384,6 +384,20 @@ require_once __DIR__ . '/../pages/footer.php';
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
     <script src="dashboard.js"></script>
+    
+    <?php if (isset($_GET['status'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: "<?= $_GET['status'] === 'success' ? 'success' : 'error' ?>",
+            title: "<?= $_GET['status'] === 'success' ? 'Cita Registrada Correctamente' : 'Error al registrar' ?>",
+            text: "<?= $_GET['status'] === 'error' ? urldecode($_GET['msg']) : '' ?>",
+            showConfirmButton: false,
+            timer: 2000, // ⏱️ 2 segundos
+            timerProgressBar: true
+        });
+    </script>
+<?php endif; ?>
 
 </body>
 </html>

@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
 
-<?php
 // ajax_add_especialidad.php
 header('Content-Type: application/json; charset=utf-8');
 
@@ -28,7 +26,7 @@ try {
   ]);
 
   // Evitar duplicados (case-insensitive)
-  $stmt = $pdo->prepare("SELECT ID_Especialidad FROM Especialidades WHERE LOWER(NombreEspecialidad) = LOWER(:nombre)");
+  $stmt = $pdo->prepare("SELECT ID_Especialidad FROM especialidades WHERE LOWER(NombreEspecialidad) = LOWER(:nombre)");
   $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
   $stmt->execute();
   $existe = $stmt->fetchColumn();
@@ -39,7 +37,7 @@ try {
     exit;
   }else{}
 
-  $ins = $pdo->prepare("INSERT INTO Especialidades (NombreEspecialidad, Descripcion) VALUES (?, ?)");
+  $ins = $pdo->prepare("INSERT INTO especialidades (NombreEspecialidad, Descripcion) VALUES (?, ?)");
   $ins->execute([$nombre, $descripcion]);
   
   $id = $pdo->lastInsertId();

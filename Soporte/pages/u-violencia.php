@@ -336,14 +336,14 @@ try {
 
     // Consulta base
     $query = "SELECT u.id AS usuario_id, u.Nombre AS usuario_nombre, u.ApellidoPaterno AS usuario_apellido_paterno, u.ApellidoMaterno AS usuario_apellido_materno, tv.Nombre_tipo AS tipo_violencia_nombre
-              FROM Usuario u
-              INNER JOIN Usuarios_Tipos_Violencia utv ON u.id = utv.ID_Usuario
-              INNER JOIN Tipos_Violencia tv ON utv.ID_Tipo_Violencia = tv.ID_Tipo_Violencia";
+              FROM usuario u
+              INNER JOIN usuarios_tipos_violencia utv ON u.id = utv.ID_Usuario
+              INNER JOIN tipos_violencia tv ON utv.ID_Tipo_Violencia = tv.ID_Tipo_Violencia";
 
     $countQuery = "SELECT COUNT(*) 
-                   FROM Usuario u
-                   INNER JOIN Usuarios_Tipos_Violencia utv ON u.id = utv.ID_Usuario
-                   INNER JOIN Tipos_Violencia tv ON utv.ID_Tipo_Violencia = tv.ID_Tipo_Violencia";
+                   FROM usuario u
+                   INNER JOIN usuarios_tipos_violencia utv ON u.id = utv.ID_Usuario
+                   INNER JOIN tipos_violencia tv ON utv.ID_Tipo_Violencia = tv.ID_Tipo_Violencia";
 
     $condiciones = [];
     $params = [];

@@ -21,11 +21,11 @@ try {
                 s.Estado,
                 p.Nombre AS NombrePonente, 
                 p.ApellidoPaterno AS ApellidoPonente
-              FROM Seminarios s
+              FROM seminarios s
               LEFT JOIN asignacion_ponente_seminario aps ON s.ID_Seminario = aps.ID_Seminario
               LEFT JOIN ponentes p ON aps.ID_Ponente = p.ID_Ponente";
               
-    $countQuery = "SELECT COUNT(*) FROM Seminarios"; // El count no necesita el join si no filtra por ponente
+    $countQuery = "SELECT COUNT(*) FROM seminarios"; // El count no necesita el join si no filtra por ponente
 
     $condiciones = [];
     $params = [];
@@ -347,8 +347,8 @@ try {
     $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($pagina - 1) * $registrosPorPagina;
 
-    $query = "SELECT * FROM Seminarios";
-    $countQuery = "SELECT COUNT(*) FROM Seminarios";
+    $query = "SELECT * FROM seminarios";
+    $countQuery = "SELECT COUNT(*) FROM seminarios";
 
     $condiciones = [];
     $params = [];
@@ -412,7 +412,7 @@ try {
           <td><?= htmlspecialchars($s['DuracionHoras']) ?></td>
           <td><?= htmlspecialchars($s['Estado']) ?></td>
           <td>
-            <a href="/ERP/ERP_IRP/checkout/editar_seminario.php?id=<?= $s['ID_Seminario'] ?>" class="btn btn-sm btn-warning">Editar</a>
+            <a href="./../checkout/editar_seminario.php?id=<?= $s['ID_Seminario'] ?>" class="btn btn-sm btn-warning">Editar</a>
             <button class="btn btn-sm btn-danger eliminar-seminario" data-id="<?= $s['ID_Seminario'] ?>">Eliminar</button>
           </td>
         </tr>

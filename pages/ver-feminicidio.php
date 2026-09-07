@@ -341,8 +341,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Feminicidios";
-    $countQuery = "SELECT COUNT(*) FROM Feminicidios";
+    $query = "SELECT * FROM feminicidios";
+    $countQuery = "SELECT COUNT(*) FROM feminicidios";
 
     $condiciones = [];
     $params = [];
@@ -416,7 +416,7 @@ try {
         echo "<td>{$feminicidio['Sexenio']}</td>";
         echo "<td>";
         
-   echo "<a href='../checkout/editar-fem.php?id={$feminicidio['ID']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
+   echo "<a href='./../checkout/editar-fem.php?id={$feminicidio['ID']}' class='btn btn-primary btn-sm'><i class='bi bi-pencil-square'></i></a> ";
   
         echo "<button class='btn btn-danger btn-sm eliminar-feminicidio' data-id='{$feminicidio['ID']}'>Eliminar</button>";
         echo "</td>";

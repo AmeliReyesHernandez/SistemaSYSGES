@@ -1,7 +1,7 @@
 <?php
 // Definir las credenciales de la base de datos
 $host = 'localhost';
-$dbname = 'sysges';
+$dbname = 'gesmujer_sigd2';
 $username = 'root';
 $password = '';
 

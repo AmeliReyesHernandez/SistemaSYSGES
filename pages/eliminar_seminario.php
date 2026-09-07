@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 if (!isset($_GET['eliminar_id']) || !is_numeric($_GET['eliminar_id'])) {
@@ -27,6 +23,6 @@ try {
         exit();
     }
 } catch (PDOException $e) {
-    echo "Error en la base de datos: " . $e->getMessage();
+    echo  $e;
 }
 ?>

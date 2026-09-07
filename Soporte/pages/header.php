@@ -1,9 +1,14 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
+
+?>
+
+<?php
 require_once __DIR__ . '/../db/config.php';
 
+
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role_id'])) {
-    header("Location: ../../sign-in/index.php");
+    header("Location: ../sign-in/index.php");
     exit();
 }
 
@@ -23,46 +28,67 @@ $stmt->execute();
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Si no hay foto guardada, usar una por defecto
+
+
+// Si no hay foto guardada, usar una por defecto
 $foto = !empty($usuario['foto']) ? $usuario['foto'] : 'default.png';
+
+// Verificar si la ruta ya incluye "uploads/"
 if (strpos($foto, "uploads/") !== false) {
     $fotoFinal = "../../" . htmlspecialchars($foto);
 } else {
     $fotoFinal = "../../uploads/personal/" . htmlspecialchars($foto);
 }
+
 ?>
+
+
+
+
+
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
 
-<!-- Menú superior con diseño verde estilo Microsoft Edge -->
-<header class="navbar sticky-top shadow-sm" style="height: 65px; background: #721896; color: #fff;">
-  <div class="container-fluid px-3 d-flex align-items-center justify-content-between">
-    
-    <!-- Logo o nombre -->
-    <a class="navbar-brand d-flex align-items-center text-white fw-semibold fs-5" href="./../pages/home.php" style="letter-spacing: 0.8px; background:none; box-shadow:none; border:none; padding:0;">
-      <img src="../assets/img/logo 1.png" alt="Logo" width="48" height="48" class="me-2 rounded-circle" style="object-fit:cover;">
-      <span style="font-weight:600;">Ges<span class="text-light">Mujer</span></span>
-    </a>
 
-    <!-- Menú de usuario con badge de notificaciones -->
-    <div class="dropdown position-relative">
+<!-- Menú superior con diseño verde estilo Microsoft Edge -->
+<header class="navbar sticky-top shadow-sm " 
+  style="
+    height: 65px;
+    background: #721896;
+    color: #fff;
+  ">
+  <div class="container-fluid px-3 d-flex align-items-center justify-content-between">
+    <!-- Logo o nombre -->
+ <a class="navbar-brand d-flex align-items-center text-white fw-semibold fs-5" 
+   href="./../pages/home.php" 
+   style="letter-spacing: 0.8px; background:none; box-shadow:none; border:none; padding:0;">
+  <img src="../assets/img/logo 1.png" alt="Logo" width="48" height="48" class="me-2 rounded-circle" style="object-fit:cover;">
+  <span style="font-weight:600;">Ges<span class="text-light">Mujer</span></span>
+</a>
+
+
+
+
+
+    <!-- Menú de usuario -->
+    <div class="dropdown">
       <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <img src="<?= $fotoFinal ?>" alt="Usuario" class="rounded-circle me-2 border border-light shadow-sm" width="40" height="40">
         <span class="d-none d-md-inline fw-semibold"><?= htmlspecialchars($usuario['Nombre']) ?></span>
-
-        <!-- Badge de mensajes nuevos -->
-        <span id="badge-mensajes" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
       </a>
 
       <ul class="dropdown-menu dropdown-menu-end mt-2 shadow border-0 rounded-3 animate-dropdown">
         <li class="px-3 py-2 border-bottom bg-body-tertiary">
-          <div class="d-flex align-items-center">
-            <img src="<?= $fotoFinal ?>" alt="Usuario" class="rounded-circle me-2 border border-success-subtle" width="35" height="35">
-            <div>
-              <strong><?= htmlspecialchars($usuario['Nombre']) ?></strong><br>
-              <small class="text-muted"><?= htmlspecialchars($usuario['Descripcion']) ?></small>
-            </div>
-          </div>
-        </li>
+  <div class="d-flex align-items-center">
+    <img src="<?= $fotoFinal ?>" alt="Usuario" 
+         class="rounded-circle me-2 border border-success-subtle" 
+         width="35" height="35">
+    <div>
+      <strong><?= htmlspecialchars($usuario['Nombre']) ?></strong><br>
+      <small class="text-muted"><?= htmlspecialchars($usuario['Descripcion']) ?></small>
+    </div>
+  </div>
+</li>
 
         <li>
           <a class="dropdown-item py-2" href="../checkout/editar-personal.php?id=<?= htmlspecialchars($usuario['ID_Personal']) ?>">
@@ -71,7 +97,7 @@ if (strpos($foto, "uploads/") !== false) {
         </li>
         <li><hr class="dropdown-divider"></li>
         <li>
-          <a class="dropdown-item py-2 text-danger fw-semibold" href="./../../pages/sign-out.php">
+          <a class="dropdown-item py-2 text-danger fw-semibold" href="./sign-out.php">
             <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
           </a>
         </li>
@@ -79,37 +105,6 @@ if (strpos($foto, "uploads/") !== false) {
     </div>
   </div>
 </header>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-let ultimoConteo = 0;
-
-function actualizarNotificacion() {
-    $.getJSON('./obtener-mensajes-nuevos.php', function(data) {
-        const badge = $('#badge-mensajes');
-        
-        if(data.noLeidos > 0){
-            badge.text(data.noLeidos).removeClass('d-none');
-        } else {
-            badge.addClass('d-none');
-        }
-
-        // Sonido de notificación si hay nuevos mensajes
-        if(data.noLeidos > ultimoConteo){
-            const audio = new Audio('../assets/sounds/notification.mp3'); // coloca tu sonido aquí
-            audio.play();
-        }
-
-        ultimoConteo = data.noLeidos;
-    });
-}
-
-$(document).ready(function(){
-    actualizarNotificacion();
-    setInterval(actualizarNotificacion, 5000); // cada 5 segundos
-});
-</script>
-
 
 <style>
 

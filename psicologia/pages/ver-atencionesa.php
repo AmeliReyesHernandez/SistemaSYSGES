@@ -368,13 +368,13 @@ try {
                             DA.EstadoCaso, 
                             DA.EstadoCita, 
                             DA.Descripcion 
-                        FROM Detalles_Atenciona DA 
+                        FROM detalles_atenciona DA 
                         INNER JOIN tutor U ON DA.ID_tutor = U.id 
-                        INNER JOIN Personal P ON DA.ID_Personal = P.ID_Personal";
+                        INNER JOIN personal P ON DA.ID_Personal = P.ID_Personal";
 
-    $countQuery = "SELECT COUNT(*) FROM Detalles_Atenciona DA 
+    $countQuery = "SELECT COUNT(*) FROM detalles_atenciona DA 
                     INNER JOIN tutor U ON DA.ID_tutor = U.id 
-                    INNER JOIN Personal P ON DA.ID_Personal = P.ID_Personal";
+                    INNER JOIN personal P ON DA.ID_Personal = P.ID_Personal";
 
     $condiciones = [];
     $params = [];

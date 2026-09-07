@@ -12,7 +12,7 @@ $id = (int) $_GET['id'];
 // Si se envía el formulario (actualización)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        $sql = "UPDATE Feminicidios SET 
+        $sql = "UPDATE feminicidios SET 
             FechaHecho = :FechaHecho,
             NombreVictima = :NombreVictima,
             ApellidoPaterno = :ApellidoPaterno,
@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Obtener los datos actuales
-$stmt = $conn->prepare("SELECT * FROM Feminicidios WHERE ID = :id");
+$stmt = $conn->prepare("SELECT * FROM feminicidios WHERE ID = :id");
 $stmt->execute([':id' => $id]);
 $fem = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -231,7 +231,7 @@ require_once __DIR__ . '/../pages/header.php';
 
  <div class="col-sm-6 position-relative">
     <label for="lugar_origen" class="form-label">Lugar de Origen</label>
-    <input type="text" class="form-control" id="lugar_origen" name="LugarOrigen"
+    <input type="text" class="form-control" id="lugar_origenn" name="LugarOrigen"
           value="<?= htmlspecialchars($fem['LugarOrigen'] ?? 'SIN DATOS') ?>" autocomplete="off" >
     <div class="sugerencias" id="sug_lugar_origen" 
          style="border:1px solid #ccc; max-height:150px; overflow-y:auto; position:absolute; background:#fff; width:95%; z-index:1000;">
@@ -242,11 +242,7 @@ require_once __DIR__ . '/../pages/header.php';
 
 
 <?php
-$host = 'localhost';
-$db   = 'oaxacaa';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+require_once __DIR__ . '/../db/configoaxaca.php';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 
@@ -268,7 +264,7 @@ try {
 
 
 <script>
-const inputOrigen = document.getElementById('lugar_origen');
+const inputOrigen = document.getElementById('lugar_origenn');
 const sugOrigen = document.getElementById('sug_lugar_origen');
 const hiddenOrigenId = document.getElementById('selected_origen_id');
 

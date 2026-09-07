@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         
         // Consulta SQL para insertar los datos en la tabla Feminicidios
-        $sql = "INSERT INTO Feminicidios (FechaHecho, NombreVictima, ApellidoPaterno, ApellidoMaterno, LugarOrigen, edad, Ocupacion, Calle, Numero, Municipio, Region, Estado, ClaveMunicipio, AlertaGenero, IDCasoAnual, NumAveriguacion, SituacionJuridica, Desaparecida, FechaDesaparicion, LugarEncontradoCuerpo, DescripcionCuerpo, FormaMuerte, TipoArma, Causas, Descendencia, NumDescendencia, NombreAgresor, ParentescoAgresor, FuentePeriodistica, AutorNota, LinkNota, Latitud, Longitud, Sexenio, Numa) 
+        $sql = "INSERT INTO feminicidios (FechaHecho, NombreVictima, ApellidoPaterno, ApellidoMaterno, LugarOrigen, edad, Ocupacion, Calle, Numero, Municipio, Region, Estado, ClaveMunicipio, AlertaGenero, IDCasoAnual, NumAveriguacion, SituacionJuridica, Desaparecida, FechaDesaparicion, LugarEncontradoCuerpo, DescripcionCuerpo, FormaMuerte, TipoArma, Causas, Descendencia, NumDescendencia, NombreAgresor, ParentescoAgresor, FuentePeriodistica, AutorNota, LinkNota, Latitud, Longitud, Sexenio, Numa) 
                 VALUES (:fecha_hecho, :nombre_victima, :apellido_paterno, :apellido_materno, :lugar_origen, :edad, :ocupacion, :calle, :numero, :municipio, :region, :estado, :clave_municipio, :alerta_genero, :id_caso_anual, :num_averiguacion, :situacion_juridica, :desaparecida, :fecha_desaparicion, :lugar_cuerpo, :descripcion_cuerpo, :forma_muerte, :tipo_arma, :causas, :descendencia, :num_descendencia, :nombre_agresor, :parentesco_agresor, :fuente_periodistica, :autor_nota, :link_nota, :latitud, :longitud, :sexenio, :numa)";
         
         // Preparar la consulta
@@ -104,7 +104,7 @@ exit();
     }
 
     // Cerrar la conexión a la base de datos
-    $conn = null;
+    //$conn = null;
 }
 ?>
  
@@ -202,7 +202,7 @@ require_once __DIR__ . '/../pages/header.php';
     <div class="row g-5">
     <div class="col-xxl-12 col-xxl-12">
         <h4 class="mb-3">Datos Generales</h4>
-        <form class="needs-validation" action="register-f.php" method="POST" enctype="multipart/form-data"  novalidate>
+        <form class="needs-validation" action="register-fem.php" method="POST" enctype="multipart/form-data"  novalidate>
     <div class="row g-3">
         
     <div class="col-sm-12">
@@ -231,7 +231,7 @@ require_once __DIR__ . '/../pages/header.php';
 
     <div class="col-sm-6 position-relative">
     <label for="lugar_origen" class="form-label">Lugar de Origen</label>
-    <input type="text" class="form-control" id="lugar_origen" name="lugar_origen" 
+    <input type="text" class="form-control" id="lugar_origenn" name="lugar_origen" 
            placeholder="Escribe o selecciona un municipio..." autocomplete="off" >
     <div class="sugerencias" id="sug_lugar_origen" 
          style="border:1px solid #ccc; max-height:150px; overflow-y:auto; position:absolute; background:#fff; width:95%; z-index:1000;">
@@ -242,11 +242,7 @@ require_once __DIR__ . '/../pages/header.php';
 
 
 <?php
-$host = 'localhost';
-$db   = 'oaxacaa';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+    require_once __DIR__ . '/../db/configoaxaca.php';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 
@@ -268,7 +264,7 @@ try {
 
 
 <script>
-const inputOrigen = document.getElementById('lugar_origen');
+const inputOrigen = document.getElementById('lugar_origenn');
 const sugOrigen = document.getElementById('sug_lugar_origen');
 const hiddenOrigenId = document.getElementById('selected_origen_id');
 
@@ -331,7 +327,7 @@ inputOrigen.addEventListener('blur', () => {
 
     <div class="col-sm-6">
     <label for="ocupacion" class="form-label">Ocupación</label>
-    <select class="form-select" id="lugar_origen" name="ocupacion" >
+    <select class="form-select" id="lugar_origenn" name="ocupacion" >
         <option value="">--</option>
         <option value="Estudiante">Estudiante</option>
         <option value="Ama de casa">Ama de casa</option>

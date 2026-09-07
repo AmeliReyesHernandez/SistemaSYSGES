@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 // Incluir el archivo de configuración de la base de datos
 require_once __DIR__ . '/../db/config.php';
 
@@ -19,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparar la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Citasa (ID_tutor, ID_Personal, TipoAtencion, Fecha, Hora) 
+        $sql = "INSERT INTO citasa (ID_tutor, ID_Personal, TipoAtencion, Fecha, Hora) 
                 VALUES (?, ?, ?, ?, ?)";
         
         // Preparar la sentencia

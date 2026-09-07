@@ -368,13 +368,13 @@ try {
                             DA.EstadoCaso, 
                             DA.EstadoCita, 
                             DA.Descripcion 
-                        FROM Detalles_Atencion DA 
-                        INNER JOIN Usuario U ON DA.ID_Usuario = U.id 
-                        INNER JOIN Personal P ON DA.ID_Personal = P.ID_Personal";
+                        FROM detalles_atencion DA 
+                        INNER JOIN usuario U ON DA.ID_Usuario = U.id 
+                        INNER JOIN personal P ON DA.ID_Personal = P.ID_Personal";
 
-    $countQuery = "SELECT COUNT(*) FROM Detalles_Atencion DA 
-                    INNER JOIN Usuario U ON DA.ID_Usuario = U.id 
-                    INNER JOIN Personal P ON DA.ID_Personal = P.ID_Personal";
+    $countQuery = "SELECT COUNT(*) FROM detalles_atencion DA 
+                    INNER JOIN usuario U ON DA.ID_Usuario = U.id 
+                    INNER JOIN personal P ON DA.ID_Personal = P.ID_Personal";
 
     $condiciones = [];
     $params = [];
@@ -562,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Eliminado!',
-                        text: 'La donación fue eliminada correctamente.',
+                        text: 'Atencion fue eliminada correctamente.',
                         timer: 2000,
                         showConfirmButton: false
                     
@@ -572,7 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Swal.fire({
                         icon: 'info',
                         title: 'Cancelado',
-                        text: 'La donación no fue eliminada 🙂',
+                        text: 'Atencion no fue eliminada 🙂',
                         timer: 2000,
                         showConfirmButton: false
                     });

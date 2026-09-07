@@ -262,7 +262,7 @@ try {
 
     // Consulta resumen del usuario
     $query = "SELECT Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Edad, Sexo, 
-                     OrientacionSexual, Estadocivil, LugarNacimiento, LenguaMaterna, LenguaIndigena, FechaRegistro
+                     comunidadLGBT, Estadocivil, LugarNacimiento, LenguaMaterna, LenguaIndigena, FechaRegistro
               FROM usuario 
               WHERE id = :usuario_id
               LIMIT 1";

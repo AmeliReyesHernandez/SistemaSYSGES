@@ -328,10 +328,10 @@ try {
     $query = "SELECT p.ID_Proyecto, CONCAT(pe.Nombre, ' ', pe.ApellidoPaterno, ' ', pe.ApellidoMaterno) AS NombrePersonal, 
                      p.NombreProyecto, p.MontoFinanciamiento, p.FechaInicio, p.FechaTermino, p.Dependencia, 
                      p.DescripcionProyecto, p.Administrador
-              FROM Proyectos p
-              INNER JOIN Personal pe ON p.ID_Personal = pe.ID_Personal";
+              FROM proyectos p
+              INNER JOIN personal pe ON p.ID_Personal = pe.ID_Personal";
 
-    $countQuery = "SELECT COUNT(*) FROM Proyectos p INNER JOIN Personal pe ON p.ID_Personal = pe.ID_Personal";
+    $countQuery = "SELECT COUNT(*) FROM proyectos p INNER JOIN personal pe ON p.ID_Personal = pe.ID_Personal";
 
     $condiciones = [];
     $params = [];

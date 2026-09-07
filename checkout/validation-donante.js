@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
       this.value = this.value.toUpperCase();
   
       // Verificar si el texto cumple con las restricciones
-      let regex = /^[a-zA-ZáéíóúÁÉÍÓÚ\s]{3,70}$/;
+     let regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,70}$/;
+
       if (!regex.test(this.value)) {
         this.setCustomValidity('Se requiere un nombre válido.');
         this.classList.add('is-invalid');
@@ -29,7 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
       this.value = this.value.toUpperCase();
   
       // Verificar si el texto cumple con las restricciones
-      let regex = /^[a-zA-ZáéíóúÁÉÍÓÚ\s]{3,70}$/;
+     let regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,70}$/;
+
       if (!regex.test(this.value)) {
         this.setCustomValidity('Se requiere un nombre válido.');
         this.classList.add('is-invalid');
@@ -51,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function () {
       this.value = this.value.toUpperCase();
   
       // Verificar si el texto cumple con las restricciones
-      let regex = /^[a-zA-ZáéíóúÁÉÍÓÚ\s]{3,70}$/;
+   let regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,70}$/;
+
       if (!regex.test(this.value)) {
         this.setCustomValidity('Se requiere un nombre válido.');
         this.classList.add('is-invalid');

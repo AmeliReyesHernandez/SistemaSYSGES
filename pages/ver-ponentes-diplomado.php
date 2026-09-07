@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 require_once __DIR__ . '/../db/config.php';

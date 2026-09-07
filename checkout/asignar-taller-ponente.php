@@ -64,7 +64,7 @@ exit();
 
 // cargar talleres y ponentes
 $talleresRows = $conn->query("SELECT * FROM talleres ORDER BY fecha ASC")->fetchAll(PDO::FETCH_ASSOC);
-$ponentesRows = $conn->query("SELECT * FROM Ponentes ORDER BY Nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
+$ponentesRows = $conn->query("SELECT * FROM ponentes ORDER BY Nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 $talleresMap = [];
 foreach ($talleresRows as $r) $talleresMap[$r['ID_Taller']] = tituloTallerFromRow($r);

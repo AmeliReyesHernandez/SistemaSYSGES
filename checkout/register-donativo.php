@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 // Verificamos si se recibieron datos del formulario
@@ -16,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparamos la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Donativos (ID_Donante, MontoDonacion, TipoDonacion) 
+        $sql = "INSERT INTO donativos (ID_Donante, MontoDonacion, TipoDonacion) 
                 VALUES (?, ?, ?)";
         
         // Preparamos la sentencia
@@ -43,8 +39,6 @@ exit();
     $conn = null;
 }
 ?>
-
-
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
     <head><script src="../assets/js/color-modes.js"></script>

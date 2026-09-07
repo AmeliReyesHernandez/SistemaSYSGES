@@ -383,8 +383,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Usuario";
-    $countQuery = "SELECT COUNT(*) FROM Usuario";
+    $query = "SELECT * FROM usuario";
+    $countQuery = "SELECT COUNT(*) FROM usuario";
 
     // Arreglo de condiciones
     $condiciones = [];
@@ -392,7 +392,7 @@ try {
 
     // Búsqueda por texto
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-        $condiciones[] = "CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno, ' ', Sexo, ' ', LenguaMaterna, ' ', LenguaIndigena, ' ', OrientacionSexual) LIKE :search";
+        $condiciones[] = "CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno, ' ', Sexo, ' ', LenguaMaterna, ' ', LenguaIndigena, ' ', comunidadLGBT) LIKE :search";
         $params[':search'] = "%{$_GET['search']}%";
     }
 
@@ -588,7 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Eliminado!',
-                        text: 'La donación fue eliminada correctamente.',
+                        text: 'El Usuario fue eliminada correctamente.',
                         timer: 2000,
                         showConfirmButton: false
                     
@@ -598,7 +598,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Swal.fire({
                         icon: 'info',
                         title: 'Cancelado',
-                        text: 'La donación no fue eliminada 🙂',
+                        text: 'El Usuario no fue eliminada 🙂',
                         timer: 2000,
                         showConfirmButton: false
                     });

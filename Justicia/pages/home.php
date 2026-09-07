@@ -1,7 +1,17 @@
 <?php                                                                                                                                                                                                                                                                                                                                                                                                
+if (session_status() == PHP_SESSION_NONE) {
+    
+require_once __DIR__ . '/../pages/seccion.php';
 
 
-require_once __DIR__ . '/seccion.php';
+}
+
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['user_id'])) {
+    // Si no ha iniciado sesión, redirigir al usuario a la página de inicio de sesión
+    header("Location: ../sign-in/index.php");
+    exit();
+}
 
 // Si el usuario ha iniciado sesión y ha presionado el botón de "Cerrar Sesión", eliminar solo las credenciales de sesión
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
@@ -122,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
   </head>
-  <body>
+  <body data-bs-theme="auto">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
@@ -253,7 +263,7 @@ require_once __DIR__ . '/../pages/header.php';
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      
+       <!-- <h1 class="h2">Panel Directivo SYSGES</h1>  -->
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -372,8 +382,8 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    $conn->exec("SET NAMES utf8");
     $query = "SELECT TV.Nombre_tipo AS Tipo_Violencia, COUNT(*) AS total
-              FROM Usuarios_Tipos_Violencia AS UTV
-              INNER JOIN Tipos_Violencia AS TV 
+              FROM usuarios_tipos_violencia AS UTV
+              INNER JOIN tipos_violencia AS TV 
               ON UTV.ID_Tipo_Violencia = TV.ID_Tipo_Violencia
               GROUP BY UTV.ID_Tipo_Violencia";
 
@@ -405,7 +415,7 @@ require_once __DIR__ . '/../db/config.php';
 
 try {
     // Consulta para obtener los datos
-    $query3 = "SELECT Municipio, COUNT(*) AS total FROM Usuario GROUP BY Municipio";
+    $query3 = "SELECT Municipio, COUNT(*) AS total FROM usuario GROUP BY Municipio";
     $statement3 = $conn->prepare($query3);
     $statement3->execute();
 
@@ -431,7 +441,7 @@ try {
 require_once __DIR__ . '/../db/config.php';
 try {
     // Consulta para obtener los datos del cuarto gráfico
-    $query4 = "SELECT Region, COUNT(*) AS total FROM Usuario GROUP BY Region";
+    $query4 = "SELECT Region, COUNT(*) AS total FROM usuario GROUP BY Region";
     $statement4 = $conn->prepare($query4);
     $statement4->execute();
 
@@ -462,7 +472,7 @@ try {
    $conn->exec("SET NAMES utf8");
 
     // Consulta para obtener los datos
-    $query5 = "SELECT Municipio, COUNT(*) AS total FROM Feminicidios GROUP BY Municipio";
+    $query5 = "SELECT Municipio, COUNT(*) AS total FROM feminicidios GROUP BY Municipio";
     $statement5 = $conn->prepare($query5);
     $statement5->execute();
 
@@ -491,15 +501,6 @@ try {
 
 
     </main>
-
-    
-        <footer class="my-5 pt-5 text-body-secondary text-center text-small">
-           <?php
-          require_once __DIR__ . '/../checkout/CR.php';
-          ?>
-                <ul class="list-inline">
-                </ul>
-        </footer>
   </div>
 </div>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
@@ -517,8 +518,8 @@ try {
    $conn->exec("SET NAMES utf8");
 
             // Consulta para obtener los datos
-            $query1 = "SELECT TV.Nombre_tipo AS Tipo_Violencia, COUNT(*) AS total FROM Usuarios_Tipos_Violencia AS UTV
-                      INNER JOIN Tipos_Violencia AS TV ON UTV.ID_Tipo_Violencia = TV.ID_Tipo_Violencia
+            $query1 = "SELECT TV.Nombre_tipo AS Tipo_Violencia, COUNT(*) AS total FROM usuarios_tipos_violencia AS UTV
+                      INNER JOIN tipos_violencia AS TV ON UTV.ID_Tipo_Violencia = TV.ID_Tipo_Violencia
                       GROUP BY UTV.ID_Tipo_Violencia";
             $statement1 = $conn->prepare($query1);
             $statement1->execute();
@@ -536,32 +537,37 @@ try {
         }
         ?>
 
-<?php
- require_once __DIR__ . '/../db/config.php';
-        try {
-            // Consulta para obtener los datos del segundo gráfico
-            $query2 = "SELECT TipoAtencion, COUNT(*) AS total FROM detalles_atencion GROUP BY TipoAtencion";
-            $statement2 = $conn->prepare($query2);
-            $statement2->execute();
 
-            // Array para almacenar los datos del segundo gráfico
-            $datos2 = array();
-            while ($fila = $statement2->fetch(PDO::FETCH_ASSOC)) {
-                $datos2[$fila['TipoAtencion']] = $fila['total'];
-            }
+ <?php
+require_once __DIR__ . '/../db/config.php';
 
-            // Convierte el array de PHP a JSON
-            $datos_json2 = json_encode($datos2);
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-        ?>
+try {
+    // Consulta para obtener los datos del segundo gráfico
+    $query2 = "SELECT TipoAtencion, COUNT(*) AS total FROM detalles_atencion GROUP BY TipoAtencion";
+    $statement2 = $conn->prepare($query2);
+    $statement2->execute();
+
+    // Array para almacenar los datos del segundo gráfico
+    $datos2 = array();
+    while ($fila = $statement2->fetch(PDO::FETCH_ASSOC)) {
+        $datos2[$fila['TipoAtencion']] = $fila['total'];
+    }
+
+    // Convierte el array de PHP a JSON permitiendo caracteres especiales
+    $datos_json2 = json_encode($datos2, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+} catch(PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+?>
+
+        
 
 <?php
 require_once __DIR__ . '/../db/config.php';
         try {
             // Consulta para obtener los datos del tercer gráfico
-            $query3 = "SELECT Municipio, COUNT(*) AS total FROM Usuario GROUP BY Municipio";
+            $query3 = "SELECT Municipio, COUNT(*) AS total FROM usuario GROUP BY Municipio";
             $statement3 = $conn->prepare($query3);
             $statement3->execute();
 
@@ -583,7 +589,7 @@ require_once __DIR__ . '/../db/config.php';
 require_once __DIR__ . '/../db/config.php';
         try {
             // Consulta para obtener los datos del cuarto gráfico
-            $query4 = "SELECT Region, COUNT(*) AS total FROM Usuario GROUP BY Region";
+            $query4 = "SELECT Region, COUNT(*) AS total FROM usuario GROUP BY Region";
             $statement4 = $conn->prepare($query4);
             $statement4->execute();
 
@@ -609,7 +615,7 @@ require_once __DIR__ . '/../db/config.php';
    $conn->exec("SET NAMES utf8");
 
             // Consulta para obtener los datos
-            $query5 = "SELECT Municipio, COUNT(*) AS total FROM Feminicidios GROUP BY Municipio";
+            $query5 = "SELECT Municipio, COUNT(*) AS total FROM feminicidios GROUP BY Municipio";
             $statement5 = $conn->prepare($query5);
             $statement5->execute();
 
@@ -631,7 +637,7 @@ require_once __DIR__ . '/../db/config.php';
          require_once __DIR__ . '/../db/config.php';
         try {
             // Consulta para obtener los datos
-            $query6 = "SELECT Region, COUNT(*) AS total FROM Feminicidios GROUP BY Region";
+            $query6 = "SELECT Region, COUNT(*) AS total FROM feminicidios GROUP BY Region";
             $statement6 = $conn->prepare($query6);
             $statement6->execute();
 
@@ -657,7 +663,7 @@ require_once __DIR__ . '/../db/config.php';
    $conn->exec("SET NAMES utf8");
 
             // Consulta para obtener los datos
-            $query7 = "SELECT DATE_FORMAT(FechaHecho, '%Y-%m') AS Mes, COUNT(*) AS total FROM Feminicidios GROUP BY Mes";
+            $query7 = "SELECT DATE_FORMAT(FechaHecho, '%Y-%m') AS Mes, COUNT(*) AS total FROM feminicidios GROUP BY Mes";
             $statement7 = $conn->prepare($query7);
             $statement7->execute();
 
@@ -683,7 +689,7 @@ require_once __DIR__ . '/../db/config.php';
    $conn->exec("SET NAMES utf8");
 
             // Consulta para obtener los datos
-            $query8 = "SELECT YEAR(FechaHecho) AS Anio, COUNT(*) AS total FROM Feminicidios GROUP BY Anio";
+            $query8 = "SELECT YEAR(FechaHecho) AS Anio, COUNT(*) AS total FROM feminicidios GROUP BY Anio";
             $statement8 = $conn->prepare($query8);
             $statement8->execute();
 
@@ -709,7 +715,7 @@ require_once __DIR__ . '/../db/config.php';
    $conn->exec("SET NAMES utf8");
 
             // Consulta para obtener los datos
-            $query9 = "SELECT TipoArma, COUNT(*) AS total FROM Feminicidios GROUP BY TipoArma";
+            $query9 = "SELECT TipoArma, COUNT(*) AS total FROM feminicidios GROUP BY TipoArma";
             $statement9 = $conn->prepare($query9);
             $statement9->execute();
 
@@ -1040,6 +1046,20 @@ borderColor: [
             return colors;
         }
     </script>
+    
+     <?php if (isset($_GET['status'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: "<?= $_GET['status'] === 'success' ? 'success' : 'error' ?>",
+            title: "<?= $_GET['status'] === 'success' ? 'Perfil Actualizado correctamente' : 'Error al registrar' ?>",
+            text: "<?= $_GET['status'] === 'error' ? urldecode($_GET['msg']) : '' ?>",
+            showConfirmButton: false,
+            timer: 2000, // ⏱️ 2 segundos
+            timerProgressBar: true
+        });
+    </script>
+<?php endif; ?>
 
 
 </body>

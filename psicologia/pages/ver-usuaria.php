@@ -248,12 +248,7 @@ require_once __DIR__ . '/../pages/seccion.php';
 
 <?php
 require_once __DIR__ . '/../pages/header.php';
-?>
 
-
-
-<?php
- 
 require_once __DIR__ . '/../pages/footer.php';
 ?>
     <!-- Temina -->
@@ -383,8 +378,8 @@ try {
     $offset = ($pagina - 1) * $registrosPorPagina;
 
     // Consulta base
-    $query = "SELECT * FROM Usuario";
-    $countQuery = "SELECT COUNT(*) FROM Usuario";
+    $query = "SELECT * FROM usuario";
+    $countQuery = "SELECT COUNT(*) FROM usuario";
 
     // Arreglo de condiciones
     $condiciones = [];

@@ -13,8 +13,8 @@ require_once __DIR__ . '/../db/config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
-
-    $stmt = $conn->prepare("SELECT ID_Personal, Password, ID_Rol FROM Personal WHERE Email = :email ");
+$msj= false;
+    $stmt = $conn->prepare("SELECT ID_Personal, Password, ID_Rol FROM personal WHERE Email = :email ");
     $stmt->bindParam(':email', $email);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -31,22 +31,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } elseif ($_SESSION['role_id'] == 2) {
             header("Location: ../leer/pages/home.php"); // Redirige al usuario a la página 2
         }elseif ($_SESSION['role_id'] == 3) {
-            header("Location: ../psicologia/pages/home.php"); // Redirige al usuario a la página 2
+            header("Location: ../psicologia/pages/home.php"); // Redirige al usuario a la página 3
         } elseif ($_SESSION['role_id'] == 4) {
-            header("Location: ../Justicia/pages/home.php"); // Redirige al usuario a la página 3
+            header("Location: ../Justicia/pages/home.php"); // Redirige al usuario a la página 4
         }elseif ($_SESSION['role_id'] == 5) {
-            header("Location: ../Soporte/pages/home.php"); // Redirige al usuario a la página 3
+            header("Location: ../Soporte/pages/home.php"); // Redirige al usuario a la página 5
+        }elseif ($_SESSION['role_id'] == 6) {
+             header("Location: ../sign-in/index.php?status=success"); // Redirige al usuario a la página 5
         }
         else {
-            // En caso de que el rol no coincida con ninguno de los roles esperados
-            // Puedes redirigir a una página de error o mostrar un mensaje de error
             echo "Rol no válido.";
         }
         exit();
+        
       } else {
           $error_message = "La contraseña ingresada es incorrecta.";
       }
     } else {
+        
         $error_message = "No se encontró ningún usuario con el correo electrónico proporcionado.";
     }
 }
@@ -239,6 +241,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     </main>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+<?php if (isset($_GET['status'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: "<?= $_GET['status'] === 'success' ? 'error' : 'error' ?>",
+            title: "<?= $_GET['status'] === 'success' ? 'Acceso denegado: usted ha sido dado de baja' : 'Error ' ?>",
+            text: "<?= $_GET['status'] === 'error' ? urldecode($_GET['msg']) : '' ?>",
+            showConfirmButton: false,
+            timer: 2000, // ⏱️ 2 segundos
+            timerProgressBar: true
+        });
+    </script>
+<?php endif; ?>
 
     </body>
 </html>

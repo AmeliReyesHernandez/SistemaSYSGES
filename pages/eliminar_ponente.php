@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-
-<?php
 require_once __DIR__ . '/../db/config.php'; // Ajusta la ruta si es diferente
 
 // Verificar que venga el ID
@@ -34,18 +30,13 @@ try {
 
     if ($stmt->execute()) {
         // Redirigir con mensaje de éxito
-        header("Location: ./ver-ponente.php?msg=success");
+        header("Location: ./ver-ponentes.php?msg=success");
         exit();
     } else {
-        header("Location: ./ver-ponente.php?msg=error");
+        header("Location: ./ver-ponentes.php?msg=error");
         exit();
     }
 
 } catch (PDOException $e) {
-    // Si hay error de integridad referencial (FK), atraparlo
-    if ($e->getCode() == "23000") {
-        die("No se puede eliminar este ponente porque está asignado a diplomados, seminarios o talleres.");
-    } else {
-        die("Error en la base de datos: " . $e->getMessage());
-    }
+   echo $e;
 }

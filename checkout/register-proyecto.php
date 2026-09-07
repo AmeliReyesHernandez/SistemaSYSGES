@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-
-<?php
 // Incluir el archivo de configuración de la base de datos
 require_once __DIR__ . '/../db/config.php';
 
@@ -21,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparar la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Proyectos (ID_Personal, NombreProyecto, MontoFinanciamiento, FechaInicio, FechaTermino, Dependencia, DescripcionProyecto, Administrador) 
+        $sql = "INSERT INTO proyectos (ID_Personal, NombreProyecto, MontoFinanciamiento, FechaInicio, FechaTermino, Dependencia, DescripcionProyecto, Administrador) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
 
@@ -210,8 +207,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="col-sm-6">
         <label for="monto_financiamiento" class="form-label">Monto de Financiamiento</label>
-        <input type="number" max="10" class="form-control" id="monto_financiamiento" name="monto_financiamiento" step="0.01" required>
-        <div class="invalid-feedback">Se requiere un apellido paterno válido.</div>
+        <input type="number"  class="form-control" id="monto_financiamiento" name="monto_financiamiento" required>
+        <div class="invalid-feedback">Se Requiere Monto</div>
     </div>
 
     <div class="col-sm-6">

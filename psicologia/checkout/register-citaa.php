@@ -26,7 +26,7 @@ $tipoMensaje = "";
 
     try {
         // Preparar la consulta SQL para insertar los datos
-        $sql = "INSERT INTO Citasa (ID_tutor, ID_Personal, TipoAtencion, Fecha, Hora) 
+        $sql = "INSERT INTO citasa (ID_tutor, ID_Personal, TipoAtencion, Fecha, Hora) 
                 VALUES (?, ?, ?, ?, ?)";
         
         // Preparar la sentencia

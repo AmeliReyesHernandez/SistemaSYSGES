@@ -402,34 +402,34 @@ try {
         $query = "SELECT ";
 
         if ($field === "ID_Personal") {
-            $query .= " CONCAT(Personal.Nombre, ' ', Personal.ApellidoPaterno, ' ', Personal.ApellidoMaterno) AS NombreCompleto, ";
+            $query .= " CONCAT(personal.Nombre, ' ', personal.ApellidoPaterno, ' ', personal.ApellidoMaterno) AS NombreCompleto, ";
         } else {
             $query .= "$field, ";
         }
 
         $query .= "COUNT(*) AS TotalUsuarios 
-                  FROM Detalles_Atenciona ";
+                  FROM detalles_atenciona ";
 
         if ($field === "ID_Personal") {
-            $query .= "INNER JOIN Personal ON Detalles_Atenciona.ID_Personal = Personal.ID_Personal ";
+            $query .= "INNER JOIN personal ON detalles_atenciona.ID_Personal = personal.ID_Personal ";
         }
 
-        $query .= "WHERE Detalles_Atenciona.$field IS NOT NULL";
+        $query .= "WHERE detalles_atenciona.$field IS NOT NULL";
 
         if (!empty($year)) {
-            $query .= " AND YEAR(Detalles_Atenciona.FechaRegistro) = :year";
+            $query .= " AND YEAR(detalles_atenciona.FechaRegistro) = :year";
         }
         if (!empty($month)) {
-            $query .= " AND MONTH(Detalles_Atenciona.FechaRegistro) = :month";
+            $query .= " AND MONTH(detalles_atenciona.FechaRegistro) = :month";
         }
         if (!empty($start_date) && !empty($end_date)) {
-            $query .= " AND Detalles_Atenciona.FechaRegistro BETWEEN :start_date AND :end_date";
+            $query .= " AND detalles_atenciona.FechaRegistro BETWEEN :start_date AND :end_date";
         }
 
         if ($field === "ID_Personal") {
-            $query .= " GROUP BY Detalles_Atenciona.ID_Personal";
+            $query .= " GROUP BY detalles_atenciona.ID_Personal";
         } else {
-            $query .= " GROUP BY Detalles_Atenciona.$field";
+            $query .= " GROUP BY detalles_atenciona.$field";
         }
 
         // Preparar y ejecutar la consulta SQL
@@ -486,7 +486,7 @@ try {
     }
 
     // Consulta SQL para obtener la suma de todas las horas con filtros de fecha
-    $query_total_horas = "SELECT SUM(Horas) AS TotalHoras FROM Detalles_Atenciona WHERE Horas IS NOT NULL";
+    $query_total_horas = "SELECT SUM(Horas) AS TotalHoras FROM detalles_atenciona WHERE Horas IS NOT NULL";
 
     if (!empty($year)) {
         $query_total_horas .= " AND YEAR(FechaRegistro) = :year";
@@ -539,12 +539,21 @@ try {
 
 
 
+ <footer class="my-5 pt-5 text-body-secondary text-center text-small">
+             <?php
+          require_once __DIR__ . '/../checkout/CR.php';
+          ?>
+                <ul class="list-inline">
 
+                </ul>
+        </footer>
 
 
 
 
     </main>
+    
+    
   </div>
   </div>
   <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>

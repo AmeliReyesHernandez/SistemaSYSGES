@@ -134,6 +134,11 @@ require_once __DIR__ . '/seccion.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
   </head>
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -270,8 +275,8 @@ $offset = ($pagina - 1) * $registrosPorPagina;
 
 // Consulta base
 // Consulta base
-$query = "SELECT *, YEAR(FechaHecho) AS Anio FROM Feminicidios";
-$countQuery = "SELECT COUNT(*) FROM Feminicidios";
+$query = "SELECT *, YEAR(FechaHecho) AS Anio FROM feminicidios";
+$countQuery = "SELECT COUNT(*) FROM feminicidios";
 
 $condiciones = [];
 $params = [];

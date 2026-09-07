@@ -395,7 +395,7 @@ try {
     // Iterar sobre cada campo para obtener los totales de feminicidios
     foreach ($fields as $field => $title) {
         // Construir la consulta SQL con filtros de fecha
-        $query = "SELECT $field AS Opcion, COUNT(*) AS TotalFeminicidios FROM Feminicidios WHERE $field IS NOT NULL";
+        $query = "SELECT $field AS Opcion, COUNT(*) AS TotalFeminicidios FROM feminicidios WHERE $field IS NOT NULL";
 
         if (!empty($year)) {
             $query .= " AND YEAR(FechaHecho) = :year";
@@ -449,7 +449,7 @@ try {
     }
 
     // Consulta SQL para obtener el total de feminicidios con filtros de fecha
-    $query_total_feminicidios = "SELECT COUNT(*) AS TotalFeminicidios FROM Feminicidios WHERE 1";
+    $query_total_feminicidios = "SELECT COUNT(*) AS TotalFeminicidios FROM feminicidios WHERE 1";
 
     if (!empty($year)) {
         $query_total_feminicidios .= " AND YEAR(FechaHecho) = :year";

@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../pages/seccion.php';
 
-?>
-<?php
 require_once __DIR__ . '/../db/config.php';
 
 ini_set('display_errors', 1);
@@ -238,7 +236,18 @@ $vlDetalles              = $_POST['vlDetalles'];
         $escolaridad = $_POST['escolaridad'];
         $estadocivil = $_POST['estadocivil'];
         $orientacionSexual = $_POST['orientacionSexual'];
-        $discapacidad = $_POST['discapacidad'];
+        
+        
+        
+               if ($_POST['discapacidads'] == "SI") {
+    $discapacidad = implode(",", $_POST['discapacidad']);
+} else {
+    $discapacidad = "";
+}
+
+        
+        
+        //$discapacidad = $_POST['discapacidad'];
         
         $calle = $_POST['calle'];
         $numInterior = $_POST['numInterior'];
@@ -1508,7 +1517,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <input 
         type="text" 
         class="form-control" 
-        id="telCelular" 
+        id="telCelularS" 
         name="telCelular" 
         placeholder="<?php echo (!empty($usuario['TelCelular']) && $usuario['TelCelular'] != '-') ? $usuario['TelCelular'] : 'SIN DATOS'; ?>"
         value="" 
@@ -1521,7 +1530,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <input 
         type="text" 
         class="form-control" 
-        id="telFijo" 
+        id="telFijoS" 
         name="telFijo" 
         placeholder="<?php echo (!empty($usuario['TelFijo']) && $usuario['TelFijo'] != '-') ? $usuario['TelFijo'] : 'SIN DATOS'; ?>"
         value="" 
@@ -1539,7 +1548,7 @@ document.addEventListener('DOMContentLoaded', function() {
             type="text" 
             class="form-control" 
             maxlength="50" 
-            id="email" 
+            id="emailS" 
             name="email" 
             placeholder="<?php echo (!empty($usuario['Email']) && $usuario['Email'] != '-') ? $usuario['Email'] : 'SIN DATOS'; ?>" 
             value=""
@@ -1556,7 +1565,7 @@ document.addEventListener('DOMContentLoaded', function() {
             type="text" 
             class="form-control" 
             maxlength="50" 
-            id="emailRespaldo" 
+            id="emailRespaldoS" 
             name="emailRespaldo" 
             placeholder="<?php echo (!empty($usuario['EmailRespaldo']) && $usuario['EmailRespaldo'] != '-') ? $usuario['EmailRespaldo'] : 'SIN DATOS'; ?>" 
             value=""
@@ -1570,7 +1579,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <input 
         type="text" 
         class="form-control" 
-        id="telConfianza" 
+        id="telConfianzaS" 
         name="telConfianza" 
         value="<?php echo (!empty($usuario['TelConfianza']) && $usuario['TelConfianza'] != '-') ? $usuario['TelConfianza'] : 'SIN DATOS'; ?>"
     ><br>
@@ -1622,7 +1631,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
- <h4>Datos de Orientacion Social</h4>
+ <h4>Datos de Orientacion Sexual</h4>
             <hr class="my-4">
 
 
@@ -2257,68 +2266,105 @@ function populateFields(details) {
 
 
 
+ <?php
+// SÍ / NO desde la BD:
+$discapacidadSN = isset($usuario['discapacidads']) ? strtoupper($usuario['discapacidads']) : 'NO';
+
+// Convertir lista de discapacidades a array
+$discapacidadesSeleccionadas = [];
+
+if (!empty($usuario['Discapacidad'])) {
+    $temp = explode(',', $usuario['Discapacidad']);
+
+    foreach ($temp as $d) {
+        $discapacidadesSeleccionadas[] = strtoupper(trim($d));
+    }
+}
+
+
+// Lista de discapacidades disponibles
+$listaDiscapacidades = [
+    "MOTRIZ",
+    "VISUAL",
+    "AUDITIVA",
+    "INTELECTUAL",
+    "DEL LENGUAJE",
+    "PSICOSOCIAL",
+    "MULTIPLE",
+    "OTRA"
+];
+
+
+
+?>
+
+
+
+
+
+
+
+
+
  <div class="col-sm-6">
   <label class="form-label">¿Presenta alguna discapacidad?</label>
-  
+
   <div class="form-check">
-    <input class="form-check-input" 
-           type="radio" 
-           name="discapacidads" 
-           id="discapacidadSi" 
-           value="SI" 
-           onclick="showDiscapacidadSelect()"
-           <?php echo (isset($usuario['discapacidads']) && strtoupper($usuario['discapacidads']) == 'SI') ? 'checked' : ''; ?>>
+    <input class="form-check-input"
+           type="radio"
+           name="discapacidads"
+           id="discapacidadSi"
+           value="SI"
+           onclick="showDiscapacidadCheckbox()"
+           <?= ($discapacidadSN == 'SI') ? 'checked' : ''; ?>>
     <label class="form-check-label" for="discapacidadSi">Sí</label>
   </div>
 
   <div class="form-check">
-    <input class="form-check-input" 
-           type="radio" 
-           name="discapacidads" 
-           id="discapacidadNo" 
-           value="NO" 
-           onclick="hideDiscapacidadSelect()"
-           <?php echo (isset($usuario['discapacidads']) && strtoupper($usuario['discapacidads']) == 'NO') ? 'checked' : ''; ?>>
+    <input class="form-check-input"
+           type="radio"
+           name="discapacidads"
+           id="discapacidadNo"
+           value="NO"
+           onclick="hideDiscapacidadCheckbox()"
+           <?= ($discapacidadSN == 'NO') ? 'checked' : ''; ?>>
     <label class="form-check-label" for="discapacidadNo">No</label>
   </div>
-
-  <?php if (!isset($usuario['discapacidad'])): ?>
-    <p class="text-muted mt-1">Sin datos</p>
-  <?php endif; ?>
 </div>
 
-<div class="col-sm-6" id="discapacidadSelectContainer" style="display: none;">
-  <label for="discapacidad" class="form-label">¿Cuál?</label>
-  <select class="form-select" id="discapacidad" name="discapacidad">
-    <option disabled value="">Seleccionar tipo...</option>
-    <option value="MOTRIZ"      <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'MOTRIZ') ? 'selected' : ''; ?>>Motriz</option>
-    <option value="VISUAL"      <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'VISUAL') ? 'selected' : ''; ?>>Visual</option>
-    <option value="AUDITIVA"    <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'AUDITIVA') ? 'selected' : ''; ?>>Auditiva</option>
-    <option value="INTELECTUAL" <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'INTELECTUAL') ? 'selected' : ''; ?>>Intelectual</option>
-    <option value="DEL LENGUAJE" <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'DEL LENGUAJE') ? 'selected' : ''; ?>>Del lenguaje</option>
-    <option value="PSICOSOCIAL" <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'PSICOSOCIAL') ? 'selected' : ''; ?>>Psicosocial</option>
-    <option value="MULTIPLE"    <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'MULTIPLE') ? 'selected' : ''; ?>>Múltiple</option>
-    <option value="OTRA"        <?php echo (isset($usuario['discapacidad']) && strtoupper($usuario['discapacidad']) == 'OTRA') ? 'selected' : ''; ?>>Otra</option>
-  </select>
+
+<div class="col-sm-6"
+     id="discapacidadCheckboxContainer"
+     style="display: <?= ($discapacidadSN == 'SI') ? 'block' : 'none'; ?>;">
+
+  <label class="form-label">¿Cuál?</label>
+
+  <?php foreach ($listaDiscapacidades as $opc): ?>
+    <div class="form-check">
+  <input class="form-check-input"
+         type="checkbox"
+         name="discapacidad[]"
+         value="<?= $opc ?>"
+         <?= in_array($opc, $discapacidadesSeleccionadas) ? 'checked' : '' ?>>
+  <label class="form-check-label"><?= ucwords(strtolower($opc)) ?></label>
+</div>
+
+  <?php endforeach; ?>
+
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const tieneDiscapacidad = "<?php echo isset($usuario['discapacidads']) ? strtoupper($usuario['discapacidads']) : ''; ?>";
-    if (tieneDiscapacidad === 'SI') {
-      showDiscapacidadSelect();
-    } else {
-      hideDiscapacidadSelect();
-    }
-  });
-
-  function showDiscapacidadSelect() {
-    document.getElementById('discapacidadSelectContainer').style.display = 'block';
+  function showDiscapacidadCheckbox() {
+    document.getElementById('discapacidadCheckboxContainer').style.display = 'block';
   }
 
-  function hideDiscapacidadSelect() {
-    document.getElementById('discapacidadSelectContainer').style.display = 'none';
-    document.getElementById('discapacidad').value = '';
+  function hideDiscapacidadCheckbox() {
+    document.getElementById('discapacidadCheckboxContainer').style.display = 'none';
+
+    // Desmarcar todos los checkbox cuando elige "NO"
+    document.querySelectorAll('#discapacidadCheckboxContainer input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+    });
   }
 </script>
 
@@ -2379,7 +2425,7 @@ function populateFields(details) {
 
 <div class="col-sm-6">
   <label for="cpPC" class="form-label">Código Postal (CP)</label>
-  <input type="number" max="100000" min="1" class="form-control" id="cpPC" name="cppc" placeholder="" value="<?php echo $usuario['CPPC']; ?>">
+  <input type="number" max="100000" min="0" class="form-control" id="cpPC" name="cppc" placeholder="" value="<?php echo $usuario['CPPC']; ?>">
   <div class="invalid-feedback">Se requiere un código postal válido.</div>
 </div>
 
@@ -2849,7 +2895,7 @@ function populateFields(details) {
   <label for="apoyosSociales" class="form-label">Otros Ingresos</label>
   <select class="form-select" id="apoyosSociales" name="apoyosSociales">
     <option value="" disabled <?php echo empty($usuario['apoyosSociales']) ? 'selected' : 'SIN DATOS'; ?>>Selecciona una opción</option>
-    <option value="PROSPERA" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'PROSPERA') ? 'selected' : ''; ?>>PROSPERA</option>
+    <option value="APOYOS SOCIALES" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'APOYOS SOCIALES') ? 'selected' : ''; ?>>APOYOS SOCIALES</option>
     <option value="PENSION_ADULTO_MAYOR" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'PENSION_ADULTO_MAYOR') ? 'selected' : ''; ?>>PENSIÓN ADULTO MAYOR</option>
     <option value="PENSION_DISCAPACIDAD" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'PENSION_DISCAPACIDAD') ? 'selected' : ''; ?>>PENSIÓN DISCAPACIDAD</option>
     <option value="SUBSIDIO" <?php echo (isset($usuario['apoyosSociales']) && strtoupper($usuario['apoyosSociales']) == 'SUBSIDIO') ? 'selected' : ''; ?>>SUBSIDIO</option>

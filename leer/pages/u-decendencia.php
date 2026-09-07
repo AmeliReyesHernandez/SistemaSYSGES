@@ -333,10 +333,10 @@ try {
     // Consulta base
     $query = "SELECT u.id AS usuario_id, u.Nombre AS usuario_nombre, u.ApellidoPaterno AS usuario_apellido_paterno, u.ApellidoMaterno AS usuario_apellido_materno, u.TelCelular, u.TelFijo, u.TelConfianza, u.Email, u.EmailRespaldo,
               h.ID_Hijo, h.Nombre AS hijo_nombre, h.ApellidoPaterno AS hijo_apellido_paterno, h.ApellidoMaterno AS hijo_apellido_materno, h.FechaNacimiento, h.Sexo, h.Escolaridad, h.Condicion
-              FROM Usuario u
-              INNER JOIN Hijos_Usuario h ON u.id = h.ID_Usuario";
+              FROM usuario u
+              INNER JOIN hijos_usuario h ON u.id = h.ID_Usuario";
 
-    $countQuery = "SELECT COUNT(*) FROM Usuario u INNER JOIN Hijos_Usuario h ON u.id = h.ID_Usuario";
+    $countQuery = "SELECT COUNT(*) FROM usuario u INNER JOIN hijos_usuario h ON u.id = h.ID_Usuario";
 
     $condiciones = [];
     $params = [];

@@ -25,9 +25,9 @@ SELECT ID_Usuario, NombreCompleto, Email, FechaAsignacion, TipoUsuario FROM (
         u.Nombre AS NombreCompleto,
         u.Email,
         ad.FechaAsignacion,
-        'Usuario' AS TipoUsuario
+        'usuario' AS TipoUsuario
     FROM asignacionesdiplomado ad
-    INNER JOIN usuario u ON ad.ID_Usuario = u.ID
+    INNER JOIN usuario u ON ad.ID_Usuario = u.id
     WHERE ad.ID_Diplomado = :id1
     " . (!empty($busqueda) ? "AND u.Nombre LIKE :busqueda1" : "") . "
 
@@ -38,7 +38,7 @@ SELECT ID_Usuario, NombreCompleto, Email, FechaAsignacion, TipoUsuario FROM (
         p.Nombre AS NombreCompleto,
         p.Email,
         ad.FechaAsignacion,
-        'Participante' AS TipoUsuario
+        'participante' AS TipoUsuario
     FROM asignacionesdiplomado ad
     INNER JOIN participante p ON ad.ID_Usuario = p.ID_Participante
     WHERE ad.ID_Diplomado = :id2
@@ -51,7 +51,7 @@ SELECT ID_Usuario, NombreCompleto, Email, FechaAsignacion, TipoUsuario FROM (
         pe.Nombre AS NombreCompleto,
         pe.Email,
         ad.FechaAsignacion,
-        'Personal' AS TipoUsuario
+        'personal' AS TipoUsuario
     FROM asignacionesdiplomado ad
     INNER JOIN personal pe ON ad.ID_Usuario = pe.ID_Personal
     WHERE ad.ID_Diplomado = :id3

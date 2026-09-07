@@ -93,9 +93,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+
+
+document.addEventListener('DOMContentLoaded', function () {
+     // Función genérica de validación
+   function validateInpute(input, regex) {
+     // Convertir el valor a mayúsculas
+    input.value = input.value.toUpperCase();
+
+    // Verificar si el texto cumple con las restricciones
+    if (!regex.test(input.value)) {
+      document.getElementById(input.id + 'Feedback').innerText = 'Se requiere un valor válido.';
+       input.classList.add('is-invalid');
+      input.classList.remove('is-valid');
+    } else {
+      document.getElementById(input.id + 'Feedback').innerText = '';
+      input.classList.remove('is-invalid');
+      input.classList.add('is-valid');
+    }
+  }
   // Obtener los inputs y asociar la validación
   const firstNameInput = document.getElementById('firstName');
   const lastNameInput = document.getElementById('lastName');
+   const la = document.getElementById('ape');
 
   firstNameInput.addEventListener('input', function () {
     let regex = /^[a-zA-ZáéíóúÁÉÍÓÚÑñ0-9\s]{3,70}$/;
@@ -105,5 +125,10 @@ document.addEventListener('DOMContentLoaded', function () {
    lastNameInput.addEventListener('input', function () {
     let regex = /^[a-zA-ZáéíóúÁÉÍÓÚÑñ0-9\s]{3,70}$/;
     validateInput(this, regex);
+  });
+  
+   la.addEventListener('input', function () {
+    let regex = /^[a-zA-ZáéíóúÁÉÍÓÚÑñ0-9\s]{3,70}$/;
+    validateInpute(this, regex);
   });
  });
