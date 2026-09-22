@@ -281,27 +281,9 @@ hr {
             <hr class="my-3">
 
           <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-donante.php">
-              <i class="bi bi-person-vcard"></i>
-                Registrar Donante 
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-donantes.php">
-              <i class="bi bi-person-lines-fill"></i>
-                Lista de Donantes 
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-donativo.php">
-              <i class="bi bi-piggy-bank-fill"></i>
-                Registrar Donativo
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-donaciones.php">
-              <i class="bi bi-card-checklist"></i>
-                Ver Donaciones
+              <a class="nav-link d-flex align-items-center gap-2" href="../pages/donaciones/index.php">
+              <i class="bi bi-heart-pulse"></i>
+                Gestión de Donaciones 
               </a>
             </li>
 
