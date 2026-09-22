@@ -1,5 +1,5 @@
 ﻿<?php
-require_once __DIR__ . '/../seccion.php';
+require_once __DIR__ . '/seccion.php';
 require_once __DIR__ . '/../../db/config.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -112,10 +112,10 @@ try {
   <body>
 
     <!-- Menú superior -->
-    <?php require_once __DIR__ . '/../header.php'; ?>
+    <?php require_once __DIR__ . '/header.php'; ?>
 
     <!-- Menú lateral -->
-    <?php require_once __DIR__ . '/../footer.php'; ?>
+    <?php require_once __DIR__ . '/footer.php'; ?>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
 

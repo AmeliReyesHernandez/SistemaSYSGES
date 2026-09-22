@@ -1,5 +1,5 @@
-﻿<?php
-require_once __DIR__ . '/../seccion.php';
+<?php
+require_once __DIR__ . '/seccion.php';
 require_once __DIR__ . '/../../db/config.php';
 
 // Parámetros de paginación y búsqueda
@@ -15,7 +15,7 @@ try {
     $params = [];
 
     if ($search !== '') {
-        $whereSQL = " WHERE (Nombre LIKE :s OR ApellidoPaterno LIKE :s OR ApellidoMaterno LIKE :s OR Email LIKE :s OR Telefono LIKE :s)";
+        $whereSQL = " WHERE (Nombre LIKE :s OR ApellidoPaterno LIKE :s OR ApellidoMaterno LIKE :s OR Email LIKE :s OR Telefono LIKE :s OR Ocupacion LIKE :s OR Ciudad LIKE :s OR RFC LIKE :s)";
         $params[':s'] = "%$search%";
     }
 
@@ -28,9 +28,10 @@ try {
     $totalRegistros = (int)$stmtCount->fetchColumn();
     $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
 
-    // Consulta con total aportado acumulado
+    // Consulta con total aportado acumulado y datos personales
     $sql = "
         SELECT d.ID_Donante, d.Nombre, d.ApellidoPaterno, d.ApellidoMaterno, d.Email, d.Telefono,
+               d.FechaNacimiento, d.Ocupacion, d.Domicilio, d.Ciudad, d.Estado, d.RFC,
                COALESCE(SUM(dn.MontoDonacion), 0) AS TotalAportado,
                COUNT(dn.ID_Donativo) AS NumeroDonaciones
         FROM donantes d
@@ -142,10 +143,10 @@ try {
   <body>
 
     <!-- Menú superior -->
-    <?php require_once __DIR__ . '/../header.php'; ?>
+    <?php require_once __DIR__ . '/header.php'; ?>
 
     <!-- Menú lateral -->
-    <?php require_once __DIR__ . '/../footer.php'; ?>
+    <?php require_once __DIR__ . '/footer.php'; ?>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
 
@@ -211,18 +212,19 @@ try {
               <thead class="table-light small text-uppercase">
                 <tr>
                   <th style="width: 60px;">ID</th>
-                  <th>Nombre Completo</th>
-                  <th>Correo Electrónico</th>
-                  <th>Teléfono</th>
-                  <th class="text-center">Donaciones</th>
-                  <th class="text-end">Total Aportado</th>
-                  <th class="text-center" style="width: 160px;">Acciones</th>
+                  <th>Donante / Ocupación</th>
+                  <th>Contacto</th>
+                  <th>Ubicación</th>
+                  <th class="text-center">Cumpleaños</th>
+                  <th class="text-center">Aportaciones</th>
+                  <th class="text-end">Total Donado</th>
+                  <th class="text-center" style="width: 140px;">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 <?php if (empty($donantes)): ?>
                   <tr>
-                    <td colspan="7" class="text-center py-5 text-muted">
+                    <td colspan="8" class="text-center py-5 text-muted">
                       <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
                       No se encontraron donantes registrados.
                     </td>
@@ -235,21 +237,41 @@ try {
                         <div class="fw-semibold text-dark">
                           <?= htmlspecialchars($d['Nombre'] . ' ' . $d['ApellidoPaterno'] . ' ' . $d['ApellidoMaterno']) ?>
                         </div>
-                      </td>
-                      <td>
-                        <?php if ($d['Email']): ?>
-                          <a href="mailto:<?= htmlspecialchars($d['Email']) ?>" class="text-decoration-none text-muted">
-                            <i class="bi bi-envelope me-1"></i><?= htmlspecialchars($d['Email']) ?>
-                          </a>
-                        <?php else: ?>
-                          <span class="text-muted small">Sin correo</span>
+                        <?php if (!empty($d['Ocupacion'])): ?>
+                          <small class="text-muted"><i class="bi bi-briefcase me-1"></i><?= htmlspecialchars($d['Ocupacion']) ?></small>
+                        <?php endif; ?>
+                        <?php if (!empty($d['RFC'])): ?>
+                          <span class="badge bg-light text-secondary border ms-1" style="font-size:0.7rem;">RFC: <?= htmlspecialchars($d['RFC']) ?></span>
                         <?php endif; ?>
                       </td>
                       <td>
+                        <?php if ($d['Email']): ?>
+                          <div>
+                            <a href="mailto:<?= htmlspecialchars($d['Email']) ?>" class="text-decoration-none text-muted small">
+                              <i class="bi bi-envelope me-1"></i><?= htmlspecialchars($d['Email']) ?>
+                            </a>
+                          </div>
+                        <?php endif; ?>
                         <?php if ($d['Telefono']): ?>
-                          <span class="text-muted"><i class="bi bi-telephone me-1"></i><?= htmlspecialchars($d['Telefono']) ?></span>
+                          <small class="text-muted"><i class="bi bi-telephone me-1"></i><?= htmlspecialchars($d['Telefono']) ?></small>
+                        <?php endif; ?>
+                      </td>
+                      <td>
+                        <?php if (!empty($d['Ciudad']) || !empty($d['Estado'])): ?>
+                          <span class="small text-muted">
+                            <i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars(trim(($d['Ciudad'] ?? '') . ', ' . ($d['Estado'] ?? ''), ', ')) ?>
+                          </span>
                         <?php else: ?>
-                          <span class="text-muted small">Sin teléfono</span>
+                          <span class="text-muted small">-</span>
+                        <?php endif; ?>
+                      </td>
+                      <td class="text-center">
+                        <?php if (!empty($d['FechaNacimiento'])): ?>
+                          <span class="badge bg-danger-subtle text-danger px-2 py-1">
+                            <i class="bi bi-gift-fill me-1"></i><?= date('d/m/Y', strtotime($d['FechaNacimiento'])) ?>
+                          </span>
+                        <?php else: ?>
+                          <span class="text-muted small">-</span>
                         <?php endif; ?>
                       </td>
                       <td class="text-center">

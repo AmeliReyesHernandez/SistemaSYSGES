@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../seccion.php';
+require_once __DIR__ . '/seccion.php';
 require_once __DIR__ . '/../../db/config.php';
 
 // Consultas estadísticas
@@ -40,6 +40,31 @@ try {
     ");
     $donantesRecientes = $stmtDonantesRecientes->fetchAll(PDO::FETCH_ASSOC);
 
+    // Cumpleaños de hoy
+    $stmtCumpleHoy = $conn->query("
+        SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, Email
+        FROM donantes
+        WHERE FechaNacimiento IS NOT NULL 
+          AND DATE_FORMAT(FechaNacimiento, '%m-%d') = DATE_FORMAT(CURDATE(), '%m-%d')
+        LIMIT 1
+    ");
+    $cumpleHoy = $stmtCumpleHoy->fetch(PDO::FETCH_ASSOC);
+
+    // Próximos cumpleaños (próximos 15 días)
+    $stmtProximos = $conn->query("
+        SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, Email, FechaNacimiento,
+               DATEDIFF(
+                 DATE_ADD(FechaNacimiento, INTERVAL (YEAR(CURDATE()) - YEAR(FechaNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m%d') > DATE_FORMAT(FechaNacimiento, '%m%d'), 1, 0)) YEAR),
+                 CURDATE()
+               ) AS DiasRestantes
+        FROM donantes
+        WHERE FechaNacimiento IS NOT NULL
+        HAVING DiasRestantes > 0 AND DiasRestantes <= 15
+        ORDER BY DiasRestantes ASC
+        LIMIT 5
+    ");
+    $proximosCumples = $stmtProximos ? $stmtProximos->fetchAll(PDO::FETCH_ASSOC) : [];
+
 } catch (PDOException $e) {
     $totalRecaudado = 0;
     $totalDonantes = 0;
@@ -47,6 +72,8 @@ try {
     $promedioDonacion = 0;
     $donacionesRecientes = [];
     $donantesRecientes = [];
+    $cumpleHoy = null;
+    $proximosCumples = [];
 }
 ?>
 <!doctype html>
@@ -319,10 +346,10 @@ try {
     </svg>
 
     <!-- Menú superior -->
-    <?php require_once __DIR__ . '/../header.php'; ?>
+    <?php require_once __DIR__ . '/header.php'; ?>
 
     <!-- Menú lateral -->
-    <?php require_once __DIR__ . '/../footer.php'; ?>
+    <?php require_once __DIR__ . '/footer.php'; ?>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
       
@@ -483,42 +510,52 @@ try {
             <div class="card-body p-3">
               
               <!-- Alerta de cumpleaños de hoy -->
-              <div class="alert alert-warning d-flex align-items-center justify-content-between p-3 mb-3 border-0 shadow-sm" style="border-radius:10px; background:#fff8e6;">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="d-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-circle" style="width: 44px; height: 44px; min-width: 44px;">
-                    <i class="bi bi-gift-fill text-danger" style="font-size: 1.4rem; line-height: 1; display: flex; align-items: center; justify-content: center;"></i>
+              <?php if (!empty($cumpleHoy)): ?>
+                <div class="alert alert-warning d-flex align-items-center justify-content-between p-3 mb-3 border-0 shadow-sm" style="border-radius:10px; background:#fff8e6;">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-circle" style="width: 44px; height: 44px; min-width: 44px;">
+                      <i class="bi bi-gift-fill text-danger" style="font-size: 1.4rem; line-height: 1; display: flex; align-items: center; justify-content: center;"></i>
+                    </div>
+                    <div>
+                      <strong class="d-block text-dark">¡Hoy es cumpleaños de <?= htmlspecialchars($cumpleHoy['NombreCompleto']) ?>!</strong>
+                      <small class="text-muted"><?= htmlspecialchars($cumpleHoy['Email'] ?: 'Donante solidario(a)') ?></small>
+                    </div>
                   </div>
-                  <div>
-                    <strong class="d-block text-dark">¡Hoy es cumpleaños de María González!</strong>
-                    <small class="text-muted">Donante recurrente desde 2024</small>
+                  <button class="btn btn-sm btn-danger fw-semibold px-3" onclick="enviarTarjetaCumple('<?= htmlspecialchars(addslashes($cumpleHoy['NombreCompleto'])) ?>', '<?= htmlspecialchars(addslashes($cumpleHoy['Email'])) ?>')">
+                    <i class="bi bi-gift-fill me-1"></i> Felicitar
+                  </button>
+                </div>
+              <?php else: ?>
+                <div class="alert alert-light border d-flex align-items-center gap-3 p-3 mb-3" style="border-radius:10px;">
+                  <div class="d-flex align-items-center justify-content-center bg-light text-secondary rounded-circle" style="width: 40px; height: 40px; min-width: 40px;">
+                    <i class="bi bi-calendar-check fs-5"></i>
+                  </div>
+                  <div class="small text-muted">
+                    Hoy no hay cumpleaños de donantes registrados. ¡Revisa la lista de próximos días!
                   </div>
                 </div>
-                <button class="btn btn-sm btn-danger fw-semibold px-3" onclick="enviarTarjetaCumple('María González', 'maria@ejemplo.com')">
-                  <i class="bi bi-gift-fill me-1"></i> Felicitar
-                </button>
-              </div>
+              <?php endif; ?>
 
               <!-- Lista de próximos cumpleaños -->
               <h6 class="text-muted small fw-bold text-uppercase mt-3 mb-2">Próximos en los siguientes 15 días</h6>
               <div class="list-group list-group-flush">
-                <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
-                  <div>
-                    <span class="fw-semibold">Lic. Carlos Morales</span><br>
-                    <small class="text-muted">Cumple el 18 de Septiembre (en 4 días)</small>
-                  </div>
-                  <button class="btn btn-sm btn-outline-purple" onclick="enviarTarjetaCumple('Carlos Morales', 'carlos@ejemplo.com')">
-                    <i class="bi bi-envelope-paper-heart-fill me-1"></i> Tarjeta
-                  </button>
-                </div>
-                <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
-                  <div>
-                    <span class="fw-semibold">Dra. Patricia Reyes</span><br>
-                    <small class="text-muted">Cumple el 24 de Septiembre (en 10 días)</small>
-                  </div>
-                  <button class="btn btn-sm btn-outline-purple" onclick="enviarTarjetaCumple('Patricia Reyes', 'patricia@ejemplo.com')">
-                    <i class="bi bi-envelope-paper-heart-fill me-1"></i> Tarjeta
-                  </button>
-                </div>
+                <?php if (empty($proximosCumples)): ?>
+                  <div class="text-muted small py-2 text-center">No hay cumpleaños en los próximos 15 días.</div>
+                <?php else: ?>
+                  <?php foreach ($proximosCumples as $pc): ?>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                      <div>
+                        <span class="fw-semibold text-dark"><?= htmlspecialchars($pc['NombreCompleto']) ?></span><br>
+                        <small class="text-muted">
+                          Cumple el <?= date('d/m', strtotime($pc['FechaNacimiento'])) ?> (en <?= $pc['DiasRestantes'] ?> <?= $pc['DiasRestantes'] == 1 ? 'día' : 'días' ?>)
+                        </small>
+                      </div>
+                      <button class="btn btn-sm btn-outline-purple" onclick="enviarTarjetaCumple('<?= htmlspecialchars(addslashes($pc['NombreCompleto'])) ?>', '<?= htmlspecialchars(addslashes($pc['Email'])) ?>')">
+                        <i class="bi bi-envelope-paper-heart-fill me-1"></i> Tarjeta
+                      </button>
+                    </div>
+                  <?php endforeach; ?>
+                <?php endif; ?>
               </div>
 
             </div>

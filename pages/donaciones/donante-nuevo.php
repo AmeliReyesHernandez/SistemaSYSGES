@@ -1,5 +1,5 @@
-﻿<?php
-require_once __DIR__ . '/../seccion.php';
+<?php
+require_once __DIR__ . '/seccion.php';
 ?>
 <!doctype html>
 <html lang="es" data-bs-theme="auto">
@@ -78,10 +78,10 @@ require_once __DIR__ . '/../seccion.php';
   <body>
 
     <!-- Menú superior -->
-    <?php require_once __DIR__ . '/../header.php'; ?>
+    <?php require_once __DIR__ . '/header.php'; ?>
 
     <!-- Menú lateral -->
-    <?php require_once __DIR__ . '/../footer.php'; ?>
+    <?php require_once __DIR__ . '/footer.php'; ?>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
 
@@ -124,38 +124,103 @@ require_once __DIR__ . '/../seccion.php';
             <div class="card-body p-4">
               <form action="acciones/guardar-donante.php" method="POST" class="needs-validation" novalidate>
                 
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <label for="nombre" class="form-label fw-semibold">Nombre(s) <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ej. María" required>
-                    <div class="invalid-feedback">Por favor ingresa el nombre.</div>
-                  </div>
+                <!-- Bloque 1: Datos Personales -->
+                <div class="mb-4">
+                  <h6 class="fw-bold text-uppercase text-purple mb-3" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
+                    <i class="bi bi-person-badge me-1"></i> Información Personal
+                  </h6>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label for="nombre" class="form-label fw-semibold">Nombre(s) <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ej. María" required>
+                      <div class="invalid-feedback">Por favor ingresa el nombre.</div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="apellido_paterno" class="form-label fw-semibold">Apellido Paterno <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" placeholder="Ej. Gómez" required>
-                    <div class="invalid-feedback">Por favor ingresa el apellido paterno.</div>
-                  </div>
+                    <div class="col-md-4">
+                      <label for="apellido_paterno" class="form-label fw-semibold">Apellido Paterno <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" placeholder="Ej. Gómez" required>
+                      <div class="invalid-feedback">Por favor ingresa el apellido paterno.</div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="apellido_materno" class="form-label fw-semibold">Apellido Materno</label>
-                    <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Ej. López">
-                  </div>
+                    <div class="col-md-4">
+                      <label for="apellido_materno" class="form-label fw-semibold">Apellido Materno</label>
+                      <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Ej. López">
+                    </div>
 
-                  <div class="col-md-6">
-                    <label for="email" class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                      <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" required>
-                      <div class="invalid-feedback">Ingresa un correo electrónico válido.</div>
+                    <div class="col-md-6">
+                      <label for="fecha_nacimiento" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-heart text-danger me-1"></i> Fecha de Nacimiento
+                      </label>
+                      <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento">
+                      <div class="form-text text-muted">Para felicitaciones automáticas de cumpleaños.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="ocupacion" class="form-label fw-semibold">
+                        <i class="bi bi-briefcase me-1"></i> Ocupación / Profesión
+                      </label>
+                      <input type="text" class="form-control" id="ocupacion" name="ocupacion" placeholder="Ej. Abogada, Docente, Empresaria...">
                     </div>
                   </div>
+                </div>
 
-                  <div class="col-md-6">
-                    <label for="telefono" class="form-label fw-semibold">Teléfono / Celular</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                      <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="10 dígitos" pattern="[0-9]{7,15}">
+                <hr class="my-4">
+
+                <!-- Bloque 2: Contacto y Domicilio -->
+                <div class="mb-4">
+                  <h6 class="fw-bold text-uppercase text-purple mb-3" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
+                    <i class="bi bi-geo-alt me-1"></i> Contacto y Domicilio
+                  </h6>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="email" class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                        <div class="invalid-feedback">Ingresa un correo electrónico válido.</div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="telefono" class="form-label fw-semibold">Teléfono / Celular</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                        <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="10 dígitos">
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <label for="domicilio" class="form-label fw-semibold">Domicilio (Calle, Número, Colonia)</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-house-door"></i></span>
+                        <input type="text" class="form-control" id="domicilio" name="domicilio" placeholder="Ej. Calle Macedonio Alcalá #200, Col. Centro">
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="ciudad" class="form-label fw-semibold">Ciudad / Municipio</label>
+                      <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ej. Oaxaca de Juárez">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="estado" class="form-label fw-semibold">Estado</label>
+                      <input type="text" class="form-control" id="estado" name="estado" placeholder="Ej. Oaxaca" value="Oaxaca">
+                    </div>
+                  </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Bloque 3: Datos Fiscales Opcionales -->
+                <div class="mb-4">
+                  <h6 class="fw-bold text-uppercase text-purple mb-3" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
+                    <i class="bi bi-receipt me-1"></i> Información Fiscal (Opcional)
+                  </h6>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="rfc" class="form-label fw-semibold">RFC</label>
+                      <input type="text" class="form-control" id="rfc" name="rfc" placeholder="12 o 13 caracteres" maxlength="20" style="text-transform: uppercase;">
+                      <div class="form-text text-muted">Para emisión de comprobantes o recibos deducibles.</div>
                     </div>
                   </div>
                 </div>
