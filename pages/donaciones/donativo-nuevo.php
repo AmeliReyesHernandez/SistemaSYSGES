@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/seccion.php';
 require_once __DIR__ . '/../../db/config.php';
 
@@ -130,7 +130,7 @@ if ($idDonantePre) {
           <a class="nav-link" href="donantes.php"><i class="bi bi-people-fill me-1"></i> Directorio de Donantes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donaciones</a>
+          <a class="nav-link" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donativos</a>
         </li>
       </ul>
 
@@ -163,9 +163,34 @@ if ($idDonantePre) {
                     <div class="invalid-feedback">Debes seleccionar un donante válido.</div>
                   </div>
 
-                  <!-- Monto -->
+                  <!-- Indicador de Fecha Automática -->
+                  <div class="col-12">
+                    <div class="alert alert-light border d-flex align-items-center justify-content-between p-2 px-3 mb-0 rounded-3">
+                      <span class="small text-secondary"><i class="bi bi-calendar-check-fill text-purple me-2"></i><strong>Fecha de Registro:</strong> Se asigna automáticamente la fecha y hora actual (<?= date('d/m/Y h:i A') ?>).</span>
+                      <span class="badge bg-purple-subtle text-purple px-2 py-1">Automática</span>
+                    </div>
+                  </div>
+
+                  <!-- Tipo / Método de Donativo -->
                   <div class="col-md-6">
-                    <label for="monto_donacion" class="form-label fw-semibold">Monto de la Donación (MXN) <span class="text-danger">*</span></label>
+                    <label for="tipo_donacion" class="form-label fw-semibold">Método / Tipo de Donativo <span class="text-danger">*</span></label>
+                    <select class="form-select" id="tipo_donacion" name="tipo_donacion" onchange="toggleTipoDonativo()" required>
+                      <option value="">Seleccione una opción...</option>
+                      <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
+                      <option value="Efectivo">Efectivo</option>
+                      <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
+                      <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
+                      <option value="Cheque">Cheque</option>
+                      <option value="En Especie">En Especie (Alimentos, Ropa, Insumos)</option>
+                      <option value="Bienes / Mobiliario">Bienes / Mobiliario / Equipo</option>
+                      <option value="Otro">Otro</option>
+                    </select>
+                    <div class="invalid-feedback">Selecciona el método de aportación.</div>
+                  </div>
+
+                  <!-- Campo Dinámico 1: Monto (Monetario) -->
+                  <div class="col-md-6" id="container_monto">
+                    <label for="monto_donacion" class="form-label fw-semibold">Monto del Donativo (MXN) <span class="text-danger">*</span></label>
                     <div class="input-group">
                       <span class="input-group-text fw-bold">$</span>
                       <input type="number" step="0.01" min="1" class="form-control" id="monto_donacion" name="monto_donacion" placeholder="0.00" required>
@@ -173,20 +198,11 @@ if ($idDonantePre) {
                     </div>
                   </div>
 
-                  <!-- Tipo / Método de Donación -->
-                  <div class="col-md-6">
-                    <label for="tipo_donacion" class="form-label fw-semibold">Método / Tipo de Donación <span class="text-danger">*</span></label>
-                    <select class="form-select" id="tipo_donacion" name="tipo_donacion" required>
-                      <option value="">Seleccione una opción...</option>
-                      <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
-                      <option value="Efectivo">Efectivo</option>
-                      <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
-                      <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
-                      <option value="Cheque">Cheque</option>
-                      <option value="En Especie">En Especie / Bienes</option>
-                      <option value="Otro">Otro</option>
-                    </select>
-                    <div class="invalid-feedback">Selecciona el método de aportación.</div>
+                  <!-- Campo Dinámico 2: Descripción en Especie / Bienes -->
+                  <div class="col-12 d-none" id="container_especie">
+                    <label for="descripcion_especie" class="form-label fw-semibold">Descripción del Donativo en Especie / Bienes <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="descripcion_especie" name="descripcion_especie" rows="3" placeholder="Describe detalladamente los artículos o bienes donados (Ej. 10 cobijas térmicas, 5 cajas de leche en polvo, 2 computadoras de escritorio)..."></textarea>
+                    <div class="invalid-feedback">Describe lo que fue donado en especie o bienes.</div>
                   </div>
 
                 </div>
@@ -196,7 +212,7 @@ if ($idDonantePre) {
                 <div class="d-flex justify-content-end gap-2">
                   <a href="donativos.php" class="btn btn-light px-4">Cancelar</a>
                   <button type="submit" class="btn btn-purple px-4 fw-semibold shadow-sm">
-                    <i class="bi bi-check2-circle me-1"></i> Registrar Donación
+                    <i class="bi bi-check2-circle me-1"></i> Registrar Donativo
                   </button>
                 </div>
 
@@ -262,6 +278,29 @@ if ($idDonantePre) {
           }
         });
       });
+
+      function toggleTipoDonativo() {
+        const sel = document.getElementById('tipo_donacion').value;
+        const cMonto = document.getElementById('container_monto');
+        const cEspecie = document.getElementById('container_especie');
+        const inMonto = document.getElementById('monto_donacion');
+        const inEspecie = document.getElementById('descripcion_especie');
+
+        if (sel === 'En Especie' || sel === 'Bienes / Mobiliario') {
+          cMonto.classList.add('d-none');
+          inMonto.removeAttribute('required');
+          inMonto.value = '';
+
+          cEspecie.classList.remove('d-none');
+          inEspecie.setAttribute('required', 'required');
+        } else {
+          cEspecie.classList.add('d-none');
+          inEspecie.removeAttribute('required');
+
+          cMonto.classList.remove('d-none');
+          inMonto.setAttribute('required', 'required');
+        }
+      }
 
       function limpiarDonante() {
         document.getElementById("input_donante").value = "";

@@ -163,7 +163,7 @@ try {
               <i class="bi bi-person-plus-fill me-1"></i> + Nuevo Donante
             </a>
             <a href="donativo-nuevo.php" class="btn btn-outline-purple btn-sm px-3 py-2 fw-semibold">
-              <i class="bi bi-cash-stack me-1"></i> Registrar Donación
+              <i class="bi bi-cash-stack me-1"></i> Registrar Donativo
             </a>
           </div>
         </div>
@@ -178,7 +178,10 @@ try {
           <a class="nav-link active" href="donantes.php"><i class="bi bi-people-fill me-1"></i> Directorio de Donantes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donaciones</a>
+          <a class="nav-link" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donativos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="mensajes.php"><i class="bi bi-envelope-paper-fill me-1"></i> Historial de Mensajes</a>
         </li>
       </ul>
 

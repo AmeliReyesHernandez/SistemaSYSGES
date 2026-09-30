@@ -1,113 +1,23 @@
 <style>
-/* -
-.sidebar {
-  background: linear-gradient(180deg, #e9f2ef, #d4e9e2, #c8e0d8) !important;  
-  color: #111 !important;
-  height: 100vh;
-  border-right: 1px solid #c0d2c9;
-  display: flex;
-  flex-direction: column;
+.sidebar svg.bi,
+.sidebar i.bi,
+svg.bi {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex-shrink: 0 !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
 }
-
-/* ---------- QUITAR FONDOS POR DEFECTO --------
-.bg-body-tertiary, .bg-light {
-  background: transparent !important;
+.sidebar .nav-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  white-space: normal !important;
 }
-
-/* ---------- ELEMENTOS DE USUARIO (FOTO, NOMBRE, ETC.) ---------
-.sidebar .user-info {
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  padding: 10px;
-  margin: 10px 15px;
-  transition: background 0.3s ease;
-}
-
-.sidebar .user-info:hover {
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
-.sidebar .user-info strong {
-  color: #000;
-}
-
-.sidebar .user-info small {
-  color: #333;
-}
-
-/* ---------- LINKS ----------
-.nav-link {
-  color: #111 !important;
-  font-weight: 500;
-  padding: 10px 20px;
-  border-radius: 8px;
-  margin: 3px 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.25s ease;
-  background-color: rgba(0, 0, 0, 0.05); /* FONDO UNIFORME EN MODO CLAR
-}
-
-.nav-link:hover {
-  background-color: rgba(76, 175, 80, 0.2) !important;
-  color: #000 !important;
-  transform: translateX(4px);
-}
-
-.nav-link.active {
-  background-color: #4CAF50 !important;
-  color: white !important;
-  font-weight: 600;
-}
-
-/* ---------- SEPARADORES --------
-hr {
-  border-color: rgba(0, 0, 0, 0.15);
-  margin: 10px 15px;
-}
-
-/* ---------- MODO OSCURO ---------
-@media (prefers-color-scheme: dark) {
-  .sidebar {
-    background: linear-gradient(180deg, #1a2524, #1f2f2e, #223836) !important;
-    color: #cfd8dc !important;
-  }
-
-  .sidebar .user-info {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .sidebar .user-info strong {
-    color: #fff !important;
-  }
-
-  .sidebar .user-info small {
-    color: #bbb !important;
-  }
-
-  .nav-link {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: #cfd8dc !important;
-  }
-
-  .nav-link:hover {
-    background-color: rgba(76, 175, 80, 0.25) !important;
-    color: #fff !important;
-  }
-
-  .nav-link.active {
-    background-color: #2e7d32 !important;
-    color: #fff !important;
-  }
-
-  hr {
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-}
-
-
-*/
 </style>
 
 
@@ -129,7 +39,7 @@ hr {
           <ul class="nav flex-column .bg-body-tertiary">
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2 " aria-current="page" href="../pages/home.php">
-                <svg class="bi"><use xlink:href="#house-fill"/></svg>
+                <i class="bi bi-house-fill"></i>
                 INICIO
               </a>
             </li>
@@ -138,13 +48,13 @@ hr {
 
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-usuaria.php">
-                <svg class="bi"><use xlink:href="#personita"/></svg>
+                <i class="bi bi-person-plus-fill"></i>
                 Registrar Nueva Usuaria
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-usuaria.php">
-                <svg class="bi"><use xlink:href="#people"/></svg>
+                <i class="bi bi-people-fill"></i>
                 Lista de Usuarias
               </a>
             </li>
@@ -185,13 +95,13 @@ hr {
 
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-tutor-adolecente.php">
-                <svg class="bi"><use xlink:href="#personita"/></svg>
+                <i class="bi bi-person-plus-fill"></i>
                 Registrar Nueva Usuaria Adolescente
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../pages/ver-usuario-adolecente.php">
-                <svg class="bi"><use xlink:href="#people"/></svg>
+                <i class="bi bi-people-fill"></i>
                 Lista de Usuarias Adolescentes
               </a>
             </li>
@@ -231,7 +141,7 @@ hr {
 
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/register-personal.php">
-                <svg class="bi"><use xlink:href="#personita"/></svg>
+                <i class="bi bi-person-badge-fill"></i>
                 Registrar Personal 
               </a>
             </li>
@@ -267,7 +177,7 @@ hr {
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="../checkout/asignacion-proyecto.php">
-                <svg class="bi"><use xlink:href="#puzzle"/></svg>
+                <i class="bi bi-puzzle-fill"></i>
                 Asignar proyecto 
               </a>
             </li>

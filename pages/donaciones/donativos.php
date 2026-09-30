@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/seccion.php';
 require_once __DIR__ . '/../../db/config.php';
 
@@ -54,7 +54,7 @@ try {
 
     // Listado paginado
     $sql = "
-        SELECT d.ID_Donativo, d.MontoDonacion, d.TipoDonacion, d.ID_Donante,
+        SELECT d.ID_Donativo, d.MontoDonacion, d.TipoDonacion, d.DescripcionEspecie, d.FechaDonacion, d.ID_Donante,
                CONCAT(dn.Nombre, ' ', dn.ApellidoPaterno, ' ', dn.ApellidoMaterno) AS Donante,
                dn.Email, dn.Telefono
         FROM donativos d
@@ -182,13 +182,13 @@ try {
       <div class="sf-header shadow-sm">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
           <div>
-            <h2 class="h3 fw-bold mb-0 text-dark">Historial de Donaciones</h2>
+            <h2 class="h3 fw-bold mb-0 text-dark">Historial de Donativos</h2>
             <p class="text-muted small mb-0">Control y registro cronológico de aportaciones económicas recibidas</p>
           </div>
           
           <div class="d-flex flex-wrap gap-2">
             <a href="donativo-nuevo.php" class="btn btn-purple btn-sm px-3 py-2 fw-semibold shadow-sm">
-              <i class="bi bi-cash-stack me-1"></i> + Nueva Donación
+              <i class="bi bi-cash-stack me-1"></i> + Nuevo Donativo
             </a>
             <a href="donante-nuevo.php" class="btn btn-outline-purple btn-sm px-3 py-2 fw-semibold">
               <i class="bi bi-person-plus-fill me-1"></i> Nuevo Donante
@@ -206,7 +206,10 @@ try {
           <a class="nav-link" href="donantes.php"><i class="bi bi-people-fill me-1"></i> Directorio de Donantes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donaciones</a>
+          <a class="nav-link active" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donativos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="mensajes.php"><i class="bi bi-envelope-paper-fill me-1"></i> Historial de Mensajes</a>
         </li>
       </ul>
 
@@ -237,7 +240,7 @@ try {
         <div class="col-md-4">
           <div class="kpi-mini d-flex align-items-center justify-content-between">
             <div>
-              <span class="text-muted small fw-semibold text-uppercase">Donación Promedio</span>
+              <span class="text-muted small fw-semibold text-uppercase">Donativo Promedio</span>
               <h4 class="fw-bold text-purple mb-0" style="color:#721896;">$<?= number_format((float)$metricas['PromedioDonacion'], 2) ?></h4>
             </div>
             <div class="rounded-circle p-2 fs-5" style="background:#f3e8ff; color:#721896;">
@@ -291,15 +294,16 @@ try {
                   <th style="width: 60px;">ID</th>
                   <th>Donante</th>
                   <th>Correo</th>
-                  <th class="text-center">Método de Aportación</th>
-                  <th class="text-end">Monto Recibido</th>
+                  <th class="text-center">Método / Tipo</th>
+                  <th class="text-center">Fecha de Registro</th>
+                  <th class="text-end">Monto / Detalle</th>
                   <th class="text-center" style="width: 120px;">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 <?php if (empty($donativos)): ?>
                   <tr>
-                    <td colspan="6" class="text-center py-5 text-muted">
+                    <td colspan="7" class="text-center py-5 text-muted">
                       <i class="bi bi-cash-stack fs-1 d-block mb-2 text-secondary opacity-50"></i>
                       No se encontraron donaciones registradas con los filtros seleccionados.
                     </td>
@@ -321,14 +325,31 @@ try {
                         <?php endif; ?>
                       </td>
                       <td class="text-center">
-                        <span class="badge bg-light text-secondary border px-2 py-1">
-                          <i class="bi bi-credit-card-2-front me-1"></i><?= htmlspecialchars($don['TipoDonacion'] ?: 'No especificado') ?>
+                        <?php if ($don['TipoDonacion'] === 'En Especie' || $don['TipoDonacion'] === 'Bienes / Mobiliario'): ?>
+                          <span class="badge bg-purple-subtle text-purple border border-purple px-2 py-1">
+                            <i class="bi bi-box-seam me-1"></i><?= htmlspecialchars($don['TipoDonacion']) ?>
+                          </span>
+                        <?php else: ?>
+                          <span class="badge bg-light text-secondary border px-2 py-1">
+                            <i class="bi bi-credit-card-2-front me-1"></i><?= htmlspecialchars($don['TipoDonacion'] ?: 'No especificado') ?>
+                          </span>
+                        <?php endif; ?>
+                      </td>
+                      <td class="text-center">
+                        <span class="small text-secondary">
+                          <i class="bi bi-clock me-1"></i><?= !empty($don['FechaDonacion']) ? date('d/m/Y h:i A', strtotime($don['FechaDonacion'])) : 'Automática' ?>
                         </span>
                       </td>
                       <td class="text-end">
-                        <span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">
-                          $<?= number_format((float)$don['MontoDonacion'], 2) ?>
-                        </span>
+                        <?php if ((float)$don['MontoDonacion'] > 0): ?>
+                          <span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">
+                            $<?= number_format((float)$don['MontoDonacion'], 2) ?>
+                          </span>
+                        <?php else: ?>
+                          <span class="text-dark small fw-semibold" title="<?= htmlspecialchars($don['DescripcionEspecie'] ?? '') ?>">
+                            <i class="bi bi-info-circle me-1 text-purple"></i><?= htmlspecialchars($don['DescripcionEspecie'] ? (mb_strlen($don['DescripcionEspecie']) > 30 ? mb_substr($don['DescripcionEspecie'], 0, 27) . '...' : $don['DescripcionEspecie']) : 'En especie') ?>
+                          </span>
+                        <?php endif; ?>
                       </td>
                       <td class="text-center">
                         <div class="btn-group btn-group-sm" role="group">

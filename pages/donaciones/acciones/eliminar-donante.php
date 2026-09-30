@@ -17,7 +17,7 @@ try {
     $tieneDonativos = (int)$checkDonativos->fetchColumn();
 
     if ($tieneDonativos > 0) {
-        // Eliminar en cascada los donativos vinculados para mantener integridad
+    
         $delDonativos = $conn->prepare("DELETE FROM donativos WHERE ID_Donante = :id");
         $delDonativos->bindParam(':id', $idDonante, PDO::PARAM_INT);
         $delDonativos->execute();

@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/seccion.php';
 require_once __DIR__ . '/../../db/config.php';
+require_once __DIR__ . '/acciones/servicio-correo.php';
+
+// Procesar felicitaciones automáticas de cumpleaños del día
+procesarCumpleanosAutomaticos($conn);
 
 // Consultas estadísticas
 try {
@@ -82,8 +86,8 @@ try {
     <script src="../../assets/js/color-modes.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Módulo de Donaciones">
-    <title>Módulo de Donaciones | GesMujer</title>
+    <meta name="description" content="Módulo de Donativos">
+    <title>Módulo de Donativos | GesMujer</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
@@ -357,7 +361,7 @@ try {
       <div class="sf-header shadow-sm">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
           <div>
-            <h2 class="h3 fw-bold mb-0 text-dark">Panel de Donaciones</h2>
+            <h2 class="h3 fw-bold mb-0 text-dark">Panel de Donativos</h2>
             <p class="text-muted small mb-0">Gestión integral de donantes y aportaciones económicas</p>
           </div>
           
@@ -367,7 +371,7 @@ try {
               <i class="bi bi-person-plus-fill me-1"></i> Nuevo Donante
             </a>
             <a href="donativo-nuevo.php" class="btn btn-purple btn-sm px-3 py-2 fw-semibold shadow-sm">
-              <i class="bi bi-cash-stack me-1"></i> Registrar Donación
+              <i class="bi bi-cash-stack me-1"></i> Registrar Donativo
             </a>
             <button class="btn btn-outline-secondary btn-sm px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalEnviarCorreo">
               <i class="bi bi-envelope-paper-heart me-1"></i> Redactar Correo
@@ -375,6 +379,31 @@ try {
           </div>
         </div>
       </div>
+
+      <!-- Notificación de estado (Envío de Correo) -->
+      <?php if (isset($_GET['status']) && $_GET['status'] === 'sent'): ?>
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mt-3 mb-0" role="alert" style="background-color: #d1e7dd; border-left: 5px solid #198754 !important;">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill text-success fs-4 me-3"></i>
+            <div>
+              <h6 class="alert-heading fw-bold mb-1 text-success">¡Correo Enviado Exitosamente!</h6>
+              <p class="mb-0 small text-dark">El mensaje ha sido procesado y enviado a la dirección de correo del donante.</p>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <?php elseif (isset($_GET['status']) && $_GET['status'] === 'error'): ?>
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-3 mb-0" role="alert" style="background-color: #f8d7da; border-left: 5px solid #dc3545 !important;">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill text-danger fs-4 me-3"></i>
+            <div>
+              <h6 class="alert-heading fw-bold mb-1 text-danger">Error al Enviar el Correo</h6>
+              <p class="mb-0 small text-dark"><strong>Detalle del error:</strong> <?= htmlspecialchars($_GET['msg'] ?? 'Ocurrió un problema al conectar con el servidor SMTP.') ?></p>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <?php endif; ?>
 
       <!-- Barra de pestañas estilo Salesforce -->
       <ul class="nav sf-nav-tabs">
@@ -385,7 +414,10 @@ try {
           <a class="nav-link" href="donantes.php"><i class="bi bi-people-fill me-1"></i> Directorio de Donantes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donaciones</a>
+          <a class="nav-link" href="donativos.php"><i class="bi bi-coin me-1"></i> Historial de Donativos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="mensajes.php"><i class="bi bi-envelope-paper-fill me-1"></i> Historial de Mensajes</a>
         </li>
       </ul>
 
@@ -619,13 +651,13 @@ try {
             </div>
             <div class="card-body d-flex flex-column gap-2">
               <a href="donativo-nuevo.php" class="btn btn-outline-primary text-start d-flex align-items-center gap-2 py-2">
-                <i class="bi bi-plus-circle-fill text-primary"></i> Registrar Nueva Donación
+                <i class="bi bi-plus-circle-fill text-primary"></i> Registrar Nuevo Donativo
               </a>
               <a href="donante-nuevo.php" class="btn btn-outline-purple text-start d-flex align-items-center gap-2 py-2">
                 <i class="bi bi-person-plus-fill"></i> Registrar Nuevo Donante
               </a>
               <a href="donativos.php" class="btn btn-outline-success text-start d-flex align-items-center gap-2 py-2">
-                <i class="bi bi-file-earmark-spreadsheet-fill text-success"></i> Reporte de Donaciones
+                <i class="bi bi-file-earmark-spreadsheet-fill text-success"></i> Reporte de Donativos
               </a>
               <button class="btn btn-outline-danger text-start d-flex align-items-center gap-2 py-2" data-bs-toggle="modal" data-bs-target="#modalEnviarCorreo">
                 <i class="bi bi-envelope-fill text-danger"></i> Enviar Mensaje a Donante
@@ -638,14 +670,14 @@ try {
             <span class="text-muted small fw-bold text-uppercase d-block mb-2">Diseño de Tarjeta GesMujer</span>
             <div class="p-3 rounded-3 text-white mb-2 shadow-sm" style="background: linear-gradient(135deg, #721896 0%);">
               <div class="text-warning mb-3" style="font-size: 2rem; line-height: 1;">
-                <i class="bi bi-stars" style="width: auto; height: auto; font-size: 2rem;"></i>
+              
                 <i class="bi bi-gift-fill text-white" style="width: auto; height: auto; font-size: 2rem; margin: 0 4px;"></i>
-                <i class="bi bi-stars" style="width: auto; height: auto; font-size: 2rem;"></i>
+                
               </div>
               <h5 class="fw-bold mb-1">¡Feliz Cumpleaños!</h5>
               <p style="font-size: 0.78rem;" class="mb-2 opacity-90">GesMujer te desea un día lleno de dicha y te agradece de corazón tu apoyo solidario.</p>
-              <span class="badge bg-white text-dark small px-3 py-1">
-                <i class="bi bi-heart-fill text-danger me-1"></i> Familia GesMujer Oaxaca
+              <span class="badge bg-white text-dark small px-3 py-1"> 
+                <i class=""></i> Familia GesMujer Oaxaca
               </span>
             </div>
           </div>
@@ -690,14 +722,22 @@ try {
               </div>
 
               <div class="mb-3">
+                <label class="form-label fw-semibold">Asunto del Correo</label>
+                <input type="text" class="form-control" name="asunto" id="correo_asunto" value="Mensaje de la Familia GesMujer Oaxaca" required>
+              </div>
+
+              <div class="mb-3">
                 <label class="form-label fw-semibold">Mensaje</label>
                 <textarea class="form-control" name="mensaje" id="correo_mensaje" rows="5" required></textarea>
               </div>
 
             </div>
-            <div class="modal-footer bg-light">
+            <div class="modal-footer bg-light justify-content-between">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-purple"><i class="bi bi-send-fill me-1"></i> Enviar Correo Ahora</button>
+              <div class="d-flex gap-2">
+                <button type="submit" name="accion" value="borrador" class="btn btn-outline-warning fw-semibold"><i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador</button>
+                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar Correo Ahora</button>
+              </div>
             </div>
           </form>
         </div>
@@ -730,7 +770,7 @@ try {
         const nom = document.getElementById('correo_nombre').value || '[Nombre del Donante]';
 
         if (sel === 'agradecimiento') {
-          txt.value = `Estimado(a) ${nom},\n\nEn nombre de todo el equipo de GesMujer Oaxaca, queremos expresarle nuestro más sincero agradecimiento por su valiosa donación. Su generosidad nos permite continuar brindando atención integral y esperanza a más mujeres en nuestro estado.\n\n¡Gracias por ser parte de este cambio!`;
+          txt.value = `Estimado(a) ${nom},\n\nEn nombre de todo el equipo de GesMujer Oaxaca, queremos expresarle nuestro más sincero agradecimiento por su valioso donativo. Su generosidad nos permite continuar brindando atención integral y esperanza a más mujeres en nuestro estado.\n\n¡Gracias por ser parte de este cambio!`;
         } else if (sel === 'cumpleanos') {
           txt.value = `¡Feliz Cumpleaños, ${nom}!\n\nTodo el equipo de GesMujer Oaxaca le desea un día maravilloso lleno de salud, alegría y bendiciones. Agradecemos enormemente contar con su apoyo y solidaridad constante.\n\n¡Un fuerte abrazo de parte de la familia GesMujer!`;
         } else if (sel === 'informativo') {
@@ -742,6 +782,22 @@ try {
 
       document.addEventListener('DOMContentLoaded', () => {
         cambiarPlantilla();
+
+        <?php if (isset($_GET['status']) && $_GET['status'] === 'sent'): ?>
+          Swal.fire({
+            icon: 'success',
+            title: '¡Correo enviado!',
+            text: 'El mensaje ha sido enviado exitosamente al donante.',
+            confirmButtonColor: '#721896'
+          });
+        <?php elseif (isset($_GET['status']) && $_GET['status'] === 'error'): ?>
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al enviar el correo',
+            text: <?= json_encode($_GET['msg'] ?? 'No se pudo enviar el mensaje.') ?>,
+            confirmButtonColor: '#721896'
+          });
+        <?php endif; ?>
       });
     </script>
   </body>
