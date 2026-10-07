@@ -25,7 +25,7 @@ try {
     $whereConditions = [];
     $params = [];
 
-    if ($search !== '') {
+    if ($search !== '') {  
         $whereConditions[] = "(dn.Nombre LIKE :s OR dn.ApellidoPaterno LIKE :s OR dn.ApellidoMaterno LIKE :s OR dn.Email LIKE :s)";
         $params[':s'] = "%$search%";
     }

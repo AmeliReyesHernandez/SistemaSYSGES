@@ -83,11 +83,10 @@ try {
     <title>Historial de Mensajes y Correos - SYSGES</title>
     <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dashboard.css" rel="stylesheet">
     
     <style>
       body {
-        font-family: 'Outfit', sans-serif;
         background-color: #f8f9fa;
         color: #333;
       }
@@ -293,7 +292,7 @@ try {
                             <?php if ($m['TipoMensaje'] === 'Cumpleaños'): ?>
                               <span class="badge bg-danger-subtle text-danger"><i class="bi bi-gift me-1"></i> Cumpleaños</span>
                             <?php elseif ($m['TipoMensaje'] === 'Agradecimiento'): ?>
-                              <span class="badge bg-purple-subtle text-purple"><i class="bi bi-heart me-1"></i> Agradecimiento</span>
+                              <span class="badge px-2 py-1" style="background-color:#f3e8ff; color:#721896;"><i class="bi bi-heart-fill me-1"></i> Agradecimiento</span>
                             <?php else: ?>
                               <span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-send me-1"></i> Manual</span>
                             <?php endif; ?>
