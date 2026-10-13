@@ -19,6 +19,10 @@ $domicilio = trim($_POST["domicilio"] ?? '');
 $ciudad = trim($_POST["ciudad"] ?? '');
 $estado = trim($_POST["estado"] ?? '');
 $rfc = strtoupper(trim($_POST["rfc"] ?? ''));
+$estatus = trim($_POST["estatus"] ?? 'Activo');
+if ($estatus !== 'Activo' && $estatus !== 'Inactivo') {
+    $estatus = 'Activo';
+}
 
 if ($nombre === '' || $apellidoPaterno === '' || $email === '') {
     $volver = $idDonante ? "../donante-editar.php?id=$idDonante" : "../donante-nuevo.php";
@@ -41,15 +45,16 @@ try {
                 Domicilio = :dom,
                 Ciudad = :ciudad,
                 Estado = :edo,
-                RFC = :rfc
+                RFC = :rfc,
+                Estatus = :estatus
             WHERE ID_Donante = :id
         ");
         $stmt->bindParam(':id', $idDonante, PDO::PARAM_INT);
     } else {
         // Crear nuevo donante
         $stmt = $conn->prepare("
-            INSERT INTO donantes (Nombre, ApellidoPaterno, ApellidoMaterno, Email, Telefono, FechaNacimiento, Ocupacion, Domicilio, Ciudad, Estado, RFC)
-            VALUES (:nombre, :ap, :am, :email, :tel, :fn, :ocup, :dom, :ciudad, :edo, :rfc)
+            INSERT INTO donantes (Nombre, ApellidoPaterno, ApellidoMaterno, Email, Telefono, FechaNacimiento, Ocupacion, Domicilio, Ciudad, Estado, RFC, Estatus)
+            VALUES (:nombre, :ap, :am, :email, :tel, :fn, :ocup, :dom, :ciudad, :edo, :rfc, :estatus)
         ");
     }
 
@@ -64,6 +69,7 @@ try {
     $stmt->bindParam(':ciudad', $ciudad);
     $stmt->bindParam(':edo', $estado);
     $stmt->bindParam(':rfc', $rfc);
+    $stmt->bindParam(':estatus', $estatus);
 
     $stmt->execute();
 

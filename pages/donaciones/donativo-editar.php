@@ -179,7 +179,7 @@ try {
                   <div class="col-12">
                     <div class="alert alert-light border d-flex align-items-center justify-content-between p-2 px-3 mb-0 rounded-3">
                       <span class="small text-secondary"><i class="bi bi-calendar-check-fill text-purple me-2"></i><strong>Fecha de Registro:</strong> <?= !empty($donativo['FechaDonacion']) ? date('d/m/Y h:i A', strtotime($donativo['FechaDonacion'])) : 'Asignada automáticamente' ?>.</span>
-                      <span class="badge bg-purple-subtle text-purple px-2 py-1">Registrada</span>
+                      <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600;">Registrada</span>
                     </div>
                   </div>
 
@@ -191,15 +191,18 @@ try {
                       $metodos = [
                           'Transferencia Bancaria',
                           'Efectivo',
-                          'Depósito en Ventanilla',
-                          'Tarjeta de Crédito / Débito',
+                          'PayPal',
+                          'Cheques',
                           'Cheque',
+                          'Tarjeta de Crédito / Débito',
+                          'Depósito en Ventanilla',
+                          'Autogestivo',
                           'En Especie',
                           'Bienes / Mobiliario',
                           'Otro'
                       ];
                       foreach ($metodos as $metodo) {
-                          $sel = ($donativo['TipoDonacion'] === $metodo) ? 'selected' : '';
+                          $sel = ($donativo['TipoDonacion'] === $metodo || ($metodo === 'Cheques' && $donativo['TipoDonacion'] === 'Cheque')) ? 'selected' : '';
                           echo "<option value=\"$metodo\" $sel>$metodo</option>";
                       }
                       ?>

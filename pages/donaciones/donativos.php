@@ -166,6 +166,21 @@ try {
         padding: 12px 16px;
         border: 1px solid #edf2f7;
       }
+      .text-purple {
+        color: #721896 !important;
+      }
+      .bg-purple-subtle {
+        background-color: #f3e8ff !important;
+        color: #721896 !important;
+      }
+      .border-purple {
+        border-color: #d1a8e7 !important;
+      }
+      .badge.bg-purple-subtle {
+        background-color: #f3e8ff !important;
+        color: #721896 !important;
+        border: 1px solid #d1a8e7 !important;
+      }
     </style>
   </head>
   <body>
@@ -187,6 +202,9 @@ try {
           </div>
           
           <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-danger btn-sm px-3 py-2 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalReportePDF">
+              <i class="bi bi-file-earmark-pdf-fill me-1"></i> Generar Reporte PDF
+            </button>
             <a href="donativo-nuevo.php" class="btn btn-purple btn-sm px-3 py-2 fw-semibold shadow-sm">
               <i class="bi bi-cash-stack me-1"></i> + Nuevo Donativo
             </a>
@@ -215,7 +233,7 @@ try {
 
       <!-- Resumen Métrico Rápido -->
       <div class="row g-3 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="kpi-mini d-flex align-items-center justify-content-between">
             <div>
               <span class="text-muted small fw-semibold text-uppercase">Total Recaudado</span>
@@ -226,7 +244,7 @@ try {
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="kpi-mini d-flex align-items-center justify-content-between">
             <div>
               <span class="text-muted small fw-semibold text-uppercase">Aportaciones Registradas</span>
@@ -234,17 +252,6 @@ try {
             </div>
             <div class="rounded-circle bg-primary-subtle text-primary p-2 fs-5">
               <i class="bi bi-receipt"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="kpi-mini d-flex align-items-center justify-content-between">
-            <div>
-              <span class="text-muted small fw-semibold text-uppercase">Donativo Promedio</span>
-              <h4 class="fw-bold text-purple mb-0" style="color:#721896;">$<?= number_format((float)$metricas['PromedioDonacion'], 2) ?></h4>
-            </div>
-            <div class="rounded-circle p-2 fs-5" style="background:#f3e8ff; color:#721896;">
-              <i class="bi bi-pie-chart-fill"></i>
             </div>
           </div>
         </div>
@@ -263,7 +270,18 @@ try {
             <select class="form-select" name="metodo">
               <option value="">Todos los métodos de pago</option>
               <?php
-              $metodos = ['Transferencia Bancaria', 'Efectivo', 'Depósito en Ventanilla', 'Tarjeta de Crédito / Débito', 'Cheque', 'En Especie', 'Otro'];
+              $metodos = [
+                  'Transferencia Bancaria',
+                  'Efectivo',
+                  'PayPal',
+                  'Cheques',
+                  'Tarjeta de Crédito / Débito',
+                  'Depósito en Ventanilla',
+                  'Autogestivo',
+                  'En Especie',
+                  'Bienes / Mobiliario',
+                  'Otro'
+              ];
               foreach ($metodos as $m) {
                   $sel = ($metodoFiltro === $m) ? 'selected' : '';
                   echo "<option value=\"$m\" $sel>$m</option>";
@@ -325,13 +343,36 @@ try {
                         <?php endif; ?>
                       </td>
                       <td class="text-center">
-                        <?php if ($don['TipoDonacion'] === 'En Especie' || $don['TipoDonacion'] === 'Bienes / Mobiliario'): ?>
-                          <span class="badge bg-purple-subtle text-purple border border-purple px-2 py-1">
-                            <i class="bi bi-box-seam me-1"></i><?= htmlspecialchars($don['TipoDonacion']) ?>
+                        <?php 
+                          $tipoLimpio = trim($don['TipoDonacion'] ?? '');
+                          if ($tipoLimpio === 'En Especie' || $tipoLimpio === 'Bienes / Mobiliario'): 
+                        ?>
+                          <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-box-seam me-1" style="color: #721896;"></i><?= htmlspecialchars($tipoLimpio) ?>
+                          </span>
+                        <?php elseif ($tipoLimpio === 'Efectivo'): ?>
+                          <span class="badge px-2 py-1" style="background-color: #eafaf1; color: #0f5132; border: 1px solid #c3e6cb; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-cash me-1" style="color: #198754;"></i>Efectivo
+                          </span>
+                        <?php elseif ($tipoLimpio === 'PayPal'): ?>
+                          <span class="badge px-2 py-1" style="background-color: #e8f4fd; color: #003087; border: 1px solid #b8daff; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-paypal me-1" style="color: #0079C1;"></i>PayPal
+                          </span>
+                        <?php elseif ($tipoLimpio === 'Cheque' || $tipoLimpio === 'Cheques'): ?>
+                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-card-checklist me-1" style="color: #495057;"></i><?= htmlspecialchars($tipoLimpio) ?>
+                          </span>
+                        <?php elseif ($tipoLimpio === 'Autogestivo'): ?>
+                          <span class="badge px-2 py-1" style="background-color: #fff9e6; color: #856404; border: 1px solid #ffeeba; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-award me-1" style="color: #d39e00;"></i>Autogestivo
+                          </span>
+                        <?php elseif ($tipoLimpio !== ''): ?>
+                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #212529; border: 1px solid #dee2e6; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-credit-card-2-front me-1" style="color: #0d6efd;"></i><?= htmlspecialchars($tipoLimpio) ?>
                           </span>
                         <?php else: ?>
-                          <span class="badge bg-light text-secondary border px-2 py-1">
-                            <i class="bi bi-credit-card-2-front me-1"></i><?= htmlspecialchars($don['TipoDonacion'] ?: 'No especificado') ?>
+                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #6c757d; border: 1px solid #dee2e6; font-weight: 500; font-size: 0.8rem;">
+                            <i class="bi bi-question-circle me-1"></i>No especificado
                           </span>
                         <?php endif; ?>
                       </td>
@@ -341,18 +382,24 @@ try {
                         </span>
                       </td>
                       <td class="text-end">
-                        <?php if ((float)$don['MontoDonacion'] > 0): ?>
+                        <?php 
+                          $esEspecieItem = ($don['TipoDonacion'] === 'En Especie' || $don['TipoDonacion'] === 'Bienes / Mobiliario' || (float)$don['MontoDonacion'] <= 0);
+                        ?>
+                        <?php if (!$esEspecieItem && (float)$don['MontoDonacion'] > 0): ?>
                           <span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">
                             $<?= number_format((float)$don['MontoDonacion'], 2) ?>
                           </span>
                         <?php else: ?>
                           <span class="text-dark small fw-semibold" title="<?= htmlspecialchars($don['DescripcionEspecie'] ?? '') ?>">
-                            <i class="bi bi-info-circle me-1 text-purple"></i><?= htmlspecialchars($don['DescripcionEspecie'] ? (mb_strlen($don['DescripcionEspecie']) > 30 ? mb_substr($don['DescripcionEspecie'], 0, 27) . '...' : $don['DescripcionEspecie']) : 'En especie') ?>
+                            <i class="bi bi-box-seam me-1 text-purple"></i><?= htmlspecialchars($don['DescripcionEspecie'] ? (mb_strlen($don['DescripcionEspecie']) > 30 ? mb_substr($don['DescripcionEspecie'], 0, 27) . '...' : $don['DescripcionEspecie']) : 'En especie') ?>
                           </span>
                         <?php endif; ?>
                       </td>
                       <td class="text-center">
                         <div class="btn-group btn-group-sm" role="group">
+                          <a href="carta-agradecimiento.php?id=<?= $don['ID_Donativo'] ?>" target="_blank" class="btn btn-outline-purple" title="Descargar / Ver Carta de Agradecimiento (PDF)">
+                            <i class="bi bi-file-earmark-heart-fill"></i>
+                          </a>
                           <a href="donativo-editar.php?id=<?= $don['ID_Donativo'] ?>" class="btn btn-outline-primary" title="Editar">
                             <i class="bi bi-pencil-square"></i>
                           </a>
@@ -396,7 +443,99 @@ try {
   </div>
 </div>
 
+    <!-- Modal: Generar Reporte PDF por Rango de Fechas -->
+    <div class="modal fade" id="modalReportePDF" tabindex="-1" aria-labelledby="modalReportePDFLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header text-white" style="background:#721896;">
+            <h5 class="modal-title" id="modalReportePDFLabel"><i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i> Generar Reporte PDF de Aportaciones</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="reporte-pdf.php" method="GET" target="_blank">
+            <div class="modal-body p-4">
+              
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Seleccionar Periodo Rápido</label>
+                <select class="form-select" id="rangoRapido" onchange="cambiarRangoFechas(this.value)">
+                  <option value="mes_actual">Mes Actual (<?= date('F Y') ?>)</option>
+                  <option value="mes_anterior">Mes Anterior</option>
+                  <option value="anio_actual">Todo el Año Actual (<?= date('Y') ?>)</option>
+                  <option value="ultimos_3_meses">Últimos 3 Meses</option>
+                  <option value="todos">Todo el Historial Histórico</option>
+                  <option value="personalizado" selected>Rango Personalizado de Fechas</option>
+                </select>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <label class="form-label fw-semibold">Fecha Inicio</label>
+                  <input type="date" class="form-control" name="fecha_inicio" id="rep_fecha_inicio" value="<?= date('Y-m-01') ?>">
+                </div>
+                <div class="col-6">
+                  <label class="form-label fw-semibold">Fecha Fin</label>
+                  <input type="date" class="form-control" name="fecha_fin" id="rep_fecha_fin" value="<?= date('Y-m-d') ?>">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Filtrar por Método / Tipo de Donativo</label>
+                <select class="form-select" name="metodo" id="rep_metodo">
+                  <option value="">Todos los Métodos y Tipos</option>
+                  <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
+                  <option value="Efectivo">Efectivo</option>
+                  <option value="PayPal">PayPal</option>
+                  <option value="Cheques">Cheques / Cheque</option>
+                  <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
+                  <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
+                  <option value="Autogestivo">Autogestivo</option>
+                  <option value="En Especie">En Especie</option>
+                  <option value="Bienes / Mobiliario">Bienes / Mobiliario</option>
+                </select>
+              </div>
+
+              <div class="alert alert-light border p-2 small text-muted mb-0 rounded-3">
+                <i class="bi bi-info-circle text-purple me-1"></i> El reporte generado incluirá membrete institucional oficial de GesMujer, resumen ejecutivo, estadísticas métricas, desglose por método y tabla detallada.
+              </div>
+
+            </div>
+            <div class="modal-footer bg-light justify-content-between">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-danger fw-semibold"><i class="bi bi-download me-1"></i> Descargar Reporte PDF</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <script src="../../assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function cambiarRangoFechas(tipo) {
+        const hoy = new Date();
+        const y = hoy.getFullYear();
+        const m = hoy.getMonth();
+        const fi = document.getElementById('rep_fecha_inicio');
+        const ff = document.getElementById('rep_fecha_fin');
+
+        const format = (d) => d.toISOString().split('T')[0];
+
+        if (tipo === 'mes_actual') {
+          fi.value = format(new Date(y, m, 1));
+          ff.value = format(new Date(y, m + 1, 0));
+        } else if (tipo === 'mes_anterior') {
+          fi.value = format(new Date(y, m - 1, 1));
+          ff.value = format(new Date(y, m, 0));
+        } else if (tipo === 'anio_actual') {
+          fi.value = `${y}-01-01`;
+          ff.value = `${y}-12-31`;
+        } else if (tipo === 'ultimos_3_meses') {
+          fi.value = format(new Date(y, m - 2, 1));
+          ff.value = format(new Date(y, m + 1, 0));
+        } else if (tipo === 'todos') {
+          fi.value = '';
+          ff.value = '';
+        }
+      }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       function confirmarEliminarDonativo(id, monto) {

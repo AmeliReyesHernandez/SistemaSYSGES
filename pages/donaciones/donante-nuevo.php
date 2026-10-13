@@ -221,6 +221,15 @@ require_once __DIR__ . '/seccion.php';
                       <input type="text" class="form-control" id="rfc" name="rfc" placeholder="12 o 13 caracteres" maxlength="20" style="text-transform: uppercase;">
                       <div class="form-text text-muted">Para emisión de comprobantes o recibos deducibles.</div>
                     </div>
+
+                    <div class="col-md-6">
+                      <label for="estatus" class="form-label fw-semibold">Estado del Donante <span class="text-danger">*</span></label>
+                      <select class="form-select" id="estatus" name="estatus" required>
+                        <option value="Activo" selected>Activo (Donante Vigente)</option>
+                        <option value="Inactivo">Inactivo</option>
+                      </select>
+                      <div class="form-text text-muted">Los donantes sin aportaciones por más de 1 año pueden marcarse inactivos.</div>
+                    </div>
                   </div>
                 </div>
 

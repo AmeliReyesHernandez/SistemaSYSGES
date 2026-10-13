@@ -25,7 +25,7 @@ try {
 
     // Donaciones recientes (últimas 5)
     $stmtRecientes = $conn->query("
-        SELECT d.ID_Donativo, d.MontoDonacion, d.TipoDonacion, 
+        SELECT d.ID_Donativo, d.MontoDonacion, d.TipoDonacion, d.DescripcionEspecie,
                CONCAT(dn.Nombre, ' ', dn.ApellidoPaterno, ' ', dn.ApellidoMaterno) as Donante,
                dn.Email
         FROM donativos d
@@ -46,7 +46,7 @@ try {
 
     // Cumpleaños de hoy
     $stmtCumpleHoy = $conn->query("
-        SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, Email
+        SELECT ID_Donante, Nombre, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, '')) AS NombreCompleto, Email
         FROM donantes
         WHERE FechaNacimiento IS NOT NULL 
           AND DATE_FORMAT(FechaNacimiento, '%m-%d') = DATE_FORMAT(CURDATE(), '%m-%d')
@@ -56,7 +56,7 @@ try {
 
     // Próximos cumpleaños (próximos 15 días)
     $stmtProximos = $conn->query("
-        SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, Email, FechaNacimiento,
+        SELECT ID_Donante, Nombre, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, '')) AS NombreCompleto, Email, FechaNacimiento,
                DATEDIFF(
                  DATE_ADD(FechaNacimiento, INTERVAL (YEAR(CURDATE()) - YEAR(FechaNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m%d') > DATE_FORMAT(FechaNacimiento, '%m%d'), 1, 0)) YEAR),
                  CURDATE()
@@ -69,6 +69,16 @@ try {
     ");
     $proximosCumples = $stmtProximos ? $stmtProximos->fetchAll(PDO::FETCH_ASSOC) : [];
 
+    // Lista completa de donantes para el selector dinámico del modal
+    $stmtTodosDonantes = $conn->query("
+        SELECT ID_Donante, Nombre, ApellidoPaterno, ApellidoMaterno,
+               CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, '')) AS NombreCompleto,
+               Email
+        FROM donantes
+        ORDER BY Nombre ASC
+    ");
+    $todosDonantes = $stmtTodosDonantes ? $stmtTodosDonantes->fetchAll(PDO::FETCH_ASSOC) : [];
+
 } catch (PDOException $e) {
     $totalRecaudado = 0;
     $totalDonantes = 0;
@@ -78,6 +88,7 @@ try {
     $donantesRecientes = [];
     $cumpleHoy = null;
     $proximosCumples = [];
+    $todosDonantes = [];
 }
 ?>
 <!doctype html>
@@ -367,6 +378,9 @@ try {
           
           <!-- Botones de Acción Rápida -->
           <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-danger btn-sm px-3 py-2 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalReportePDF">
+              <i class="bi bi-file-earmark-pdf-fill me-1"></i> Generar Reporte PDF
+            </button>
             <a href="donante-nuevo.php" class="btn btn-outline-purple btn-sm px-3 py-2 fw-semibold">
               <i class="bi bi-person-plus-fill me-1"></i> Nuevo Donante
             </a>
@@ -499,7 +513,7 @@ try {
                           <small class="text-muted"><i class="bi bi-envelope me-1"></i><?= htmlspecialchars($donante['Email'] ?: 'Sin correo') ?></small>
                         </div>
                       </div>
-                      <button class="btn btn-sm btn-outline-secondary" onclick="prepararCorreo('<?= htmlspecialchars($donante['NombreCompleto']) ?>', '<?= htmlspecialchars($donante['Email']) ?>')">
+                      <button class="btn btn-sm btn-outline-secondary" onclick="prepararCorreo('<?= htmlspecialchars(addslashes($donante['NombreCompleto'])) ?>', '<?= htmlspecialchars(addslashes($donante['Email'])) ?>', <?= $donante['ID_Donante'] ?>)">
                         <i class="bi bi-send-fill"></i>
                       </button>
                     </li>
@@ -553,7 +567,7 @@ try {
                       <small class="text-muted"><?= htmlspecialchars($cumpleHoy['Email'] ?: 'Donante solidario(a)') ?></small>
                     </div>
                   </div>
-                  <button class="btn btn-sm btn-danger fw-semibold px-3" onclick="enviarTarjetaCumple('<?= htmlspecialchars(addslashes($cumpleHoy['NombreCompleto'])) ?>', '<?= htmlspecialchars(addslashes($cumpleHoy['Email'])) ?>')">
+                  <button class="btn btn-sm btn-danger fw-semibold px-3" onclick="enviarTarjetaCumple('<?= htmlspecialchars(addslashes($cumpleHoy['Nombre'])) ?>', '<?= htmlspecialchars(addslashes($cumpleHoy['Email'])) ?>', <?= $cumpleHoy['ID_Donante'] ?>)">
                     <i class="bi bi-gift-fill me-1"></i> Felicitar
                   </button>
                 </div>
@@ -582,7 +596,7 @@ try {
                           Cumple el <?= date('d/m', strtotime($pc['FechaNacimiento'])) ?> (en <?= $pc['DiasRestantes'] ?> <?= $pc['DiasRestantes'] == 1 ? 'día' : 'días' ?>)
                         </small>
                       </div>
-                      <button class="btn btn-sm btn-outline-purple" onclick="enviarTarjetaCumple('<?= htmlspecialchars(addslashes($pc['NombreCompleto'])) ?>', '<?= htmlspecialchars(addslashes($pc['Email'])) ?>')">
+                      <button class="btn btn-sm btn-outline-purple" onclick="enviarTarjetaCumple('<?= htmlspecialchars(addslashes($pc['Nombre'])) ?>', '<?= htmlspecialchars(addslashes($pc['Email'])) ?>', <?= $pc['ID_Donante'] ?>)">
                         <i class="bi bi-envelope-paper-heart-fill me-1"></i> Tarjeta
                       </button>
                     </div>
@@ -621,9 +635,18 @@ try {
                             <span class="fw-semibold text-dark"><?= htmlspecialchars($donacion['Donante']) ?></span>
                           </td>
                           <td>
-                            <span class="badge bg-success-subtle text-success fs-6 fw-bold">
-                              $<?= number_format((float)$donacion['MontoDonacion'], 2) ?>
-                            </span>
+                            <?php 
+                              $esEspecieRec = ($donacion['TipoDonacion'] === 'En Especie' || $donacion['TipoDonacion'] === 'Bienes / Mobiliario' || (float)$donacion['MontoDonacion'] <= 0);
+                            ?>
+                            <?php if (!$esEspecieRec && (float)$donacion['MontoDonacion'] > 0): ?>
+                              <span class="badge bg-success-subtle text-success fs-6 fw-bold">
+                                $<?= number_format((float)$donacion['MontoDonacion'], 2) ?>
+                              </span>
+                            <?php else: ?>
+                              <span class="text-secondary small fw-semibold" title="<?= htmlspecialchars($donacion['DescripcionEspecie'] ?? '') ?>">
+                                <i class="bi bi-box-seam me-1 text-purple"></i><?= htmlspecialchars($donacion['DescripcionEspecie'] ? (mb_strlen($donacion['DescripcionEspecie']) > 25 ? mb_substr($donacion['DescripcionEspecie'], 0, 22) . '...' : $donacion['DescripcionEspecie']) : 'En especie') ?>
+                              </span>
+                            <?php endif; ?>
                           </td>
                           <td>
                             <span class="badge bg-light text-secondary border">
@@ -668,18 +691,14 @@ try {
           <!-- Vista Previa Tarjeta de Cumpleaños -->
           <div class="card-sf text-center p-3">
             <span class="text-muted small fw-bold text-uppercase d-block mb-2">Diseño de Tarjeta GesMujer</span>
-            <div class="p-3 rounded-3 text-white mb-2 shadow-sm" style="background: linear-gradient(135deg, #721896 0%);">
-              <div class="text-warning mb-3" style="font-size: 2rem; line-height: 1;">
-              
-                <i class="bi bi-gift-fill text-white" style="width: auto; height: auto; font-size: 2rem; margin: 0 4px;"></i>
-                
-              </div>
-              <h5 class="fw-bold mb-1">¡Feliz Cumpleaños!</h5>
-              <p style="font-size: 0.78rem;" class="mb-2 opacity-90">GesMujer te desea un día lleno de dicha y te agradece de corazón tu apoyo solidario.</p>
-              <span class="badge bg-white text-dark small px-3 py-1"> 
-                <i class=""></i> Familia GesMujer Oaxaca
-              </span>
+            <div class="mb-2 shadow-sm rounded-3 overflow-hidden border">
+              <img src="../../assets/img/cumpleanos_banner.png" alt="Tarjeta Oficial de Cumpleaños GesMujer" class="img-fluid w-100 d-block">
             </div>
+            <div class="text-purple fw-bold fst-italic small mb-1">¡Que tengas el mejor de los días!</div>
+            <p style="font-size: 0.78rem;" class="text-muted mb-2">Diseño oficial enviado automáticamente en el día de cumpleaños de cada donante.</p>
+            <span class="badge px-3 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d8b4fe;"> 
+              Familia GesMujer Oaxaca
+            </span>
           </div>
 
         </div>
@@ -692,43 +711,73 @@ try {
 
     <!-- Modal: Enviar Correo Directo -->
     <div class="modal fade" id="modalEnviarCorreo" tabindex="-1" aria-labelledby="modalEnviarCorreoLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow">
           <div class="modal-header text-white" style="background:#721896;">
-            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo a Donante</h5>
+            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo Institucional con Membrete</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form action="acciones/enviar-correo.php" method="POST">
-            <div class="modal-body">
+          <form action="acciones/enviar-correo.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="return_url" value="../index.php">
+            <input type="hidden" name="id_donante" id="correo_id_donante" value="">
+            <div class="modal-body p-4">
               
+              <!-- Selector Dinámico de Donante Registrado -->
+              <div class="mb-3 p-3 bg-light rounded-3 border">
+                <label class="form-label fw-bold text-purple mb-1">
+                  <i class="bi bi-person-check-fill me-1"></i> Seleccionar Donante (Autocompletar Datos):
+                </label>
+                <select class="form-select" id="correo_donante_select" onchange="seleccionarDonanteModal(this)">
+                  <option value="">-- Elige un donante registrado o escribe manualmente --</option>
+                  <?php foreach ($todosDonantes as $dn): ?>
+                    <option value="<?= $dn['ID_Donante'] ?>" 
+                            data-nombre="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
+                            data-pila="<?= htmlspecialchars($dn['Nombre']) ?>" 
+                            data-email="<?= htmlspecialchars($dn['Email']) ?>">
+                      <?= htmlspecialchars($dn['NombreCompleto']) ?> (<?= htmlspecialchars($dn['Email'] ?: 'Sin correo') ?>)
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <div class="form-text text-muted">Al seleccionar a una persona se cargará su correo y su nombre se insertará dinámicamente en el mensaje.</div>
+              </div>
+
               <div class="mb-3">
                 <label class="form-label fw-semibold">Seleccionar Plantilla Rápida</label>
                 <select class="form-select" id="plantillaSelect" onchange="cambiarPlantilla()">
-                  <option value="agradecimiento">Carta de Agradecimiento por Donativo</option>
                   <option value="cumpleanos">Tarjeta de Feliz Cumpleaños</option>
+                  <option value="agradecimiento">Carta de Agradecimiento por Donativo</option>
+                  <option value="recibo">Envío de Recibo de Donativo / Comprobante</option>
                   <option value="informativo">Informe de Impacto y Actividades</option>
                   <option value="personalizado">Mensaje Personalizado</option>
                 </select>
               </div>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Nombre del Donante</label>
-                <input type="text" class="form-control" name="nombre" id="correo_nombre" placeholder="Nombre completo" required>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Nombre del Donante / Saludo <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="nombre" id="correo_nombre" placeholder="Nombre completo o de pila" oninput="actualizarNombreEnMensaje()" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" name="email" id="correo_email" placeholder="correo@ejemplo.com" required>
+                </div>
               </div>
 
               <div class="mb-3">
-                <label class="form-label fw-semibold">Correo Electrónico</label>
-                <input type="email" class="form-control" name="email" id="correo_email" placeholder="correo@ejemplo.com" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Asunto del Correo</label>
+                <label class="form-label fw-semibold">Asunto del Correo <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="asunto" id="correo_asunto" value="Mensaje de la Familia GesMujer Oaxaca" required>
               </div>
 
               <div class="mb-3">
-                <label class="form-label fw-semibold">Mensaje</label>
+                <label class="form-label fw-semibold">Mensaje <span class="text-danger">*</span></label>
                 <textarea class="form-control" name="mensaje" id="correo_mensaje" rows="5" required></textarea>
+              </div>
+
+              <!-- Campo de Archivo Adjunto (Recibo PDF / Imagen / Doc) -->
+              <div class="mb-2 p-3 bg-light rounded-3 border">
+                <label class="form-label fw-semibold mb-1"><i class="bi bi-paperclip text-purple me-1"></i> Adjuntar Recibo, Comprobante o Documento (Opcional)</label>
+                <input type="file" name="adjunto" id="correo_adjunto" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.xls,.xlsx">
+                <div class="form-text text-muted">Formatos permitidos: PDF, Word (DOC/DOCX), Imágenes (JPG, PNG) o Excel (hasta 15MB).</div>
               </div>
 
             </div>
@@ -736,8 +785,72 @@ try {
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               <div class="d-flex gap-2">
                 <button type="submit" name="accion" value="borrador" class="btn btn-outline-warning fw-semibold"><i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador</button>
-                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar Correo Ahora</button>
+                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar con Membrete</button>
               </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Generar Reporte PDF por Rango de Fechas -->
+    <div class="modal fade" id="modalReportePDF" tabindex="-1" aria-labelledby="modalReportePDFLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header text-white" style="background:#721896;">
+            <h5 class="modal-title" id="modalReportePDFLabel"><i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i> Generar Reporte PDF de Aportaciones</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="reporte-pdf.php" method="GET" target="_blank">
+            <div class="modal-body p-4">
+              
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Seleccionar Periodo Rápido</label>
+                <select class="form-select" id="rangoRapidoIndex" onchange="cambiarRangoFechasIndex(this.value)">
+                  <option value="mes_actual">Mes Actual (<?= date('F Y') ?>)</option>
+                  <option value="mes_anterior">Mes Anterior</option>
+                  <option value="anio_actual">Todo el Año Actual (<?= date('Y') ?>)</option>
+                  <option value="ultimos_3_meses">Últimos 3 Meses</option>
+                  <option value="todos">Todo el Historial Histórico</option>
+                  <option value="personalizado" selected>Rango Personalizado de Fechas</option>
+                </select>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <label class="form-label fw-semibold">Fecha Inicio</label>
+                  <input type="date" class="form-control" name="fecha_inicio" id="rep_fecha_inicio_idx" value="<?= date('Y-m-01') ?>">
+                </div>
+                <div class="col-6">
+                  <label class="form-label fw-semibold">Fecha Fin</label>
+                  <input type="date" class="form-control" name="fecha_fin" id="rep_fecha_fin_idx" value="<?= date('Y-m-d') ?>">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Filtrar por Método / Tipo de Donativo</label>
+                <select class="form-select" name="metodo" id="rep_metodo_idx">
+                  <option value="">Todos los Métodos y Tipos</option>
+                  <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
+                  <option value="Efectivo">Efectivo</option>
+                  <option value="PayPal">PayPal</option>
+                  <option value="Cheques">Cheques / Cheque</option>
+                  <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
+                  <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
+                  <option value="Autogestivo">Autogestivo</option>
+                  <option value="En Especie">En Especie</option>
+                  <option value="Bienes / Mobiliario">Bienes / Mobiliario</option>
+                </select>
+              </div>
+
+              <div class="alert alert-light border p-2 small text-muted mb-0 rounded-3">
+                <i class="bi bi-info-circle text-purple me-1"></i> El reporte generado incluirá membrete institucional oficial de GesMujer, resumen ejecutivo, estadísticas métricas, desglose por método y tabla detallada.
+              </div>
+
+            </div>
+            <div class="modal-footer bg-light justify-content-between">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-danger fw-semibold"><i class="bi bi-download me-1"></i> Descargar Reporte PDF</button>
             </div>
           </form>
         </div>
@@ -749,34 +862,141 @@ try {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
-      function prepararCorreo(nombre, email) {
-        document.getElementById('correo_nombre').value = nombre;
-        document.getElementById('correo_email').value = email;
+      function prepararCorreo(nombre, email, idDonante) {
+        document.getElementById('correo_nombre').value = nombre || '';
+        document.getElementById('correo_email').value = email || '';
+        const idInput = document.getElementById('correo_id_donante');
+        if (idInput) idInput.value = idDonante || '';
+        const selectDonante = document.getElementById('correo_donante_select');
+        if (selectDonante) selectDonante.value = idDonante || '';
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
-      function enviarTarjetaCumple(nombre, email) {
-        document.getElementById('correo_nombre').value = nombre;
-        document.getElementById('correo_email').value = email;
+      function enviarTarjetaCumple(nombre, email, idDonante) {
+        document.getElementById('correo_nombre').value = nombre || '';
+        document.getElementById('correo_email').value = email || '';
+        const idInput = document.getElementById('correo_id_donante');
+        if (idInput) idInput.value = idDonante || '';
+        const selectDonante = document.getElementById('correo_donante_select');
+        if (selectDonante) selectDonante.value = idDonante || '';
         document.getElementById('plantillaSelect').value = 'cumpleanos';
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
+      function seleccionarDonanteModal(selectEl) {
+        const opt = selectEl.options[selectEl.selectedIndex];
+        if (!opt || !opt.value) return;
+        const nombrePila = opt.getAttribute('data-pila') || opt.getAttribute('data-nombre');
+        const email = opt.getAttribute('data-email') || '';
+        const idDonante = opt.value;
+
+        document.getElementById('correo_nombre').value = nombrePila;
+        document.getElementById('correo_email').value = email;
+        const idInput = document.getElementById('correo_id_donante');
+        if (idInput) idInput.value = idDonante;
+
+        actualizarNombreEnMensaje();
+      }
+
+      function actualizarNombreEnMensaje() {
+        const nom = document.getElementById('correo_nombre').value.trim() || '[Nombre del Donante]';
+        const txt = document.getElementById('correo_mensaje');
+        if (!txt) return;
+
+        const sel = document.getElementById('plantillaSelect').value;
+        if (sel === 'cumpleanos') {
+          if (!txt.value.includes('en el GESMujer no solo celebramos')) {
+            cambiarPlantilla();
+            return;
+          }
+          txt.value = txt.value.replace(/^[^\n,]+, en el GESMujer no solo celebramos/m, `${nom}, en el GESMujer no solo celebramos`);
+          txt.value = txt.value.replace(/\[Nombre del Donante\]/g, nom);
+        } else if (sel === 'agradecimiento') {
+          if (!txt.value.includes('Querido(a)')) {
+            cambiarPlantilla();
+            return;
+          }
+          txt.value = txt.value.replace(/Querido\(a\) [^,\n]+,/g, `Querido(a) ${nom},`);
+          txt.value = txt.value.replace(/\[Nombre del Donante\]/g, nom);
+        } else if (sel === 'recibo' || sel === 'informativo') {
+          if (!txt.value.includes('Estimado(a)')) {
+            cambiarPlantilla();
+            return;
+          }
+          txt.value = txt.value.replace(/Estimado\(a\) [^,\n]+,/g, `Estimado(a) ${nom},`);
+          txt.value = txt.value.replace(/\[Nombre del Donante\]/g, nom);
+        }
+      }
+
       function cambiarPlantilla() {
         const sel = document.getElementById('plantillaSelect').value;
         const txt = document.getElementById('correo_mensaje');
-        const nom = document.getElementById('correo_nombre').value || '[Nombre del Donante]';
+        const asunto = document.getElementById('correo_asunto');
+        let nom = document.getElementById('correo_nombre').value.trim();
+        if (!nom) nom = '[Nombre del Donante]';
+
+        const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        const hoy = new Date();
+        const fechaCarta = `Oaxaca de Juárez, Oaxaca a ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
 
         if (sel === 'agradecimiento') {
-          txt.value = `Estimado(a) ${nom},\n\nEn nombre de todo el equipo de GesMujer Oaxaca, queremos expresarle nuestro más sincero agradecimiento por su valioso donativo. Su generosidad nos permite continuar brindando atención integral y esperanza a más mujeres en nuestro estado.\n\n¡Gracias por ser parte de este cambio!`;
+          asunto.value = '¡Gracias por sumarte a transformar vidas en Oaxaca! - GesMujer';
+          txt.value = `${fechaCarta}\n\n` +
+            `Querido(a) ${nom}, ¡gracias por sumarte a transformar vidas en Oaxaca!\n\n` +
+            `A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GesMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo.\n\n` +
+            `Acciones como la tuya hacen posible que sigamos caminando junto a mujeres, jóvenes y niñas de diversas comunidades indígenas y rurales del estado de Oaxaca. Gracias a tu valioso respaldo, podemos fortalecer nuestras acciones de acompañamiento, formación, defensa de sus derechos e impulso a su autonomía, brindándoles herramientas para construir proyectos de vida con dignidad, justicia y libres de violencia.\n\n` +
+            `En GesMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n` +
+            `Nos comprometemos firmemente a administrar tu aportación con total transparencia y con la dedicación que nos ha caracterizado por más de cuatro décadas de trabajo en favor de las mujeres oaxaqueñas.\n\n` +
+            `Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\n` +
+            `Con aprecio y respeto,\n\n` +
+            `María del Rosario Martínez Miguel\n` +
+            `Grupo de Estudios sobre la Mujer Rosario Castellanos (GesMujer)`;
+        } else if (sel === 'recibo') {
+          asunto.value = 'Envío de Recibo de Donativo - GesMujer Oaxaca';
+          txt.value = `Estimado(a) ${nom},\n\nLe hacemos llegar adjunto a este correo su recibo/comprobante oficial correspondiente a su reciente donativo.\n\nReiteramos nuestra gratitud por su generosidad y confianza en nuestras causas.\n\nAtentamente,\nEquipo GesMujer Oaxaca`;
         } else if (sel === 'cumpleanos') {
-          txt.value = `¡Feliz Cumpleaños, ${nom}!\n\nTodo el equipo de GesMujer Oaxaca le desea un día maravilloso lleno de salud, alegría y bendiciones. Agradecemos enormemente contar con su apoyo y solidaridad constante.\n\n¡Un fuerte abrazo de parte de la familia GesMujer!`;
+          asunto.value = 'En GESMujer Te deseamos... ¡Feliz Cumpleaños!';
+          txt.value = `¡Que tengas el mejor de los días!\n\n` +
+            `${nom}, en el GESMujer no solo celebramos tu cumpleaños, ¡También el tiempo de amistad y cariño! Gracias por ser parte de nuestra historia, tu apoyo siempre constante nos llena de alegría la vida. Deseamos con cariño que la sigas pasando... ¡Estupendo! Disfruta tu día en compañía de quienes más quieres, dedícate tiempo y déjate querer mucho.\n\n` +
+            `Recibe los mejores deseos y muchos abrazos con cariño.\n\n` +
+            `¡ Felicidades !\n\n` +
+            `Atentamente.\n` +
+            `Grupo de Estudios Sobre la Mujer "Rosario Castellanos" A.C.`;
         } else if (sel === 'informativo') {
+          asunto.value = 'Informe de Impacto y Actividades - GesMujer Oaxaca';
           txt.value = `Estimado(a) ${nom},\n\nLe compartimos nuestro informe mensual de actividades. Gracias a su apoyo hemos logrado avanzar en nuestros programas de empoderamiento y acompañamiento.\n\nQuedamos a su disposición para cualquier duda.`;
         } else if (sel === 'personalizado') {
+          asunto.value = 'Mensaje de la Familia GesMujer Oaxaca';
           txt.value = '';
+        }
+      }
+
+      function cambiarRangoFechasIndex(tipo) {
+        const hoy = new Date();
+        const y = hoy.getFullYear();
+        const m = hoy.getMonth();
+        const fi = document.getElementById('rep_fecha_inicio_idx');
+        const ff = document.getElementById('rep_fecha_fin_idx');
+
+        const format = (d) => d.toISOString().split('T')[0];
+
+        if (tipo === 'mes_actual') {
+          fi.value = format(new Date(y, m, 1));
+          ff.value = format(new Date(y, m + 1, 0));
+        } else if (tipo === 'mes_anterior') {
+          fi.value = format(new Date(y, m - 1, 1));
+          ff.value = format(new Date(y, m, 0));
+        } else if (tipo === 'anio_actual') {
+          fi.value = `${y}-01-01`;
+          ff.value = `${y}-12-31`;
+        } else if (tipo === 'ultimos_3_meses') {
+          fi.value = format(new Date(y, m - 2, 1));
+          ff.value = format(new Date(y, m + 1, 0));
+        } else if (tipo === 'todos') {
+          fi.value = '';
+          ff.value = '';
         }
       }
 
@@ -787,7 +1007,7 @@ try {
           Swal.fire({
             icon: 'success',
             title: '¡Correo enviado!',
-            text: 'El mensaje ha sido enviado exitosamente al donante.',
+            text: 'El mensaje con membrete ha sido enviado exitosamente al donante.',
             confirmButtonColor: '#721896'
           });
         <?php elseif (isset($_GET['status']) && $_GET['status'] === 'error'): ?>

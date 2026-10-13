@@ -599,18 +599,14 @@ try {
           <!-- Vista Previa Tarjeta de Cumpleaños -->
           <div class="card-sf text-center p-3">
             <span class="text-muted small fw-bold text-uppercase d-block mb-2">Diseño de Tarjeta GesMujer</span>
-            <div class="p-3 rounded-3 text-white mb-2 shadow-sm" style="background: linear-gradient(135deg, #721896 0%);">
-              <div class="text-warning mb-3" style="font-size: 2rem; line-height: 1;">
-                <i class="bi bi-stars" style="width: auto; height: auto; font-size: 2rem;"></i>
-                <i class="bi bi-gift-fill text-white" style="width: auto; height: auto; font-size: 2rem; margin: 0 4px;"></i>
-                <i class="bi bi-stars" style="width: auto; height: auto; font-size: 2rem;"></i>
-              </div>
-              <h5 class="fw-bold mb-1">¡Feliz Cumpleaños!</h5>
-              <p style="font-size: 0.78rem;" class="mb-2 opacity-90">GesMujer te desea un día lleno de dicha y te agradece de corazón tu apoyo solidario.</p>
-              <span class="badge bg-white text-dark small px-3 py-1">
-                <i class="bi bi-heart-fill text-danger me-1"></i> Familia GesMujer Oaxaca
-              </span>
+            <div class="mb-2 shadow-sm rounded-3 overflow-hidden border">
+              <img src="../assets/img/cumpleanos_banner.png" alt="Tarjeta Oficial de Cumpleaños GesMujer" class="img-fluid w-100 d-block">
             </div>
+            <div class="text-purple fw-bold fst-italic small mb-1">¡Que tengas el mejor de los días!</div>
+            <p style="font-size: 0.78rem;" class="text-muted mb-2">Diseño oficial enviado automáticamente en el día de cumpleaños de cada donante.</p>
+            <span class="badge px-3 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d8b4fe;">
+              Familia GesMujer Oaxaca
+            </span>
           </div>
 
         </div>
@@ -695,7 +691,12 @@ try {
         if (sel === 'agradecimiento') {
           txt.value = `Estimado(a) ${nom},\n\nEn nombre de todo el equipo de GesMujer Oaxaca, queremos expresarle nuestro más sincero agradecimiento por su valiosa donación. Su generosidad nos permite continuar brindando atención integral y esperanza a más mujeres en nuestro estado.\n\n¡Gracias por ser parte de este cambio!`;
         } else if (sel === 'cumpleanos') {
-          txt.value = `¡Feliz Cumpleaños, ${nom}!\n\nTodo el equipo de GesMujer Oaxaca le desea un día maravilloso lleno de salud, alegría y bendiciones. Agradecemos enormemente contar con su apoyo y solidaridad constante.\n\n¡Un fuerte abrazo de parte de la familia GesMujer!`;
+          txt.value = `¡Que tengas el mejor de los días!\n\n` +
+            `${nom}, en el GESMujer no solo celebramos tu cumpleaños, ¡También el tiempo de amistad y cariño! Gracias por ser parte de nuestra historia, tu apoyo siempre constante nos llena de alegría la vida. Deseamos con cariño que la sigas pasando... ¡Estupendo! Disfruta tu día en compañía de quienes más quieres, dedícate tiempo y déjate querer mucho.\n\n` +
+            `Recibe los mejores deseos y muchos abrazos con cariño.\n\n` +
+            `¡ Felicidades !\n\n` +
+            `Atentamente.\n` +
+            `Grupo de Estudios Sobre la Mujer "Rosario Castellanos" A.C.`;
         } else if (sel === 'informativo') {
           txt.value = `Estimado(a) ${nom},\n\nLe compartimos nuestro informe mensual de actividades. Gracias a su apoyo hemos logrado avanzar en nuestros programas de empoderamiento y acompañamiento.\n\nQuedamos a su disposición para cualquier duda.`;
         } else if (sel === 'personalizado') {

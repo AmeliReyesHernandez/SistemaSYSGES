@@ -1,4 +1,7 @@
 <?php
+// Establecer zona horaria local de México (Oaxaca)
+date_default_timezone_set('America/Mexico_City');
+
 // Definir las credenciales de la base de datos
 $host = 'localhost';
 $dbname = 'gesmujer_sigd2';

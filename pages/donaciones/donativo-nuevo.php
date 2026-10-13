@@ -167,7 +167,7 @@ if ($idDonantePre) {
                   <div class="col-12">
                     <div class="alert alert-light border d-flex align-items-center justify-content-between p-2 px-3 mb-0 rounded-3">
                       <span class="small text-secondary"><i class="bi bi-calendar-check-fill text-purple me-2"></i><strong>Fecha de Registro:</strong> Se asigna automáticamente la fecha y hora actual (<?= date('d/m/Y h:i A') ?>).</span>
-                      <span class="badge bg-purple-subtle text-purple px-2 py-1">Automática</span>
+                      <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600;">Automática</span>
                     </div>
                   </div>
 
@@ -178,9 +178,11 @@ if ($idDonantePre) {
                       <option value="">Seleccione una opción...</option>
                       <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
                       <option value="Efectivo">Efectivo</option>
-                      <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
+                      <option value="PayPal">PayPal</option>
+                      <option value="Cheques">Cheques / Cheque</option>
                       <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
-                      <option value="Cheque">Cheque</option>
+                      <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
+                      <option value="Autogestivo">Autogestivo (Recaudación propia / Eventos / Bazar)</option>
                       <option value="En Especie">En Especie (Alimentos, Ropa, Insumos)</option>
                       <option value="Bienes / Mobiliario">Bienes / Mobiliario / Equipo</option>
                       <option value="Otro">Otro</option>

@@ -65,10 +65,15 @@ try {
 
     $stmt->execute();
 
+    // Reactivar automáticamente el estatus del donante a 'Activo'
+    $stmtActivar = $conn->prepare("UPDATE donantes SET Estatus = 'Activo' WHERE ID_Donante = :donante");
+    $stmtActivar->execute([':donante' => $idDonante]);
+
     // Si es un donativo nuevo, enviar correo automático de agradecimiento al donante
     if ($esNuevo) {
         $stmtDonante = $conn->prepare("
-            SELECT CONCAT(Nombre, ' ', ApellidoPaterno) AS NombreCompleto, Email
+            SELECT Nombre, ApellidoPaterno, ApellidoMaterno,
+                   CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, '')) AS NombreCompleto, Email
             FROM donantes
             WHERE ID_Donante = :id
         ");
@@ -76,20 +81,42 @@ try {
         $donante = $stmtDonante->fetch(PDO::FETCH_ASSOC);
 
         if ($donante && !empty($donante['Email'])) {
-            $nombre = $donante['NombreCompleto'];
+            $nombrePila = trim($donante['Nombre'] ?? '');
+            $nombreCompleto = trim($donante['NombreCompleto'] ?? '');
+            $saludoNombre = !empty($nombrePila) ? $nombrePila : (!empty($nombreCompleto) ? $nombreCompleto : 'Donante');
             $email = $donante['Email'];
-            $asunto = "¡Gracias por su valioso donativo - GesMujer Oaxaca!";
+            $asunto = "¡Gracias por sumarte a transformar vidas en Oaxaca! - GesMujer";
 
+            // Fecha en formato formal
+            $meses = ['', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+            $dia = date('j');
+            $mes = $meses[(int)date('n')];
+            $ano = date('Y');
+            $fechaCarta = "Oaxaca de Juárez, Oaxaca a {$dia} de {$mes} de {$ano}";
+
+            // Detalle dinámico del donativo
             if ($esEspecie) {
-                $detalleText = "en especie ({$tipoDonacion}: {$descripcionEspecie})";
+                $descEspecie = trim($descripcionEspecie) ?: 'alimentos';
+                $detalleDonativo = " (En Especie: {$descEspecie})";
             } else {
                 $montoFormateado = number_format($montoDonacion, 2);
-                $detalleText = "de \${$montoFormateado} MXN ({$tipoDonacion})";
+                $tipoMetodo = $tipoDonacion ?: 'Efectivo';
+                $detalleDonativo = " de \${$montoFormateado} MXN ({$tipoMetodo})";
             }
 
-            $mensaje = "Estimado(a) {$nombre},\n\nEn nombre de todo el equipo de GesMujer Oaxaca, queremos expresarle nuestro más sincero agradecimiento por su reciente donativo {$detalleText}.\n\nSu generosidad nos permite continuar brindando atención integral y esperanza a más mujeres en nuestro estado.\n\n¡Gracias por ser parte de este cambio!";
+            // Cuerpo exacto de la carta oficial
+            $mensaje = "{$fechaCarta}\n\n"
+                     . "Querido(a) {$saludoNombre}, ¡gracias por sumarte a transformar vidas en Oaxaca!\n\n"
+                     . "A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GesMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo{$detalleDonativo}.\n\n"
+                     . "Acciones como la tuya hacen posible que sigamos caminando junto a mujeres, jóvenes y niñas de diversas comunidades indígenas y rurales del estado de Oaxaca. Gracias a tu valioso respaldo, podemos fortalecer nuestras acciones de acompañamiento, formación, defensa de sus derechos e impulso a su autonomía, brindándoles herramientas para construir proyectos de vida con dignidad, justicia y libres de violencia.\n\n"
+                     . "En GesMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n"
+                     . "Nos comprometemos firmemente a administrar tu aportación con total transparencia y con la dedicación que nos ha caracterizado por más de cuatro décadas de trabajo en favor de las mujeres oaxaqueñas.\n\n"
+                     . "Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\n"
+                     . "Con aprecio y respeto,\n\n"
+                     . "María del Rosario Martínez Miguel\n"
+                     . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GesMujer)";
 
-            enviarCorreoInstitucional($email, $nombre, $asunto, $mensaje, 'Agradecimiento', $idDonante);
+            enviarCorreoInstitucional($email, $nombreCompleto ?: $saludoNombre, $asunto, $mensaje, 'Agradecimiento', $idDonante);
         }
     }
 

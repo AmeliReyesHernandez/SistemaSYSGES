@@ -46,3 +46,59 @@
 .navbar .form-control {
   padding: .75rem 1rem;
 }
+
+/*
+ * Utilidades Institucionales GesMujer (Morado y Badges)
+ */
+.text-purple {
+  color: #721896 !important;
+}
+
+.bg-purple {
+  background-color: #721896 !important;
+  color: #ffffff !important;
+}
+
+.bg-purple-subtle {
+  background-color: #f3e8ff !important;
+  color: #721896 !important;
+}
+
+.border-purple {
+  border-color: #d1a8e7 !important;
+}
+
+.badge.bg-purple-subtle,
+.badge-purple {
+  background-color: #f3e8ff !important;
+  color: #721896 !important;
+  border: 1px solid #d1a8e7 !important;
+  font-weight: 600 !important;
+}
+
+.badge.bg-purple-subtle i,
+.badge-purple i {
+  color: #721896 !important;
+}
+
+.btn-purple {
+  background-color: #721896 !important;
+  color: #ffffff !important;
+  border-color: #721896 !important;
+}
+
+.btn-purple:hover {
+  background-color: #5b1378 !important;
+  color: #ffffff !important;
+  border-color: #5b1378 !important;
+}
+
+.btn-outline-purple {
+  color: #721896 !important;
+  border-color: #721896 !important;
+}
+
+.btn-outline-purple:hover {
+  background-color: #721896 !important;
+  color: #ffffff !important;
+}

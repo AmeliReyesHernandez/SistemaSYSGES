@@ -246,6 +246,15 @@ try {
                       <input type="text" class="form-control" id="rfc" name="rfc" value="<?= htmlspecialchars($donante['RFC'] ?? '') ?>" placeholder="12 o 13 caracteres" maxlength="20" style="text-transform: uppercase;">
                       <div class="form-text text-muted">Para emisión de comprobantes o recibos deducibles.</div>
                     </div>
+
+                    <div class="col-md-6">
+                      <label for="estatus" class="form-label fw-semibold">Estado del Donante <span class="text-danger">*</span></label>
+                      <select class="form-select" id="estatus" name="estatus" required>
+                        <option value="Activo" <?= (($donante['Estatus'] ?? 'Activo') === 'Activo') ? 'selected' : '' ?>>Activo (Donante Vigente)</option>
+                        <option value="Inactivo" <?= (($donante['Estatus'] ?? 'Activo') === 'Inactivo') ? 'selected' : '' ?>>Inactivo (Sin aportaciones recientes)</option>
+                      </select>
+                      <div class="form-text text-muted">Puedes reactivar o pausar el estatus de este donante.</div>
+                    </div>
                   </div>
                 </div>
 

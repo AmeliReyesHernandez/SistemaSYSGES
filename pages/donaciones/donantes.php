@@ -9,18 +9,26 @@ if ($pagina < 1) $pagina = 1;
 $offset = ($pagina - 1) * $registrosPorPagina;
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$filtroEstatus = isset($_GET['estatus']) ? trim($_GET['estatus']) : '';
 
 try {
-    $whereSQL = "";
+    $whereConditions = [];
     $params = [];
 
     if ($search !== '') {
-        $whereSQL = " WHERE (Nombre LIKE :s OR ApellidoPaterno LIKE :s OR ApellidoMaterno LIKE :s OR Email LIKE :s OR Telefono LIKE :s OR Ocupacion LIKE :s OR Ciudad LIKE :s OR RFC LIKE :s)";
+        $whereConditions[] = "(d.Nombre LIKE :s OR d.ApellidoPaterno LIKE :s OR d.ApellidoMaterno LIKE :s OR d.Email LIKE :s OR d.Telefono LIKE :s OR d.Ocupacion LIKE :s OR d.Ciudad LIKE :s OR d.RFC LIKE :s)";
         $params[':s'] = "%$search%";
     }
 
+    if ($filtroEstatus !== '') {
+        $whereConditions[] = "d.Estatus = :estatus";
+        $params[':estatus'] = $filtroEstatus;
+    }
+
+    $whereSQL = !empty($whereConditions) ? " WHERE " . implode(" AND ", $whereConditions) : "";
+
     // Conteo total
-    $stmtCount = $conn->prepare("SELECT COUNT(*) FROM donantes" . $whereSQL);
+    $stmtCount = $conn->prepare("SELECT COUNT(*) FROM donantes d" . $whereSQL);
     foreach ($params as $key => $val) {
         $stmtCount->bindValue($key, $val);
     }
@@ -28,12 +36,14 @@ try {
     $totalRegistros = (int)$stmtCount->fetchColumn();
     $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
 
-    // Consulta con total aportado acumulado y datos personales
+    // Consulta con total aportado acumulado, estatus y última donación
     $sql = "
         SELECT d.ID_Donante, d.Nombre, d.ApellidoPaterno, d.ApellidoMaterno, d.Email, d.Telefono,
                d.FechaNacimiento, d.Ocupacion, d.Domicilio, d.Ciudad, d.Estado, d.RFC,
+               COALESCE(d.Estatus, 'Activo') AS Estatus,
                COALESCE(SUM(dn.MontoDonacion), 0) AS TotalAportado,
-               COUNT(dn.ID_Donativo) AS NumeroDonaciones
+               COUNT(dn.ID_Donativo) AS NumeroDonaciones,
+               MAX(dn.FechaDonacion) AS UltimaDonacion
         FROM donantes d
         LEFT JOIN donativos dn ON d.ID_Donante = dn.ID_Donante
         $whereSQL
@@ -51,8 +61,12 @@ try {
     $stmt->execute();
     $donantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Lista de donantes para selector del modal
+    $todosDonantesSelect = $conn->query("SELECT ID_Donante, Nombre, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, '')) AS NombreCompleto, Email FROM donantes ORDER BY Nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     $donantes = [];
+    $todosDonantesSelect = [];
     $totalRegistros = 0;
     $totalPaginas = 1;
     $errorMsg = $e->getMessage();
@@ -188,15 +202,22 @@ try {
       <!-- Filtro y buscador -->
       <div class="card-sf p-3 mb-4">
         <form method="GET" action="donantes.php" class="row g-2 align-items-center">
-          <div class="col-md-9 col-sm-8">
+          <div class="col-md-6 col-sm-6">
             <div class="input-group">
               <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-              <input type="text" class="form-control" name="search" placeholder="Buscar por nombre, email o teléfono..." value="<?= htmlspecialchars($search) ?>">
+              <input type="text" class="form-control" name="search" placeholder="Buscar por nombre, email, teléfono o RFC..." value="<?= htmlspecialchars($search) ?>">
             </div>
           </div>
-          <div class="col-md-3 col-sm-4 d-flex gap-2">
-            <button type="submit" class="btn btn-purple w-100 fw-semibold">Buscar</button>
-            <?php if ($search !== ''): ?>
+          <div class="col-md-3 col-sm-6">
+            <select class="form-select" name="estatus">
+              <option value="">Todos los Estados (Activos / Inactivos)</option>
+              <option value="Activo" <?= ($filtroEstatus === 'Activo') ? 'selected' : '' ?>>Activos (Vigentes)</option>
+              <option value="Inactivo" <?= ($filtroEstatus === 'Inactivo') ? 'selected' : '' ?>>Inactivos (Sin donación reciente)</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-12 d-flex gap-2">
+            <button type="submit" class="btn btn-purple w-100 fw-semibold">Filtrar</button>
+            <?php if ($search !== '' || $filtroEstatus !== ''): ?>
               <a href="donantes.php" class="btn btn-outline-secondary" title="Limpiar"><i class="bi bi-arrow-repeat"></i></a>
             <?php endif; ?>
           </div>
@@ -206,7 +227,7 @@ try {
       <!-- Tabla de Donantes -->
       <div class="card-sf">
         <div class="card-sf-header d-flex justify-content-between align-items-center">
-          <span><i class="bi bi-person-lines-fill me-2 text-primary"></i> Donantes Registrados (<?= $totalRegistros ?>)</span>
+          <span><i class="bi bi-person-lines-fill me-2 text-primary"></i> Directorio de Donantes (<?= $totalRegistros ?>)</span>
           <span class="badge bg-light text-dark border">Página <?= $pagina ?> de <?= max(1, $totalPaginas) ?></span>
         </div>
         <div class="card-body p-0">
@@ -214,14 +235,14 @@ try {
             <table class="table table-hover align-middle mb-0">
               <thead class="table-light small text-uppercase">
                 <tr>
-                  <th style="width: 60px;">ID</th>
+                  <th style="width: 50px;">ID</th>
                   <th>Donante / Ocupación</th>
                   <th>Contacto</th>
-                  <th>Ubicación</th>
+                  <th class="text-center">Estado</th>
                   <th class="text-center">Cumpleaños</th>
                   <th class="text-center">Aportaciones</th>
                   <th class="text-end">Total Donado</th>
-                  <th class="text-center" style="width: 140px;">Acciones</th>
+                  <th class="text-center" style="width: 170px;">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -229,16 +250,21 @@ try {
                   <tr>
                     <td colspan="8" class="text-center py-5 text-muted">
                       <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
-                      No se encontraron donantes registrados.
+                      No se encontraron donantes con los filtros seleccionados.
                     </td>
                   </tr>
                 <?php else: ?>
                   <?php foreach ($donantes as $d): ?>
+                    <?php 
+                      $esActivo = (($d['Estatus'] ?? 'Activo') === 'Activo');
+                    ?>
                     <tr>
                       <td class="text-muted fw-semibold">#<?= $d['ID_Donante'] ?></td>
                       <td>
                         <div class="fw-semibold text-dark">
-                          <?= htmlspecialchars($d['Nombre'] . ' ' . $d['ApellidoPaterno'] . ' ' . $d['ApellidoMaterno']) ?>
+                          <a href="javascript:void(0)" onclick="verFichaDonante(<?= $d['ID_Donante'] ?>)" class="text-dark text-decoration-none hover-purple">
+                            <?= htmlspecialchars($d['Nombre'] . ' ' . $d['ApellidoPaterno'] . ' ' . $d['ApellidoMaterno']) ?>
+                          </a>
                         </div>
                         <?php if (!empty($d['Ocupacion'])): ?>
                           <small class="text-muted"><i class="bi bi-briefcase me-1"></i><?= htmlspecialchars($d['Ocupacion']) ?></small>
@@ -259,13 +285,15 @@ try {
                           <small class="text-muted"><i class="bi bi-telephone me-1"></i><?= htmlspecialchars($d['Telefono']) ?></small>
                         <?php endif; ?>
                       </td>
-                      <td>
-                        <?php if (!empty($d['Ciudad']) || !empty($d['Estado'])): ?>
-                          <span class="small text-muted">
-                            <i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars(trim(($d['Ciudad'] ?? '') . ', ' . ($d['Estado'] ?? ''), ', ')) ?>
+                      <td class="text-center">
+                        <?php if ($esActivo): ?>
+                          <span class="badge bg-success-subtle text-success px-2 py-1" style="cursor: pointer;" onclick="cambiarEstatus(<?= $d['ID_Donante'] ?>, 'Inactivo')" title="Clic para marcar como Inactivo">
+                            <i class="bi bi-check-circle-fill me-1"></i> Activo
                           </span>
                         <?php else: ?>
-                          <span class="text-muted small">-</span>
+                          <span class="badge bg-secondary-subtle text-secondary px-2 py-1" style="cursor: pointer;" onclick="cambiarEstatus(<?= $d['ID_Donante'] ?>, 'Activo')" title="Clic para Reactivar donante">
+                            <i class="bi bi-pause-circle-fill me-1"></i> Inactivo
+                          </span>
                         <?php endif; ?>
                       </td>
                       <td class="text-center">
@@ -289,9 +317,18 @@ try {
                       </td>
                       <td class="text-center">
                         <div class="btn-group btn-group-sm" role="group">
+                          <button type="button" class="btn btn-outline-purple" title="Ver Ficha e Historial de Donaciones" onclick="verFichaDonante(<?= $d['ID_Donante'] ?>)">
+                            <i class="bi bi-eye-fill"></i>
+                          </button>
                           <a href="donativo-nuevo.php?id_donante=<?= $d['ID_Donante'] ?>" class="btn btn-outline-success" title="Registrar Aportación">
                             <i class="bi bi-plus-circle"></i>
                           </a>
+                          <button type="button" class="btn btn-outline-warning" title="Enviar Felicitación de Cumpleaños" onclick="enviarTarjetaCumpleDonante('<?= htmlspecialchars(addslashes($d['Nombre'])) ?>', '<?= htmlspecialchars(addslashes($d['Email'])) ?>', <?= $d['ID_Donante'] ?>)">
+                            <i class="bi bi-gift-fill text-warning"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-secondary" title="Redactar Correo Institucional" onclick="prepararCorreoDonante('<?= htmlspecialchars(addslashes($d['Nombre'])) ?>', '<?= htmlspecialchars(addslashes($d['Email'])) ?>', <?= $d['ID_Donante'] ?>)">
+                            <i class="bi bi-envelope-paper-heart"></i>
+                          </button>
                           <a href="donante-editar.php?id=<?= $d['ID_Donante'] ?>" class="btn btn-outline-primary" title="Editar">
                             <i class="bi bi-pencil-square"></i>
                           </a>
@@ -315,15 +352,15 @@ try {
             <nav>
               <ul class="pagination pagination-sm mb-0">
                 <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
-                  <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&search=<?= urlencode($search) ?>">Anterior</a>
+                  <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&search=<?= urlencode($search) ?>&estatus=<?= urlencode($filtroEstatus) ?>">Anterior</a>
                 </li>
                 <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                   <li class="page-item <?= ($i === $pagina) ? 'active' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= $i ?>&search=<?= urlencode($search) ?>"><?= $i ?></a>
+                    <a class="page-link" href="?pagina=<?= $i ?>&search=<?= urlencode($search) ?>&estatus=<?= urlencode($filtroEstatus) ?>"><?= $i ?></a>
                   </li>
                 <?php endfor; ?>
                 <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
-                  <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&search=<?= urlencode($search) ?>">Siguiente</a>
+                  <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&search=<?= urlencode($search) ?>&estatus=<?= urlencode($filtroEstatus) ?>">Siguiente</a>
                 </li>
               </ul>
             </nav>
@@ -335,9 +372,464 @@ try {
   </div>
 </div>
 
+    <!-- Modal: Ficha del Donante e Historial de Donaciones -->
+    <div class="modal fade" id="modalFichaDonante" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header text-white" style="background:#721896;">
+            <h5 class="modal-title" id="fd_titulo"><i class="bi bi-person-vcard-fill me-2"></i> Ficha Integral del Donante</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4" id="fd_cargando" style="text-align: center; padding: 40px;">
+            <div class="spinner-border text-purple" role="status"></div>
+            <p class="text-muted mt-2">Cargando información y donaciones del donante...</p>
+          </div>
+          <div class="modal-body p-4 d-none" id="fd_contenido">
+            
+            <!-- Encabezado de la Ficha -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 pb-3 mb-3 border-bottom">
+              <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold fs-3" style="width: 58px; height: 58px; background: #8e3ec0;" id="fd_avatar">
+                  D
+                </div>
+                <div>
+                  <h4 class="fw-bold mb-0 text-dark" id="fd_nombre">Nombre Donante</h4>
+                  <div class="d-flex align-items-center gap-2 mt-1">
+                    <span id="fd_badge_estatus"></span>
+                    <span class="text-muted small" id="fd_rfc"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary" id="fd_btn_toggle_estatus" onclick="toggleEstatusModal()">
+                  <i class="bi bi-arrow-repeat me-1"></i> Cambiar Estado
+                </button>
+                <a href="#" class="btn btn-sm btn-purple" id="fd_btn_donar">
+                  <i class="bi bi-cash-stack me-1"></i> + Nueva Aportación
+                </a>
+                <button class="btn btn-sm btn-outline-purple" id="fd_btn_correo">
+                  <i class="bi bi-envelope-paper-heart me-1"></i> Redactar Correo
+                </button>
+              </div>
+            </div>
+
+            <!-- KPIs Rápidos del Donante -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-4 col-sm-4 col-12">
+                <div class="p-3 rounded-3 bg-light border text-center">
+                  <small class="text-muted text-uppercase fw-semibold d-block" style="font-size: 0.72rem;">Total Aportado</small>
+                  <h4 class="fw-bold text-success mb-0 mt-1" id="fd_kpi_total">$0.00</h4>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4 col-12">
+                <div class="p-3 rounded-3 bg-light border text-center">
+                  <small class="text-muted text-uppercase fw-semibold d-block" style="font-size: 0.72rem;">N° Donativos</small>
+                  <h4 class="fw-bold text-dark mb-0 mt-1" id="fd_kpi_donativos">0</h4>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4 col-12">
+                <div class="p-3 rounded-3 bg-light border text-center">
+                  <small class="text-muted text-uppercase fw-semibold d-block" style="font-size: 0.72rem;">Última Aportación</small>
+                  <h5 class="fw-bold text-secondary mb-0 mt-1" id="fd_kpi_ultima">Sin registro</h5>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fila de Información Personal y de Contacto -->
+            <div class="card border mb-4 bg-light">
+              <div class="card-body p-3">
+                <div class="row g-3 small">
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Correo Electrónico:</span>
+                    <strong class="text-dark" id="fd_email">-</strong>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Teléfono:</span>
+                    <strong class="text-dark" id="fd_telefono">-</strong>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Fecha de Cumpleaños:</span>
+                    <strong class="text-dark" id="fd_cumple">-</strong>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Ocupación / Profesión:</span>
+                    <strong class="text-dark" id="fd_ocupacion">-</strong>
+                  </div>
+                  <div class="col-md-8">
+                    <span class="text-muted d-block">Domicilio / Ubicación:</span>
+                    <strong class="text-dark" id="fd_domicilio">-</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabla del Historial de Donativos -->
+            <h6 class="fw-bold text-purple mb-3 text-uppercase" style="color:#721896; letter-spacing: 0.5px;">
+              <i class="bi bi-clock-history me-1"></i> Historial Completo de Aportaciones
+            </h6>
+            <div class="table-responsive border rounded-3 bg-white mb-2">
+              <table class="table table-hover align-middle mb-0" id="fd_tabla_donativos">
+                <thead class="table-light small text-uppercase">
+                  <tr>
+                    <th style="width: 70px;">Folio</th>
+                    <th>Fecha y Hora</th>
+                    <th>Método / Tipo</th>
+                    <th class="text-end">Monto / Detalle</th>
+                  </tr>
+                </thead>
+                <tbody id="fd_tbody_donativos">
+                  <!-- Se llena dinámicamente -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <div class="modal-footer bg-light justify-content-between">
+            <a href="#" class="btn btn-outline-primary" id="fd_btn_editar_link"><i class="bi bi-pencil-square me-1"></i> Editar Datos</a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar Ficha</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Enviar Correo con Archivo Adjunto (Recibo PDF / Imagen / Doc) -->
+    <div class="modal fade" id="modalEnviarCorreo" tabindex="-1" aria-labelledby="modalEnviarCorreoLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header text-white" style="background:#721896;">
+            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo Institucional con Membrete</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="acciones/enviar-correo.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="return_url" value="../donantes.php">
+            <input type="hidden" name="id_donante" id="correo_id_donante" value="">
+            <div class="modal-body p-4">
+              
+              <!-- Selector Dinámico de Donante Registrado -->
+              <div class="mb-3 p-3 bg-light rounded-3 border">
+                <label class="form-label fw-bold text-purple mb-1">
+                  <i class="bi bi-person-check-fill me-1"></i> Seleccionar Donante (Autocompletar Datos):
+                </label>
+                <select class="form-select" id="correo_donante_select" onchange="seleccionarDonanteModal(this)">
+                  <option value="">-- Elige un donante registrado o escribe manualmente --</option>
+                  <?php foreach ($todosDonantesSelect as $dn): ?>
+                    <option value="<?= $dn['ID_Donante'] ?>" 
+                            data-nombre="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
+                            data-pila="<?= htmlspecialchars($dn['Nombre']) ?>" 
+                            data-email="<?= htmlspecialchars($dn['Email']) ?>">
+                      <?= htmlspecialchars($dn['NombreCompleto']) ?> (<?= htmlspecialchars($dn['Email'] ?: 'Sin correo') ?>)
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <div class="form-text text-muted">Al seleccionar a una persona se cargará su correo y su nombre se insertará dinámicamente en el mensaje.</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Seleccionar Plantilla Rápida</label>
+                <select class="form-select" id="plantillaSelect" onchange="cambiarPlantilla()">
+                  <option value="cumpleanos">Tarjeta de Feliz Cumpleaños</option>
+                  <option value="agradecimiento">Carta de Agradecimiento por Aportación</option>
+                  <option value="recibo">Envío de Recibo de Donativo / Comprobante</option>
+                  <option value="informativo">Informe de Actividades y Resultados</option>
+                  <option value="personalizado">Mensaje Personalizado</option>
+                </select>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Nombre del Donante / Saludo <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="nombre" id="correo_nombre" placeholder="Nombre completo o de pila" oninput="actualizarNombreEnMensaje()" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" name="email" id="correo_email" placeholder="correo@ejemplo.com" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Asunto del Correo <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="asunto" id="correo_asunto" value="Mensaje de la Familia GesMujer Oaxaca" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Mensaje <span class="text-danger">*</span></label>
+                <textarea class="form-control" name="mensaje" id="correo_mensaje" rows="5" required placeholder="Escribe el mensaje aquí..."></textarea>
+              </div>
+
+              <!-- Campo de Archivo Adjunto (Recibo PDF / Imagen / Doc) -->
+              <div class="mb-2 p-3 bg-light rounded-3 border">
+                <label class="form-label fw-semibold mb-1"><i class="bi bi-paperclip text-purple me-1"></i> Adjuntar Recibo, Comprobante o Documento (Opcional)</label>
+                <input type="file" name="adjunto" id="correo_adjunto" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.xls,.xlsx">
+                <div class="form-text text-muted">Formatos permitidos: PDF, Word (DOC/DOCX), Imágenes (JPG, PNG) o Excel (hasta 15MB).</div>
+              </div>
+
+            </div>
+            <div class="modal-footer bg-light justify-content-between">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <div class="d-flex gap-2">
+                <button type="submit" name="accion" value="borrador" class="btn btn-outline-warning fw-semibold"><i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador</button>
+                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar con Membrete</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <script src="../../assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+      let currentDonanteId = null;
+      let currentDonanteEstatus = 'Activo';
+
+      // Función para abrir la Ficha y desplegar datos e historial del donante
+      function verFichaDonante(id) {
+        currentDonanteId = id;
+        document.getElementById('fd_cargando').classList.remove('d-none');
+        document.getElementById('fd_contenido').classList.add('d-none');
+        
+        const modal = new bootstrap.Modal(document.getElementById('modalFichaDonante'));
+        modal.show();
+
+        fetch(`ajax/historial_donante.php?id=${id}`)
+          .then(res => res.json())
+          .then(data => {
+            if (!data.success) {
+              Swal.fire({ icon: 'error', title: 'Error', text: data.error || 'No se pudo cargar la información.' });
+              modal.hide();
+              return;
+            }
+
+            const d = data.donante;
+            const donativos = data.donativos;
+            currentDonanteEstatus = d.Estatus || 'Activo';
+
+            // Datos principales
+            document.getElementById('fd_nombre').innerText = d.NombreCompleto;
+            document.getElementById('fd_avatar').innerText = (d.Nombre ? d.Nombre.charAt(0).toUpperCase() : 'D');
+            document.getElementById('fd_rfc').innerText = d.RFC ? `RFC: ${d.RFC}` : 'Sin RFC';
+            
+            // Badge de estatus
+            const badgeContainer = document.getElementById('fd_badge_estatus');
+            if (currentDonanteEstatus === 'Activo') {
+              badgeContainer.innerHTML = `<span class="badge bg-success-subtle text-success px-2 py-1"><i class="bi bi-check-circle-fill me-1"></i> Activo</span>`;
+            } else {
+              badgeContainer.innerHTML = `<span class="badge bg-secondary-subtle text-secondary px-2 py-1"><i class="bi bi-pause-circle-fill me-1"></i> Inactivo</span>`;
+            }
+
+            // KPIs
+            document.getElementById('fd_kpi_total').innerText = '$' + parseFloat(d.TotalAportado || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('fd_kpi_donativos').innerText = d.NumeroDonaciones || '0';
+            document.getElementById('fd_kpi_ultima').innerText = d.UltimaDonacion ? new Date(d.UltimaDonacion).toLocaleDateString('es-MX') : 'Sin aportaciones';
+
+            // Datos de contacto
+            document.getElementById('fd_email').innerText = d.Email || 'Sin correo registrado';
+            document.getElementById('fd_telefono').innerText = d.Telefono || 'Sin teléfono';
+            document.getElementById('fd_cumple').innerText = d.FechaNacimiento ? new Date(d.FechaNacimiento).toLocaleDateString('es-MX') : 'Sin fecha';
+            document.getElementById('fd_ocupacion').innerText = d.Ocupacion || 'No especificada';
+            document.getElementById('fd_domicilio').innerText = [d.Domicilio, d.Ciudad, d.Estado].filter(Boolean).join(', ') || 'No registrado';
+
+            // Botones de acción del modal
+            document.getElementById('fd_btn_donar').href = `donativo-nuevo.php?id_donante=${d.ID_Donante}`;
+            document.getElementById('fd_btn_editar_link').href = `donante-editar.php?id=${d.ID_Donante}`;
+            document.getElementById('fd_btn_correo').onclick = () => {
+              modal.hide();
+              prepararCorreoDonante(d.NombreCompleto, d.Email, d.ID_Donante);
+            };
+
+            // Tabla de donativos
+            const tbody = document.getElementById('fd_tbody_donativos');
+            tbody.innerHTML = '';
+            if (donativos.length === 0) {
+              tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">Este donante aún no tiene aportaciones registradas.</td></tr>`;
+            } else {
+              donativos.forEach(item => {
+                const montoHtml = parseFloat(item.MontoDonacion) > 0 
+                  ? `<span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">$${parseFloat(item.MontoDonacion).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>`
+                  : `<span class="text-dark small fw-semibold"><i class="bi bi-box-seam me-1 text-purple"></i>${item.DescripcionEspecie || 'En especie'}</span>`;
+
+                const fechaStr = item.FechaDonacion ? new Date(item.FechaDonacion).toLocaleString('es-MX') : 'Automática';
+                let badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #212529; border: 1px solid #dee2e6; font-weight: 600;"><i class="bi bi-credit-card-2-front me-1 text-primary"></i>${item.TipoDonacion || 'No especificado'}</span>`;
+                if (item.TipoDonacion === 'En Especie' || item.TipoDonacion === 'Bienes / Mobiliario') {
+                  badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600;"><i class="bi bi-box-seam me-1" style="color: #721896;"></i>${item.TipoDonacion}</span>`;
+                } else if (item.TipoDonacion === 'Efectivo') {
+                  badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #eafaf1; color: #0f5132; border: 1px solid #c3e6cb; font-weight: 600;"><i class="bi bi-cash me-1 text-success"></i>Efectivo</span>`;
+                }
+
+                tbody.innerHTML += `
+                  <tr>
+                    <td class="fw-semibold text-muted">#${item.ID_Donativo}</td>
+                    <td><i class="bi bi-calendar-event me-1 text-secondary"></i>${fechaStr}</td>
+                    <td>${badgeMetodo}</td>
+                    <td class="text-end">
+                      ${montoHtml}
+                      <a href="carta-agradecimiento.php?id=${item.ID_Donativo}" target="_blank" class="btn btn-sm btn-outline-purple py-0 px-2 ms-2" title="Descargar / Ver Carta de Agradecimiento PDF">
+                        <i class="bi bi-file-earmark-heart-fill"></i>
+                      </a>
+                    </td>
+                  </tr>
+                `;
+              });
+            }
+
+            document.getElementById('fd_cargando').classList.add('d-none');
+            document.getElementById('fd_contenido').classList.remove('d-none');
+          })
+          .catch(err => {
+            Swal.fire({ icon: 'error', title: 'Error de red', text: 'No se pudo comunicar con el servidor.' });
+            modal.hide();
+          });
+      }
+
+      // Cambiar estatus de donante
+      function cambiarEstatus(id, nuevoEstatus) {
+        const texto = (nuevoEstatus === 'Activo') 
+          ? '¿Deseas reactivar a este donante como Vigente?' 
+          : '¿Deseas marcar a este donante como Inactivo?';
+
+        Swal.fire({
+          title: 'Estado del Donante',
+          text: texto,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#721896',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Sí, cambiar',
+          cancelButtonText: 'Cancelar'
+        }).then(result => {
+          if (result.isConfirmed) {
+            fetch(`acciones/cambiar-estatus-donante.php?id=${id}&estatus=${nuevoEstatus}&ajax=1`)
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  Swal.fire({ icon: 'success', title: 'Actualizado', text: 'El estado del donante fue modificado.', timer: 1800, showConfirmButton: false })
+                    .then(() => window.location.reload());
+                } else {
+                  Swal.fire({ icon: 'error', title: 'Error', text: data.error || 'No se pudo actualizar.' });
+                }
+              });
+          }
+        });
+      }
+
+      function toggleEstatusModal() {
+        if (!currentDonanteId) return;
+        const nuevo = (currentDonanteEstatus === 'Activo') ? 'Inactivo' : 'Activo';
+        cambiarEstatus(currentDonanteId, nuevo);
+      }
+
+      // Preparar modal de correo para donante específico
+      function prepararCorreoDonante(nombre, email, idDonante) {
+        document.getElementById('correo_nombre').value = nombre || '';
+        document.getElementById('correo_email').value = email || '';
+        const idInput = document.getElementById('correo_id_donante');
+        if (idInput) idInput.value = idDonante || '';
+        const selectDonante = document.getElementById('correo_donante_select');
+        if (selectDonante && idDonante) selectDonante.value = idDonante;
+        cambiarPlantilla();
+        new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
+      }
+
+      function enviarTarjetaCumpleDonante(nombre, email, idDonante) {
+        document.getElementById('correo_nombre').value = nombre || '';
+        document.getElementById('correo_email').value = email || '';
+        const idInput = document.getElementById('correo_id_donante');
+        if (idInput) idInput.value = idDonante || '';
+        const selectDonante = document.getElementById('correo_donante_select');
+        if (selectDonante && idDonante) selectDonante.value = idDonante;
+        document.getElementById('plantillaSelect').value = 'cumpleanos';
+        cambiarPlantilla();
+        new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
+      }
+
+      function seleccionarDonanteModal(selectEl) {
+        const opt = selectEl.options[selectEl.selectedIndex];
+        if (!opt || !opt.value) return;
+        const nombrePila = opt.getAttribute('data-pila') || opt.getAttribute('data-nombre');
+        const email = opt.getAttribute('data-email') || '';
+        const idDonante = opt.value;
+
+        document.getElementById('correo_nombre').value = nombrePila;
+        document.getElementById('correo_email').value = email;
+        const idInput = document.getElementById('correo_id_donante');
+        if (idInput) idInput.value = idDonante;
+
+        actualizarNombreEnMensaje();
+      }
+
+      function actualizarNombreEnMensaje() {
+        const nom = document.getElementById('correo_nombre').value.trim() || '[Nombre del Donante]';
+        const txt = document.getElementById('correo_mensaje');
+        if (!txt) return;
+
+        const sel = document.getElementById('plantillaSelect').value;
+        if (sel === 'cumpleanos') {
+          if (!txt.value.includes('en el GESMujer no solo celebramos')) {
+            cambiarPlantilla();
+            return;
+          }
+          txt.value = txt.value.replace(/^[^\n,]+, en el GESMujer no solo celebramos/m, `${nom}, en el GESMujer no solo celebramos`);
+          txt.value = txt.value.replace(/\[Nombre del Donante\]/g, nom);
+        } else if (sel === 'agradecimiento') {
+          if (!txt.value.includes('Querido(a)')) {
+            cambiarPlantilla();
+            return;
+          }
+          txt.value = txt.value.replace(/Querido\(a\) [^,\n]+,/g, `Querido(a) ${nom},`);
+          txt.value = txt.value.replace(/\[Nombre del Donante\]/g, nom);
+        } else if (sel === 'recibo' || sel === 'informativo') {
+          if (!txt.value.includes('Estimado(a)')) {
+            cambiarPlantilla();
+            return;
+          }
+          txt.value = txt.value.replace(/Estimado\(a\) [^,\n]+,/g, `Estimado(a) ${nom},`);
+          txt.value = txt.value.replace(/\[Nombre del Donante\]/g, nom);
+        }
+      }
+
+      function cambiarPlantilla() {
+        const sel = document.getElementById('plantillaSelect').value;
+        const txt = document.getElementById('correo_mensaje');
+        const asunto = document.getElementById('correo_asunto');
+        let nom = document.getElementById('correo_nombre').value.trim();
+        if (!nom) nom = '[Nombre del Donante]';
+
+        const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        const hoy = new Date();
+        const fechaCarta = `Oaxaca de Juárez, Oaxaca a ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
+
+        if (sel === 'agradecimiento') {
+          asunto.value = '¡Gracias por sumarte a transformar vidas en Oaxaca! - GesMujer';
+          txt.value = `${fechaCarta}\n\n` +
+            `Querido(a) ${nom}, ¡gracias por sumarte a transformar vidas en Oaxaca!\n\n` +
+            `A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GesMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo.\n\n` +
+            `Acciones como la tuya hacen posible que sigamos caminando junto a mujeres, jóvenes y niñas de diversas comunidades indígenas y rurales del estado de Oaxaca. Gracias a tu valioso respaldo, podemos fortalecer nuestras acciones de acompañamiento, formación, defensa de sus derechos e impulso a su autonomía, brindándoles herramientas para construir proyectos de vida con dignidad, justicia y libres de violencia.\n\n` +
+            `En GesMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n` +
+            `Nos comprometemos firmemente a administrar tu aportación con total transparencia y con la dedicación que nos ha caracterizado por más de cuatro décadas de trabajo en favor de las mujeres oaxaqueñas.\n\n` +
+            `Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\n` +
+            `Con aprecio y respeto,\n\n` +
+            `María del Rosario Martínez Miguel\n` +
+            `Grupo de Estudios sobre la Mujer Rosario Castellanos (GesMujer)`;
+        } else if (sel === 'recibo') {
+          asunto.value = 'Envío de Recibo de Donativo - GesMujer Oaxaca';
+          txt.value = `Estimado(a) ${nom},\n\nLe hacemos llegar adjunto a este correo su recibo/comprobante oficial correspondiente a su reciente donativo.\n\nReiteramos nuestra gratitud por su generosidad y confianza en nuestras causas.\n\nAtentamente,\nEquipo GesMujer Oaxaca`;
+        } else if (sel === 'cumpleanos') {
+          asunto.value = 'En GESMujer Te deseamos... ¡Feliz Cumpleaños!';
+          txt.value = `¡Que tengas el mejor de los días!\n\n` +
+            `${nom}, en el GESMujer no solo celebramos tu cumpleaños, ¡También el tiempo de amistad y cariño! Gracias por ser parte de nuestra historia, tu apoyo siempre constante nos llena de alegría la vida. Deseamos con cariño que la sigas pasando... ¡Estupendo! Disfruta tu día en compañía de quienes más quieres, dedícate tiempo y déjate querer mucho.\n\n` +
+            `Recibe los mejores deseos y muchos abrazos con cariño.\n\n` +
+            `¡ Felicidades !\n\n` +
+            `Atentamente.\n` +
+            `Grupo de Estudios Sobre la Mujer "Rosario Castellanos" A.C.`;
+        } else if (sel === 'informativo') {
+          asunto.value = 'Informe de Actividades y Resultados - GesMujer Oaxaca';
+          txt.value = `Estimado(a) ${nom},\n\nLe compartimos nuestro reporte de actividades y avances en los programas de apoyo a mujeres. Gracias a su solidaridad esto es posible.\n\nQuedamos a su disposición para cualquier duda.`;
+        } else if (sel === 'personalizado') {
+          asunto.value = 'Mensaje de la Familia GesMujer Oaxaca';
+          txt.value = '';
+        }
+      }
+
       function confirmarEliminar(id, nombre) {
         Swal.fire({
           title: '¿Eliminar donante?',
@@ -361,6 +853,10 @@ try {
         Swal.fire({ icon: 'success', title: 'Eliminado', text: 'El donante fue eliminado correctamente.', timer: 2500, showConfirmButton: false });
       } else if (urlParams.get('status') === 'saved') {
         Swal.fire({ icon: 'success', title: 'Guardado', text: 'Los datos del donante se guardaron con éxito.', timer: 2500, showConfirmButton: false });
+      } else if (urlParams.get('status') === 'status_updated') {
+        Swal.fire({ icon: 'success', title: 'Actualizado', text: 'El estado del donante fue actualizado.', timer: 2500, showConfirmButton: false });
+      } else if (urlParams.get('status') === 'sent') {
+        Swal.fire({ icon: 'success', title: '¡Correo Enviado!', text: 'El mensaje con membrete fue enviado exitosamente.', timer: 2500, showConfirmButton: false });
       } else if (urlParams.get('status') === 'error') {
         Swal.fire({ icon: 'error', title: 'Error', text: urlParams.get('msg') || 'Ocurrió un error en la operación.' });
       }
