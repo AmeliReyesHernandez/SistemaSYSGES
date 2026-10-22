@@ -257,30 +257,32 @@ try {
         </div>
       </div>
 
-      <!-- Filtros y Buscador -->
+      <!-- Filtros y Buscador (búsqueda en tiempo real) -->
       <div class="card-sf p-3 mb-4">
-        <form method="GET" action="donativos.php" class="row g-2 align-items-center">
-          <div class="col-md-6 col-sm-12">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-7 col-sm-7">
             <div class="input-group">
-              <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-              <input type="text" class="form-control" name="search" placeholder="Buscar por donante o correo..." value="<?= htmlspecialchars($search) ?>">
+              <span class="input-group-text bg-white"><i class="bi bi-search text-purple"></i></span>
+              <input type="text" class="form-control" id="liveSearch"
+                     placeholder="Buscar por donante o correo..."
+                     value="<?= htmlspecialchars($search) ?>"
+                     autocomplete="off">
+              <span class="input-group-text bg-white border-start-0" id="searchSpinner" style="display:none!important;">
+                <span class="spinner-border spinner-border-sm text-purple" role="status"></span>
+              </span>
+              <button class="btn btn-outline-secondary" id="btnLimpiar" title="Limpiar" style="display:none;" onclick="limpiarBusqueda()">
+                <i class="bi bi-x-lg"></i>
+              </button>
             </div>
           </div>
-          <div class="col-md-4 col-sm-8">
-            <select class="form-select" name="metodo">
+          <div class="col-md-5 col-sm-5">
+            <select class="form-select" id="filtroMetodo" onchange="buscarDonativos()">
               <option value="">Todos los métodos de pago</option>
               <?php
               $metodos = [
-                  'Transferencia Bancaria',
-                  'Efectivo',
-                  'PayPal',
-                  'Cheques',
-                  'Tarjeta de Crédito / Débito',
-                  'Depósito en Ventanilla',
-                  'Autogestivo',
-                  'En Especie',
-                  'Bienes / Mobiliario',
-                  'Otro'
+                  'Transferencia Bancaria','Efectivo','PayPal','Cheques',
+                  'Tarjeta de Crédito / Débito','Depósito en Ventanilla',
+                  'Autogestivo','En Especie','Bienes / Mobiliario','Otro'
               ];
               foreach ($metodos as $m) {
                   $sel = ($metodoFiltro === $m) ? 'selected' : '';
@@ -289,124 +291,104 @@ try {
               ?>
             </select>
           </div>
-          <div class="col-md-2 col-sm-4 d-flex gap-2">
-            <button type="submit" class="btn btn-purple w-100 fw-semibold">Filtrar</button>
-            <?php if ($search !== '' || $metodoFiltro !== ''): ?>
-              <a href="donativos.php" class="btn btn-outline-secondary" title="Limpiar filtros"><i class="bi bi-arrow-repeat"></i></a>
-            <?php endif; ?>
-          </div>
-        </form>
+        </div>
+        <div class="mt-2" id="searchHint" style="display:none;">
+          <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Resultados para: <strong id="searchHintText"></strong></small>
+        </div>
       </div>
 
       <!-- Tabla de Donativos -->
       <div class="card-sf">
         <div class="card-sf-header d-flex justify-content-between align-items-center">
-          <span><i class="bi bi-receipt-cutoff me-2 text-purple"></i> Registro de Aportaciones (<?= $totalRegistros ?>)</span>
-          <span class="badge bg-light text-dark border">Página <?= $pagina ?> de <?= max(1, $totalPaginas) ?></span>
+          <span><i class="bi bi-receipt-cutoff me-2 text-purple"></i> Registro de Aportaciones (<span id="contadorTotal"><?= $totalRegistros ?></span>)</span>
+          <span class="badge bg-light text-dark border" id="paginaLabel">Página <?= $pagina ?> de <?= max(1, $totalPaginas) ?></span>
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light small text-uppercase">
+            <table class="table table-hover table-sm align-middle mb-0" style="font-size: 0.855rem;">
+              <thead class="table-light" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em;">
                 <tr>
-                  <th style="width: 60px;">ID</th>
-                  <th>Donante</th>
-                  <th>Correo</th>
-                  <th class="text-center">Método / Tipo</th>
-                  <th class="text-center">Fecha de Registro</th>
-                  <th class="text-end">Monto / Detalle</th>
-                  <th class="text-center" style="width: 120px;">Acciones</th>
+                  <th style="width: 52px; padding: 8px 10px;">ID</th>
+                  <th style="padding: 8px 10px;">Donante</th>
+                  <th style="padding: 8px 10px;">Correo</th>
+                  <th class="text-center" style="padding: 8px 10px;">Método / Tipo</th>
+                  <th class="text-center" style="padding: 8px 10px;">Fecha</th>
+                  <th class="text-end" style="padding: 8px 10px;">Monto</th>
+                  <th class="text-center" style="width: 90px; padding: 8px 10px;">Carta PDF</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="tbodyDonativos">
                 <?php if (empty($donativos)): ?>
                   <tr>
-                    <td colspan="7" class="text-center py-5 text-muted">
+                    <td colspan="7" class="text-center py-4 text-muted">
                       <i class="bi bi-cash-stack fs-1 d-block mb-2 text-secondary opacity-50"></i>
-                      No se encontraron donaciones registradas con los filtros seleccionados.
+                      No se encontraron aportaciones registradas.
                     </td>
                   </tr>
                 <?php else: ?>
                   <?php foreach ($donativos as $don): ?>
                     <tr>
-                      <td class="text-muted fw-semibold">#<?= $don['ID_Donativo'] ?></td>
-                      <td>
-                        <div class="fw-semibold text-dark">
-                          <?= htmlspecialchars($don['Donante'] ?: 'Donante no asignado') ?>
-                        </div>
+                      <td class="text-muted fw-semibold" style="padding:7px 10px;">#<?= $don['ID_Donativo'] ?></td>
+                      <td style="padding:7px 10px;">
+                        <div class="fw-semibold text-dark" style="line-height:1.4;"><?= htmlspecialchars($don['Donante'] ?: 'Sin asignar') ?></div>
                       </td>
-                      <td>
-                        <?php if ($don['Email']): ?>
-                          <span class="text-muted small"><i class="bi bi-envelope me-1"></i><?= htmlspecialchars($don['Email']) ?></span>
-                        <?php else: ?>
-                          <span class="text-muted small">Sin correo</span>
-                        <?php endif; ?>
-                      </td>
-                      <td class="text-center">
-                        <?php 
-                          $tipoLimpio = trim($don['TipoDonacion'] ?? '');
-                          if ($tipoLimpio === 'En Especie' || $tipoLimpio === 'Bienes / Mobiliario'): 
-                        ?>
-                          <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600; font-size: 0.8rem;">
-                            <i class="bi bi-box-seam me-1" style="color: #721896;"></i><?= htmlspecialchars($tipoLimpio) ?>
-                          </span>
-                        <?php elseif ($tipoLimpio === 'Efectivo'): ?>
-                          <span class="badge px-2 py-1" style="background-color: #eafaf1; color: #0f5132; border: 1px solid #c3e6cb; font-weight: 600; font-size: 0.8rem;">
-                            <i class="bi bi-cash me-1" style="color: #198754;"></i>Efectivo
-                          </span>
-                        <?php elseif ($tipoLimpio === 'PayPal'): ?>
-                          <span class="badge px-2 py-1" style="background-color: #e8f4fd; color: #003087; border: 1px solid #b8daff; font-weight: 600; font-size: 0.8rem;">
-                            <i class="bi bi-paypal me-1" style="color: #0079C1;"></i>PayPal
-                          </span>
-                        <?php elseif ($tipoLimpio === 'Cheque' || $tipoLimpio === 'Cheques'): ?>
-                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; font-weight: 600; font-size: 0.8rem;">
-                            <i class="bi bi-card-checklist me-1" style="color: #495057;"></i><?= htmlspecialchars($tipoLimpio) ?>
-                          </span>
-                        <?php elseif ($tipoLimpio === 'Autogestivo'): ?>
-                          <span class="badge px-2 py-1" style="background-color: #fff9e6; color: #856404; border: 1px solid #ffeeba; font-weight: 600; font-size: 0.8rem;">
-                            <i class="bi bi-award me-1" style="color: #d39e00;"></i>Autogestivo
-                          </span>
-                        <?php elseif ($tipoLimpio !== ''): ?>
-                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #212529; border: 1px solid #dee2e6; font-weight: 600; font-size: 0.8rem;">
-                            <i class="bi bi-credit-card-2-front me-1" style="color: #0d6efd;"></i><?= htmlspecialchars($tipoLimpio) ?>
-                          </span>
-                        <?php else: ?>
-                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #6c757d; border: 1px solid #dee2e6; font-weight: 500; font-size: 0.8rem;">
-                            <i class="bi bi-question-circle me-1"></i>No especificado
-                          </span>
-                        <?php endif; ?>
-                      </td>
-                      <td class="text-center">
-                        <span class="small text-secondary">
-                          <i class="bi bi-clock me-1"></i><?= !empty($don['FechaDonacion']) ? date('d/m/Y h:i A', strtotime($don['FechaDonacion'])) : 'Automática' ?>
+                      <td style="padding:7px 10px;">
+                        <span class="text-muted" style="font-size:0.9rem;">
+                          <?= $don['Email'] ? htmlspecialchars($don['Email']) : 'Sin correo' ?>
                         </span>
                       </td>
-                      <td class="text-end">
-                        <?php 
-                          $esEspecieItem = ($don['TipoDonacion'] === 'En Especie' || $don['TipoDonacion'] === 'Bienes / Mobiliario' || (float)$don['MontoDonacion'] <= 0);
+                      <td class="text-center" style="padding:7px 10px;">
+                        <?php
+                          $tipoLimpio = trim($don['TipoDonacion'] ?? '');
+                          if ($tipoLimpio === 'En Especie' || $tipoLimpio === 'Bienes / Mobiliario'):
                         ?>
-                        <?php if (!$esEspecieItem && (float)$don['MontoDonacion'] > 0): ?>
-                          <span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">
-                            $<?= number_format((float)$don['MontoDonacion'], 2) ?>
+                          <span class="badge px-2 py-1" style="background:#f3e8ff;color:#721896;border:1px solid #d1a8e7;font-weight:600;font-size:0.75rem;">
+                            <i class="bi bi-box-seam me-1" style="color:#721896;"></i><?= htmlspecialchars($tipoLimpio) ?>
                           </span>
+                        <?php elseif ($tipoLimpio === 'Efectivo'): ?>
+                          <span class="badge px-2 py-1" style="background:#eafaf1;color:#0f5132;border:1px solid #c3e6cb;font-weight:600;font-size:0.75rem;">
+                            <i class="bi bi-cash me-1" style="color:#198754;"></i>Efectivo
+                          </span>
+                        <?php elseif ($tipoLimpio === 'PayPal'): ?>
+                          <span class="badge px-2 py-1" style="background:#e8f4fd;color:#003087;border:1px solid #b8daff;font-weight:600;font-size:0.75rem;">
+                            <i class="bi bi-paypal me-1" style="color:#0079C1;"></i>PayPal
+                          </span>
+                        <?php elseif ($tipoLimpio === 'Cheque' || $tipoLimpio === 'Cheques'): ?>
+                          <span class="badge px-2 py-1" style="background:#f8f9fa;color:#495057;border:1px solid #ced4da;font-weight:600;font-size:0.75rem;">
+                            <?= htmlspecialchars($tipoLimpio) ?>
+                          </span>
+                        <?php elseif ($tipoLimpio === 'Autogestivo'): ?>
+                          <span class="badge px-2 py-1" style="background:#fff9e6;color:#856404;border:1px solid #ffeeba;font-weight:600;font-size:0.75rem;">Autogestivo</span>
+                        <?php elseif ($tipoLimpio !== ''): ?>
+                          <span class="badge px-2 py-1" style="background:#f8f9fa;color:#212529;border:1px solid #dee2e6;font-weight:600;font-size:0.75rem;"><?= htmlspecialchars($tipoLimpio) ?></span>
                         <?php else: ?>
-                          <span class="text-dark small fw-semibold" title="<?= htmlspecialchars($don['DescripcionEspecie'] ?? '') ?>">
-                            <i class="bi bi-box-seam me-1 text-purple"></i><?= htmlspecialchars($don['DescripcionEspecie'] ? (mb_strlen($don['DescripcionEspecie']) > 30 ? mb_substr($don['DescripcionEspecie'], 0, 27) . '...' : $don['DescripcionEspecie']) : 'En especie') ?>
+                          <span class="badge px-2 py-1" style="background:#f8f9fa;color:#6c757d;border:1px solid #dee2e6;font-size:0.75rem;">No especificado</span>
+                        <?php endif; ?>
+                      </td>
+                      <td class="text-center" style="padding:7px 10px;">
+                        <span class="text-secondary" style="font-size:0.8rem;">
+                          <?= !empty($don['FechaDonacion']) ? date('d/m/Y H:i', strtotime($don['FechaDonacion'])) : 'Auto' ?>
+                        </span>
+                      </td>
+                      <td class="text-end" style="padding:7px 10px;">
+                        <?php $esEspecie = ($don['TipoDonacion'] === 'En Especie' || $don['TipoDonacion'] === 'Bienes / Mobiliario' || (float)$don['MontoDonacion'] <= 0); ?>
+                        <?php if (!$esEspecie && (float)$don['MontoDonacion'] > 0): ?>
+                          <span class="badge bg-success-subtle text-success fw-bold px-2 py-1" style="font-size:0.82rem;">$<?= number_format((float)$don['MontoDonacion'], 2) ?></span>
+                        <?php else: ?>
+                          <span class="text-dark fw-semibold" style="font-size:0.8rem;" title="<?= htmlspecialchars($don['DescripcionEspecie'] ?? '') ?>">
+                            <i class="bi bi-box-seam me-1 text-purple"></i><?= htmlspecialchars($don['DescripcionEspecie'] ? (mb_strlen($don['DescripcionEspecie']) > 22 ? mb_substr($don['DescripcionEspecie'], 0, 19) . '...' : $don['DescripcionEspecie']) : 'En especie') ?>
                           </span>
                         <?php endif; ?>
                       </td>
-                      <td class="text-center">
-                        <div class="btn-group btn-group-sm" role="group">
-                          <a href="carta-agradecimiento.php?id=<?= $don['ID_Donativo'] ?>" target="_blank" class="btn btn-outline-purple" title="Descargar / Ver Carta de Agradecimiento (PDF)">
-                            <i class="bi bi-file-earmark-heart-fill"></i>
-                          </a>
-                          <a href="donativo-editar.php?id=<?= $don['ID_Donativo'] ?>" class="btn btn-outline-primary" title="Editar">
-                            <i class="bi bi-pencil-square"></i>
-                          </a>
-                          <button type="button" class="btn btn-outline-danger" title="Eliminar" onclick="confirmarEliminarDonativo(<?= $don['ID_Donativo'] ?>, '<?= number_format((float)$don['MontoDonacion'], 2) ?>')">
-                            <i class="bi bi-trash3"></i>
-                          </button>
-                        </div>
+                      <td class="text-center" style="padding:7px 10px;">
+                        <a href="carta-agradecimiento.php?id=<?= $don['ID_Donativo'] ?>" target="_blank"
+                           style="display:inline-flex;align-items:center;gap:4px;font-size:0.76rem;padding:3px 7px;border-radius:6px;border:1.5px solid #721896;color:#721896;background:transparent;text-decoration:none;font-weight:600;white-space:nowrap;"
+                           title="Ver / Descargar Carta de Agradecimiento PDF"
+                           onmouseover="this.style.background='#721896';this.style.color='#fff';"
+                           onmouseout="this.style.background='transparent';this.style.color='#721896';">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>
+                          Carta
+                        </a>
                       </td>
                     </tr>
                   <?php endforeach; ?>
@@ -415,33 +397,33 @@ try {
             </table>
           </div>
         </div>
-
-        <!-- Paginación -->
+        <!-- Paginación dinámica -->
+        <div id="paginacionContainer">
         <?php if ($totalPaginas > 1): ?>
-          <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-3">
-            <small class="text-muted">Mostrando aportaciones <?= $offset + 1 ?> a <?= min($offset + $registrosPorPagina, $totalRegistros) ?> de <?= $totalRegistros ?></small>
-            <nav>
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
-                  <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&search=<?= urlencode($search) ?>&metodo=<?= urlencode($metodoFiltro) ?>">Anterior</a>
+          <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2">
+            <small class="text-muted">Mostrando <?= $offset + 1 ?> a <?= min($offset + $registrosPorPagina, $totalRegistros) ?> de <?= $totalRegistros ?></small>
+            <nav><ul class="pagination pagination-sm mb-0">
+              <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
+                <a class="page-link" href="#" onclick="irPagina(<?= $pagina - 1 ?>);return false;">Anterior</a>
+              </li>
+              <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                <li class="page-item <?= ($i === $pagina) ? 'active' : '' ?>">
+                  <a class="page-link" href="#" onclick="irPagina(<?= $i ?>);return false;"><?= $i ?></a>
                 </li>
-                <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
-                  <li class="page-item <?= ($i === $pagina) ? 'active' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= $i ?>&search=<?= urlencode($search) ?>&metodo=<?= urlencode($metodoFiltro) ?>"><?= $i ?></a>
-                  </li>
-                <?php endfor; ?>
-                <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
-                  <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&search=<?= urlencode($search) ?>&metodo=<?= urlencode($metodoFiltro) ?>">Siguiente</a>
-                </li>
-              </ul>
-            </nav>
+              <?php endfor; ?>
+              <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
+                <a class="page-link" href="#" onclick="irPagina(<?= $pagina + 1 ?>);return false;">Siguiente</a>
+              </li>
+            </ul></nav>
           </div>
         <?php endif; ?>
+        </div>
       </div>
 
     </main>
   </div>
 </div>
+
 
     <!-- Modal: Generar Reporte PDF por Rango de Fechas -->
     <div class="modal fade" id="modalReportePDF" tabindex="-1" aria-labelledby="modalReportePDFLabel" aria-hidden="true">
@@ -515,51 +497,153 @@ try {
         const m = hoy.getMonth();
         const fi = document.getElementById('rep_fecha_inicio');
         const ff = document.getElementById('rep_fecha_fin');
-
         const format = (d) => d.toISOString().split('T')[0];
-
-        if (tipo === 'mes_actual') {
-          fi.value = format(new Date(y, m, 1));
-          ff.value = format(new Date(y, m + 1, 0));
-        } else if (tipo === 'mes_anterior') {
-          fi.value = format(new Date(y, m - 1, 1));
-          ff.value = format(new Date(y, m, 0));
-        } else if (tipo === 'anio_actual') {
-          fi.value = `${y}-01-01`;
-          ff.value = `${y}-12-31`;
-        } else if (tipo === 'ultimos_3_meses') {
-          fi.value = format(new Date(y, m - 2, 1));
-          ff.value = format(new Date(y, m + 1, 0));
-        } else if (tipo === 'todos') {
-          fi.value = '';
-          ff.value = '';
-        }
+        if (tipo === 'mes_actual') { fi.value = format(new Date(y, m, 1)); ff.value = format(new Date(y, m + 1, 0)); }
+        else if (tipo === 'mes_anterior') { fi.value = format(new Date(y, m - 1, 1)); ff.value = format(new Date(y, m, 0)); }
+        else if (tipo === 'anio_actual') { fi.value = `${y}-01-01`; ff.value = `${y}-12-31`; }
+        else if (tipo === 'ultimos_3_meses') { fi.value = format(new Date(y, m - 2, 1)); ff.value = format(new Date(y, m + 1, 0)); }
+        else if (tipo === 'todos') { fi.value = ''; ff.value = ''; }
       }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-      function confirmarEliminarDonativo(id, monto) {
-        Swal.fire({
-          title: '¿Eliminar donativo?',
-          text: `Se eliminará el donativo por $${monto}. Esta acción no se puede deshacer.`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Sí, eliminar',
-          cancelButtonText: 'Cancelar'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = `acciones/eliminar-donativo.php?id=${id}`;
-          }
-        });
+      // ─── BÚSQUEDA EN TIEMPO REAL ─────────────────────────────────────────
+      let searchTimeout = null;
+      let paginaActual = <?= $pagina ?>;
+
+      const inputSearch  = document.getElementById('liveSearch');
+      const selMetodo    = document.getElementById('filtroMetodo');
+      const btnLimpiar   = document.getElementById('btnLimpiar');
+      const searchHint   = document.getElementById('searchHint');
+      const searchHintTxt= document.getElementById('searchHintText');
+      const spinner      = document.getElementById('searchSpinner');
+
+      // SVG inline del icóno carta (reutilizable)
+      const cartaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>`;
+
+      inputSearch.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => { paginaActual = 1; buscarDonativos(); }, 320);
+        btnLimpiar.style.display = inputSearch.value.trim() !== '' ? '' : 'none';
+      });
+
+      function limpiarBusqueda() {
+        inputSearch.value = '';
+        btnLimpiar.style.display = 'none';
+        searchHint.style.display = 'none';
+        paginaActual = 1;
+        buscarDonativos();
       }
+
+      function irPagina(p) { paginaActual = p; buscarDonativos(); }
+
+      function buscarDonativos() {
+        const q      = inputSearch.value.trim();
+        const metodo = selMetodo.value;
+        const url    = `ajax/buscar_donativos.php?search=${encodeURIComponent(q)}&metodo=${encodeURIComponent(metodo)}&pagina=${paginaActual}`;
+
+        spinner.style.removeProperty('display');
+        fetch(url)
+          .then(r => r.json())
+          .then(data => {
+            spinner.style.display = 'none';
+            if (!data.success) return;
+            renderizarTabla(data);
+            if (q) { searchHintTxt.textContent = q; searchHint.style.display = ''; }
+            else { searchHint.style.display = 'none'; }
+          })
+          .catch(() => { spinner.style.display = 'none'; });
+      }
+
+      function badgeMetodo(tipo) {
+        const t = (tipo || '').trim();
+        if (t === 'En Especie' || t === 'Bienes / Mobiliario')
+          return `<span class="badge px-2 py-1" style="background:#f3e8ff;color:#721896;border:1px solid #d1a8e7;font-weight:600;font-size:0.75rem;">${escHtml(t)}</span>`;
+        if (t === 'Efectivo')
+          return `<span class="badge px-2 py-1" style="background:#eafaf1;color:#0f5132;border:1px solid #c3e6cb;font-weight:600;font-size:0.75rem;">Efectivo</span>`;
+        if (t === 'PayPal')
+          return `<span class="badge px-2 py-1" style="background:#e8f4fd;color:#003087;border:1px solid #b8daff;font-weight:600;font-size:0.75rem;">PayPal</span>`;
+        if (t === 'Cheque' || t === 'Cheques')
+          return `<span class="badge px-2 py-1" style="background:#f8f9fa;color:#495057;border:1px solid #ced4da;font-weight:600;font-size:0.75rem;">${escHtml(t)}</span>`;
+        if (t === 'Autogestivo')
+          return `<span class="badge px-2 py-1" style="background:#fff9e6;color:#856404;border:1px solid #ffeeba;font-weight:600;font-size:0.75rem;">Autogestivo</span>`;
+        if (t !== '')
+          return `<span class="badge px-2 py-1" style="background:#f8f9fa;color:#212529;border:1px solid #dee2e6;font-weight:600;font-size:0.75rem;">${escHtml(t)}</span>`;
+        return `<span class="badge px-2 py-1" style="background:#f8f9fa;color:#6c757d;border:1px solid #dee2e6;font-size:0.75rem;">No especificado</span>`;
+      }
+
+      function renderizarTabla(data) {
+        const tbody = document.getElementById('tbodyDonativos');
+        document.getElementById('contadorTotal').textContent = data.totalRegistros;
+        document.getElementById('paginaLabel').textContent  = `Página ${data.pagina} de ${data.totalPaginas}`;
+
+        if (!data.donativos || data.donativos.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No se encontraron aportaciones con los filtros seleccionados.</td></tr>`;
+          document.getElementById('paginacionContainer').innerHTML = '';
+          return;
+        }
+
+        tbody.innerHTML = data.donativos.map(d => {
+          const monto    = parseFloat(d.MontoDonacion || 0);
+          const esEspecie = (d.TipoDonacion === 'En Especie' || d.TipoDonacion === 'Bienes / Mobiliario' || monto <= 0);
+          const montoHtml = !esEspecie && monto > 0
+            ? `<span class="badge bg-success-subtle text-success fw-bold px-2 py-1" style="font-size:0.82rem;">$${monto.toLocaleString('es-MX',{minimumFractionDigits:2})}</span>`
+            : `<span class="text-dark fw-semibold" style="font-size:0.8rem;" title="${escHtml(d.DescripcionEspecie||'')}">${escHtml(d.DescripcionEspecie ? (d.DescripcionEspecie.length>22?d.DescripcionEspecie.slice(0,19)+'...':d.DescripcionEspecie) : 'En especie')}</span>`;
+
+          const fecha = d.FechaDonacion
+            ? new Date(d.FechaDonacion).toLocaleString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
+            : 'Auto';
+
+          return `<tr>
+            <td class="text-muted fw-semibold" style="padding:7px 10px;font-size:0.855rem;">#${d.ID_Donativo}</td>
+            <td style="padding:7px 10px;font-size:0.855rem;"><div class="fw-semibold text-dark" style="line-height:1.2;">${escHtml(d.Donante||'Sin asignar')}</div></td>
+            <td style="padding:7px 10px;"><span class="text-muted" style="font-size:0.8rem;">${escHtml(d.Email||'Sin correo')}</span></td>
+            <td class="text-center" style="padding:7px 10px;">${badgeMetodo(d.TipoDonacion)}</td>
+            <td class="text-center" style="padding:7px 10px;"><span class="text-secondary" style="font-size:0.8rem;">${escHtml(fecha)}</span></td>
+            <td class="text-end" style="padding:7px 10px;">${montoHtml}</td>
+            <td class="text-center" style="padding:7px 10px;">
+              <a href="carta-agradecimiento.php?id=${d.ID_Donativo}" target="_blank"
+                 style="display:inline-flex;align-items:center;gap:4px;font-size:0.76rem;padding:3px 7px;border-radius:6px;border:1.5px solid #721896;color:#721896;background:transparent;text-decoration:none;font-weight:600;white-space:nowrap;"
+                 title="Ver / Descargar Carta de Agradecimiento PDF"
+                 onmouseover="this.style.background='#721896';this.style.color='#fff';"
+                 onmouseout="this.style.background='transparent';this.style.color='#721896';">
+                ${cartaSVG} Carta
+              </a>
+            </td>
+          </tr>`;
+        }).join('');
+
+        renderizarPaginacion(data);
+      }
+
+      function renderizarPaginacion(data) {
+        const cont = document.getElementById('paginacionContainer');
+        if (data.totalPaginas <= 1) { cont.innerHTML = ''; return; }
+        const offset = (data.pagina - 1) * 10;
+        const hasta  = Math.min(offset + 10, data.totalRegistros);
+        let links = '';
+        for (let i = 1; i <= data.totalPaginas; i++) {
+          links += `<li class="page-item ${i === data.pagina ? 'active' : ''}"><a class="page-link" href="#" onclick="irPagina(${i});return false;">${i}</a></li>`;
+        }
+        cont.innerHTML = `
+          <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2">
+            <small class="text-muted">Mostrando ${offset + 1} a ${hasta} de ${data.totalRegistros}</small>
+            <nav><ul class="pagination pagination-sm mb-0">
+              <li class="page-item ${data.pagina <= 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="irPagina(${data.pagina-1});return false;">Anterior</a></li>
+              ${links}
+              <li class="page-item ${data.pagina >= data.totalPaginas ? 'disabled' : ''}"><a class="page-link" href="#" onclick="irPagina(${data.pagina+1});return false;">Siguiente</a></li>
+            </ul></nav>
+          </div>`;
+      }
+
+      function escHtml(str) {
+        return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+      // ─────────────────────────────────────────
 
       // Mensajes SweetAlert2 de URL
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('status') === 'deleted') {
-        Swal.fire({ icon: 'success', title: 'Eliminado', text: 'El donativo fue eliminado correctamente.', timer: 2500, showConfirmButton: false });
-      } else if (urlParams.get('status') === 'saved') {
+      if (urlParams.get('status') === 'saved') {
         Swal.fire({ icon: 'success', title: 'Guardado', text: 'El donativo se registró con éxito.', timer: 2500, showConfirmButton: false });
       } else if (urlParams.get('status') === 'error') {
         Swal.fire({ icon: 'error', title: 'Error', text: urlParams.get('msg') || 'Ocurrió un error en la operación.' });

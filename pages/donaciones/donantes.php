@@ -199,65 +199,67 @@ try {
         </li>
       </ul>
 
-      <!-- Filtro y buscador -->
+      <!-- Filtro y buscador (búsqueda en tiempo real) -->
       <div class="card-sf p-3 mb-4">
-        <form method="GET" action="donantes.php" class="row g-2 align-items-center">
-          <div class="col-md-6 col-sm-6">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-7 col-sm-7">
             <div class="input-group">
-              <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-              <input type="text" class="form-control" name="search" placeholder="Buscar por nombre, email, teléfono o RFC..." value="<?= htmlspecialchars($search) ?>">
+              <span class="input-group-text bg-white"><i class="bi bi-search text-purple"></i></span>
+              <input type="text" class="form-control" id="liveSearch"
+                     placeholder="Buscar por nombre, email, teléfono o RFC..."
+                     value="<?= htmlspecialchars($search) ?>"
+                     autocomplete="off">
+              <span class="input-group-text bg-white border-start-0" id="searchSpinner" style="display:none!important;">
+                <span class="spinner-border spinner-border-sm text-purple" role="status"></span>
+              </span>
+              <button class="btn btn-outline-secondary" id="btnLimpiar" title="Limpiar búsqueda" style="display:none;" onclick="limpiarBusqueda()">
+                <i class="bi bi-x-lg"></i>
+              </button>
             </div>
           </div>
-          <div class="col-md-3 col-sm-6">
-            <select class="form-select" name="estatus">
+          <div class="col-md-5 col-sm-5">
+            <select class="form-select" id="filtroEstatus" onchange="buscarDonantes()">
               <option value="">Todos los Estados (Activos / Inactivos)</option>
               <option value="Activo" <?= ($filtroEstatus === 'Activo') ? 'selected' : '' ?>>Activos (Vigentes)</option>
               <option value="Inactivo" <?= ($filtroEstatus === 'Inactivo') ? 'selected' : '' ?>>Inactivos (Sin donación reciente)</option>
             </select>
           </div>
-          <div class="col-md-3 col-sm-12 d-flex gap-2">
-            <button type="submit" class="btn btn-purple w-100 fw-semibold">Filtrar</button>
-            <?php if ($search !== '' || $filtroEstatus !== ''): ?>
-              <a href="donantes.php" class="btn btn-outline-secondary" title="Limpiar"><i class="bi bi-arrow-repeat"></i></a>
-            <?php endif; ?>
-          </div>
-        </form>
+        </div>
+        <div class="mt-2" id="searchHint" style="display:none;">
+          <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Mostrando resultados para: <strong id="searchHintText"></strong></small>
+        </div>
       </div>
 
-      <!-- Tabla de Donantes -->
-      <div class="card-sf">
+      <!-- Tabla de Donantes (renderizada por JS o PHP en carga inicial) -->
+      <div class="card-sf" id="tablaCard">
         <div class="card-sf-header d-flex justify-content-between align-items-center">
-          <span><i class="bi bi-person-lines-fill me-2 text-primary"></i> Directorio de Donantes (<?= $totalRegistros ?>)</span>
-          <span class="badge bg-light text-dark border">Página <?= $pagina ?> de <?= max(1, $totalPaginas) ?></span>
+          <span><i class="bi bi-person-lines-fill me-2 text-primary"></i> Directorio de Donantes (<span id="contadorTotal"><?= $totalRegistros ?></span>)</span>
+          <span class="badge bg-light text-dark border" id="paginaLabel">Página <?= $pagina ?> de <?= max(1, $totalPaginas) ?></span>
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" id="tablaDonantes">
               <thead class="table-light small text-uppercase">
                 <tr>
                   <th style="width: 50px;">ID</th>
                   <th>Donante / Ocupación</th>
                   <th>Contacto</th>
                   <th class="text-center">Estado</th>
-                  <th class="text-center">Cumpleaños</th>
-                  <th class="text-center">Aportaciones</th>
                   <th class="text-end">Total Donado</th>
-                  <th class="text-center" style="width: 170px;">Acciones</th>
+                  <th class="text-center" style="width: 130px;">Acciones</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="tbodyDonantes">
                 <?php if (empty($donantes)): ?>
                   <tr>
-                    <td colspan="8" class="text-center py-5 text-muted">
+                    <td colspan="6" class="text-center py-5 text-muted">
                       <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
                       No se encontraron donantes con los filtros seleccionados.
                     </td>
                   </tr>
                 <?php else: ?>
                   <?php foreach ($donantes as $d): ?>
-                    <?php 
-                      $esActivo = (($d['Estatus'] ?? 'Activo') === 'Activo');
-                    ?>
+                    <?php $esActivo = (($d['Estatus'] ?? 'Activo') === 'Activo'); ?>
                     <tr>
                       <td class="text-muted fw-semibold">#<?= $d['ID_Donante'] ?></td>
                       <td>
@@ -287,54 +289,26 @@ try {
                       </td>
                       <td class="text-center">
                         <?php if ($esActivo): ?>
-                          <span class="badge bg-success-subtle text-success px-2 py-1" style="cursor: pointer;" onclick="cambiarEstatus(<?= $d['ID_Donante'] ?>, 'Inactivo')" title="Clic para marcar como Inactivo">
-                            <i class="bi bi-check-circle-fill me-1"></i> Activo
+                          <span class="badge bg-success-subtle text-success px-2 py-1" style="cursor:pointer;" onclick="cambiarEstatus(<?= $d['ID_Donante'] ?>, 'Inactivo')" title="Clic para marcar como Inactivo">
+                            <i class="bi bi-check-circle-fill me-1"></i>Activo
                           </span>
                         <?php else: ?>
-                          <span class="badge bg-secondary-subtle text-secondary px-2 py-1" style="cursor: pointer;" onclick="cambiarEstatus(<?= $d['ID_Donante'] ?>, 'Activo')" title="Clic para Reactivar donante">
-                            <i class="bi bi-pause-circle-fill me-1"></i> Inactivo
+                          <span class="badge bg-secondary-subtle text-secondary px-2 py-1" style="cursor:pointer;" onclick="cambiarEstatus(<?= $d['ID_Donante'] ?>, 'Activo')" title="Clic para Reactivar">
+                            <i class="bi bi-pause-circle-fill me-1"></i>Inactivo
                           </span>
                         <?php endif; ?>
-                      </td>
-                      <td class="text-center">
-                        <?php if (!empty($d['FechaNacimiento'])): ?>
-                          <span class="badge bg-danger-subtle text-danger px-2 py-1">
-                            <i class="bi bi-gift-fill me-1"></i><?= date('d/m/Y', strtotime($d['FechaNacimiento'])) ?>
-                          </span>
-                        <?php else: ?>
-                          <span class="text-muted small">-</span>
-                        <?php endif; ?>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge bg-primary-subtle text-primary fw-semibold px-2 py-1">
-                          <?= (int)$d['NumeroDonaciones'] ?>
-                        </span>
                       </td>
                       <td class="text-end">
-                        <span class="fw-bold text-success">
-                          $<?= number_format((float)$d['TotalAportado'], 2) ?>
-                        </span>
+                        <span class="fw-bold text-success">$<?= number_format((float)$d['TotalAportado'], 2) ?></span>
                       </td>
                       <td class="text-center">
                         <div class="btn-group btn-group-sm" role="group">
-                          <button type="button" class="btn btn-outline-purple" title="Ver Ficha e Historial de Donaciones" onclick="verFichaDonante(<?= $d['ID_Donante'] ?>)">
+                          <button type="button" class="btn btn-outline-purple" title="Ver Ficha del Donante" onclick="verFichaDonante(<?= $d['ID_Donante'] ?>)">
                             <i class="bi bi-eye-fill"></i>
                           </button>
                           <a href="donativo-nuevo.php?id_donante=<?= $d['ID_Donante'] ?>" class="btn btn-outline-success" title="Registrar Aportación">
-                            <i class="bi bi-plus-circle"></i>
+                            <i class="bi bi-plus-circle-fill"></i>
                           </a>
-                          <button type="button" class="btn btn-outline-warning" title="Enviar Felicitación de Cumpleaños" onclick="enviarTarjetaCumpleDonante('<?= htmlspecialchars(addslashes($d['Nombre'])) ?>', '<?= htmlspecialchars(addslashes($d['Email'])) ?>', <?= $d['ID_Donante'] ?>)">
-                            <i class="bi bi-gift-fill text-warning"></i>
-                          </button>
-                          <button type="button" class="btn btn-outline-secondary" title="Redactar Correo Institucional" onclick="prepararCorreoDonante('<?= htmlspecialchars(addslashes($d['Nombre'])) ?>', '<?= htmlspecialchars(addslashes($d['Email'])) ?>', <?= $d['ID_Donante'] ?>)">
-                            <i class="bi bi-envelope-paper-heart"></i>
-                          </button>
-                          <a href="donante-editar.php?id=<?= $d['ID_Donante'] ?>" class="btn btn-outline-primary" title="Editar">
-                            <i class="bi bi-pencil-square"></i>
-                          </a>
-                          <button type="button" class="btn btn-outline-danger" title="Eliminar" onclick="confirmarEliminar(<?= $d['ID_Donante'] ?>, '<?= htmlspecialchars(addslashes($d['Nombre'])) ?>')">
-                            <i class="bi bi-trash3"></i>
-                          </button>
                         </div>
                       </td>
                     </tr>
@@ -344,28 +318,27 @@ try {
             </table>
           </div>
         </div>
-
-        <!-- Paginación -->
+        <!-- Paginación dinámica -->
+        <div id="paginacionContainer">
         <?php if ($totalPaginas > 1): ?>
           <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-3">
-            <small class="text-muted">Mostrando registros <?= $offset + 1 ?> a <?= min($offset + $registrosPorPagina, $totalRegistros) ?> de <?= $totalRegistros ?></small>
-            <nav>
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
-                  <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&search=<?= urlencode($search) ?>&estatus=<?= urlencode($filtroEstatus) ?>">Anterior</a>
+            <small class="text-muted" id="paginaInfo">Mostrando <?= $offset + 1 ?> a <?= min($offset + $registrosPorPagina, $totalRegistros) ?> de <?= $totalRegistros ?></small>
+            <nav><ul class="pagination pagination-sm mb-0" id="paginacionLinks">
+              <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
+                <a class="page-link" href="#" onclick="irPagina(<?= $pagina - 1 ?>); return false;">Anterior</a>
+              </li>
+              <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                <li class="page-item <?= ($i === $pagina) ? 'active' : '' ?>">
+                  <a class="page-link" href="#" onclick="irPagina(<?= $i ?>); return false;"><?= $i ?></a>
                 </li>
-                <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
-                  <li class="page-item <?= ($i === $pagina) ? 'active' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= $i ?>&search=<?= urlencode($search) ?>&estatus=<?= urlencode($filtroEstatus) ?>"><?= $i ?></a>
-                  </li>
-                <?php endfor; ?>
-                <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
-                  <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&search=<?= urlencode($search) ?>&estatus=<?= urlencode($filtroEstatus) ?>">Siguiente</a>
-                </li>
-              </ul>
-            </nav>
+              <?php endfor; ?>
+              <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
+                <a class="page-link" href="#" onclick="irPagina(<?= $pagina + 1 ?>); return false;">Siguiente</a>
+              </li>
+            </ul></nav>
           </div>
         <?php endif; ?>
+        </div>
       </div>
 
     </main>
@@ -475,6 +448,7 @@ try {
                     <th>Fecha y Hora</th>
                     <th>Método / Tipo</th>
                     <th class="text-end">Monto / Detalle</th>
+                    <th class="text-center" style="width: 110px;">Carta PDF</th>
                   </tr>
                 </thead>
                 <tbody id="fd_tbody_donativos">
@@ -579,6 +553,143 @@ try {
     <script src="../../assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+      // ─── BÚSQUEDA EN TIEMPO REAL ────────────────────────────────────────────
+      let searchTimeout = null;
+      let paginaActual = <?= $pagina ?>;
+
+      const inputSearch  = document.getElementById('liveSearch');
+      const selEstatus   = document.getElementById('filtroEstatus');
+      const btnLimpiar   = document.getElementById('btnLimpiar');
+      const searchHint   = document.getElementById('searchHint');
+      const searchHintTxt= document.getElementById('searchHintText');
+      const spinner      = document.getElementById('searchSpinner');
+
+      inputSearch.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          paginaActual = 1;
+          buscarDonantes();
+        }, 320);
+
+        // Mostrar/ocultar botón limpiar
+        btnLimpiar.style.display = inputSearch.value.trim() !== '' ? '' : 'none';
+      });
+
+      function limpiarBusqueda() {
+        inputSearch.value = '';
+        btnLimpiar.style.display = 'none';
+        searchHint.style.display = 'none';
+        paginaActual = 1;
+        buscarDonantes();
+      }
+
+      function irPagina(p) {
+        paginaActual = p;
+        buscarDonantes();
+      }
+
+      function buscarDonantes() {
+        const q       = inputSearch.value.trim();
+        const estatus = selEstatus.value;
+        const url     = `ajax/buscar_directorio.php?search=${encodeURIComponent(q)}&estatus=${encodeURIComponent(estatus)}&pagina=${paginaActual}`;
+
+        spinner.style.removeProperty('display');
+        fetch(url)
+          .then(r => r.json())
+          .then(data => {
+            spinner.style.display = 'none';
+            if (!data.success) return;
+            renderizarTabla(data);
+
+            // Hint de búsqueda
+            if (q) {
+              searchHintTxt.textContent = q;
+              searchHint.style.display = '';
+            } else {
+              searchHint.style.display = 'none';
+            }
+          })
+          .catch(() => { spinner.style.display = 'none'; });
+      }
+
+      function renderizarTabla(data) {
+        const tbody = document.getElementById('tbodyDonantes');
+        document.getElementById('contadorTotal').textContent = data.totalRegistros;
+        document.getElementById('paginaLabel').textContent  = `Página ${data.pagina} de ${data.totalPaginas}`;
+
+        if (!data.donantes || data.donantes.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
+            No se encontraron donantes con los filtros seleccionados.</td></tr>`;
+          document.getElementById('paginacionContainer').innerHTML = '';
+          return;
+        }
+
+        tbody.innerHTML = data.donantes.map(d => {
+          const nombre = `${d.Nombre || ''} ${d.ApellidoPaterno || ''} ${d.ApellidoMaterno || ''}`.trim();
+          const esActivo = (d.Estatus || 'Activo') === 'Activo';
+          const total   = parseFloat(d.TotalAportado || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+          const ocupBadge = d.Ocupacion ? `<small class="text-muted"><i class="bi bi-briefcase me-1"></i>${escHtml(d.Ocupacion)}</small>` : '';
+          const rfcBadge  = d.RFC ? `<span class="badge bg-light text-secondary border ms-1" style="font-size:0.7rem;">RFC: ${escHtml(d.RFC)}</span>` : '';
+          const emailHtml = d.Email ? `<div><a href="mailto:${escHtml(d.Email)}" class="text-decoration-none text-muted small"><i class="bi bi-envelope me-1"></i>${escHtml(d.Email)}</a></div>` : '';
+          const telHtml   = d.Telefono ? `<small class="text-muted"><i class="bi bi-telephone me-1"></i>${escHtml(d.Telefono)}</small>` : '';
+          const estatusBadge = esActivo
+            ? `<span class="badge bg-success-subtle text-success px-2 py-1" style="cursor:pointer;" onclick="cambiarEstatus(${d.ID_Donante},'Inactivo')" title="Clic para marcar Inactivo"><i class="bi bi-check-circle-fill me-1"></i>Activo</span>`
+            : `<span class="badge bg-secondary-subtle text-secondary px-2 py-1" style="cursor:pointer;" onclick="cambiarEstatus(${d.ID_Donante},'Activo')" title="Clic para Reactivar"><i class="bi bi-pause-circle-fill me-1"></i>Inactivo</span>`;
+
+          return `<tr>
+            <td class="text-muted fw-semibold">#${d.ID_Donante}</td>
+            <td>
+              <div class="fw-semibold text-dark">
+                <a href="javascript:void(0)" onclick="verFichaDonante(${d.ID_Donante})" class="text-dark text-decoration-none">${escHtml(nombre)}</a>
+              </div>
+              ${ocupBadge}${rfcBadge}
+            </td>
+            <td>${emailHtml}${telHtml}</td>
+            <td class="text-center">${estatusBadge}</td>
+            <td class="text-end"><span class="fw-bold text-success">$${total}</span></td>
+            <td class="text-center">
+              <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-purple" title="Ver Ficha del Donante" onclick="verFichaDonante(${d.ID_Donante})">
+                  <i class="bi bi-eye-fill"></i>
+                </button>
+                <a href="donativo-nuevo.php?id_donante=${d.ID_Donante}" class="btn btn-outline-success" title="Registrar Aportación">
+                  <i class="bi bi-plus-circle-fill"></i>
+                </a>
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+
+        // Paginación dinámica
+        renderizarPaginacion(data);
+      }
+
+      function renderizarPaginacion(data) {
+        const cont = document.getElementById('paginacionContainer');
+        if (data.totalPaginas <= 1) { cont.innerHTML = ''; return; }
+        const offset = (data.pagina - 1) * 10;
+        const hasta  = Math.min(offset + 10, data.totalRegistros);
+        let links = '';
+        for (let i = 1; i <= data.totalPaginas; i++) {
+          links += `<li class="page-item ${i === data.pagina ? 'active' : ''}"><a class="page-link" href="#" onclick="irPagina(${i});return false;">${i}</a></li>`;
+        }
+        cont.innerHTML = `
+          <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-3">
+            <small class="text-muted">Mostrando ${offset + 1} a ${hasta} de ${data.totalRegistros}</small>
+            <nav><ul class="pagination pagination-sm mb-0">
+              <li class="page-item ${data.pagina <= 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="irPagina(${data.pagina - 1});return false;">Anterior</a></li>
+              ${links}
+              <li class="page-item ${data.pagina >= data.totalPaginas ? 'disabled' : ''}"><a class="page-link" href="#" onclick="irPagina(${data.pagina + 1});return false;">Siguiente</a></li>
+            </ul></nav>
+          </div>`;
+      }
+
+      function escHtml(str) {
+        return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+      // ────────────────────────────────────────────────────────────────────────
+
       let currentDonanteId = null;
       let currentDonanteEstatus = 'Activo';
 
@@ -661,10 +772,14 @@ try {
                     <td class="fw-semibold text-muted">#${item.ID_Donativo}</td>
                     <td><i class="bi bi-calendar-event me-1 text-secondary"></i>${fechaStr}</td>
                     <td>${badgeMetodo}</td>
-                    <td class="text-end">
-                      ${montoHtml}
-                      <a href="carta-agradecimiento.php?id=${item.ID_Donativo}" target="_blank" class="btn btn-sm btn-outline-purple py-0 px-2 ms-2" title="Descargar / Ver Carta de Agradecimiento PDF">
-                        <i class="bi bi-file-earmark-heart-fill"></i>
+                    <td class="text-end">${montoHtml}</td>
+                    <td class="text-center">
+                      <a href="carta-agradecimiento.php?id=${item.ID_Donativo}" target="_blank"
+                         style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;padding:4px 8px;border-radius:6px;border:1.5px solid #721896;color:#721896;background:transparent;text-decoration:none;font-weight:600;white-space:nowrap;"
+                         title="Ver / Descargar Carta de Agradecimiento PDF"
+                         onmouseover="this.style.background='#721896';this.style.color='#fff';"
+                         onmouseout="this.style.background='transparent';this.style.color='#721896';">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="margin-right:4px;vertical-align:-2px;"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg> Carta
                       </a>
                     </td>
                   </tr>

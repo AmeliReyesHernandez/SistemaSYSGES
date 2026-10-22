@@ -522,24 +522,6 @@ try {
               </ul>
             </div>
           </div>
-
-          <!-- Banner Informativo -->
-          <div class="card border-0 shadow-sm p-4 text-white" style="background: linear-gradient(135deg, #9d4edd 100%); border-radius: 12px;">
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; min-width: 50px;">
-                <i class="bi bi-shield-check text-white" style="font-size: 1.6rem; line-height: 1; display: flex; align-items: center; justify-content: center;"></i>
-              </div>
-              <div>
-                <h5 class="fw-bold mb-0">Atención Personalizada</h5>
-                <small class="opacity-75">Fidelización de Donantes</small>
-              </div>
-            </div>
-            <p class="small mb-3">Agradece cada donativo en menos de 24 horas y envía tarjetas de cumpleaños automáticas para fortalecer el vínculo con GesMujer.</p>
-            <button class="btn btn-light btn-sm text-purple fw-semibold" data-bs-toggle="modal" data-bs-target="#modalEnviarCorreo">
-              <i class="bi bi-envelope-heart-fill me-1"></i> Enviar Agradecimiento
-            </button>
-          </div>
-
         </div>
 
         <!-- Columna 2: Eventos / Cumpleaños y Donaciones Recientes -->
@@ -666,27 +648,6 @@ try {
 
         <!-- Columna 3: Accesos Rápidos y Vista Previa de Tarjeta -->
         <div class="col-lg-3">
-          
-          <!-- Acciones Rápidas -->
-          <div class="card-sf">
-            <div class="card-sf-header">
-              <span></i> Accesos Directos</span>
-            </div>
-            <div class="card-body d-flex flex-column gap-2">
-              <a href="donativo-nuevo.php" class="btn btn-outline-primary text-start d-flex align-items-center gap-2 py-2">
-                <i class="bi bi-plus-circle-fill text-primary"></i> Registrar Nuevo Donativo
-              </a>
-              <a href="donante-nuevo.php" class="btn btn-outline-purple text-start d-flex align-items-center gap-2 py-2">
-                <i class="bi bi-person-plus-fill"></i> Registrar Nuevo Donante
-              </a>
-              <a href="donativos.php" class="btn btn-outline-success text-start d-flex align-items-center gap-2 py-2">
-                <i class="bi bi-file-earmark-spreadsheet-fill text-success"></i> Reporte de Donativos
-              </a>
-              <button class="btn btn-outline-danger text-start d-flex align-items-center gap-2 py-2" data-bs-toggle="modal" data-bs-target="#modalEnviarCorreo">
-                <i class="bi bi-envelope-fill text-danger"></i> Enviar Mensaje a Donante
-              </button>
-            </div>
-          </div>
 
           <!-- Vista Previa Tarjeta de Cumpleaños -->
           <div class="card-sf text-center p-3">
