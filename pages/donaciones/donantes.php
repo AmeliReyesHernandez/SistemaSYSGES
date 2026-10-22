@@ -220,8 +220,8 @@ try {
           <div class="col-md-5 col-sm-5">
             <select class="form-select" id="filtroEstatus" onchange="buscarDonantes()">
               <option value="">Todos los Estados (Activos / Inactivos)</option>
-              <option value="Activo" <?= ($filtroEstatus === 'Activo') ? 'selected' : '' ?>>Activos (Vigentes)</option>
-              <option value="Inactivo" <?= ($filtroEstatus === 'Inactivo') ? 'selected' : '' ?>>Inactivos (Sin donación reciente)</option>
+              <option value="Activo" <?= ($filtroEstatus === 'Activo') ? 'selected' : '' ?>>Activos</option>
+              <option value="Inactivo" <?= ($filtroEstatus === 'Inactivo') ? 'selected' : '' ?>>Inactivos</option>
             </select>
           </div>
         </div>
@@ -471,7 +471,7 @@ try {
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow">
           <div class="modal-header text-white" style="background:#721896;">
-            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo Institucional con Membrete</h5>
+            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form action="acciones/enviar-correo.php" method="POST" enctype="multipart/form-data">
@@ -479,25 +479,6 @@ try {
             <input type="hidden" name="id_donante" id="correo_id_donante" value="">
             <div class="modal-body p-4">
               
-              <!-- Selector Dinámico de Donante Registrado -->
-              <div class="mb-3 p-3 bg-light rounded-3 border">
-                <label class="form-label fw-bold text-purple mb-1">
-                  <i class="bi bi-person-check-fill me-1"></i> Seleccionar Donante (Autocompletar Datos):
-                </label>
-                <select class="form-select" id="correo_donante_select" onchange="seleccionarDonanteModal(this)">
-                  <option value="">-- Elige un donante registrado o escribe manualmente --</option>
-                  <?php foreach ($todosDonantesSelect as $dn): ?>
-                    <option value="<?= $dn['ID_Donante'] ?>" 
-                            data-nombre="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
-                            data-pila="<?= htmlspecialchars($dn['Nombre']) ?>" 
-                            data-email="<?= htmlspecialchars($dn['Email']) ?>">
-                      <?= htmlspecialchars($dn['NombreCompleto']) ?> (<?= htmlspecialchars($dn['Email'] ?: 'Sin correo') ?>)
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-                <div class="form-text text-muted">Al seleccionar a una persona se cargará su correo y su nombre se insertará dinámicamente en el mensaje.</div>
-              </div>
-
               <div class="mb-3">
                 <label class="form-label fw-semibold">Seleccionar Plantilla Rápida</label>
                 <select class="form-select" id="plantillaSelect" onchange="cambiarPlantilla()">
@@ -511,8 +492,22 @@ try {
 
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                  <label class="form-label fw-semibold">Nombre del Donante / Saludo <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" name="nombre" id="correo_nombre" placeholder="Nombre completo o de pila" oninput="actualizarNombreEnMensaje()" required>
+                  <label class="form-label fw-semibold">Nombre del Donante<span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="nombre" id="correo_nombre" 
+                         list="lista_donantes_datalist_donantes" 
+                         placeholder="Nombre completo o de pila" 
+                         oninput="manejarInputNombre(this.value)" 
+                         onchange="manejarInputNombre(this.value)" 
+                         autocomplete="off" required>
+                  <datalist id="lista_donantes_datalist_donantes">
+                    <?php foreach ($todosDonantesSelect as $dn): ?>
+                      <option value="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
+                              data-email="<?= htmlspecialchars($dn['Email'] ?? '') ?>" 
+                              data-id="<?= $dn['ID_Donante'] ?>">
+                        <?= htmlspecialchars($dn['Email'] ? $dn['Email'] : 'Sin correo') ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </datalist>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
@@ -532,7 +527,7 @@ try {
 
               <!-- Campo de Archivo Adjunto (Recibo PDF / Imagen / Doc) -->
               <div class="mb-2 p-3 bg-light rounded-3 border">
-                <label class="form-label fw-semibold mb-1"><i class="bi bi-paperclip text-purple me-1"></i> Adjuntar Recibo, Comprobante o Documento (Opcional)</label>
+                <label class="form-label fw-semibold mb-1"><i class="bi bi-paperclip text-purple me-1"></i> Adjuntar Recibo, Comprobante o Documento</label>
                 <input type="file" name="adjunto" id="correo_adjunto" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.xls,.xlsx">
                 <div class="form-text text-muted">Formatos permitidos: PDF, Word (DOC/DOCX), Imágenes (JPG, PNG) o Excel (hasta 15MB).</div>
               </div>
@@ -542,7 +537,7 @@ try {
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               <div class="d-flex gap-2">
                 <button type="submit" name="accion" value="borrador" class="btn btn-outline-warning fw-semibold"><i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador</button>
-                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar con Membrete</button>
+                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar</button>
               </div>
             </div>
           </form>
@@ -839,8 +834,6 @@ try {
         document.getElementById('correo_email').value = email || '';
         const idInput = document.getElementById('correo_id_donante');
         if (idInput) idInput.value = idDonante || '';
-        const selectDonante = document.getElementById('correo_donante_select');
-        if (selectDonante && idDonante) selectDonante.value = idDonante;
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
@@ -850,26 +843,32 @@ try {
         document.getElementById('correo_email').value = email || '';
         const idInput = document.getElementById('correo_id_donante');
         if (idInput) idInput.value = idDonante || '';
-        const selectDonante = document.getElementById('correo_donante_select');
-        if (selectDonante && idDonante) selectDonante.value = idDonante;
         document.getElementById('plantillaSelect').value = 'cumpleanos';
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
-      function seleccionarDonanteModal(selectEl) {
-        const opt = selectEl.options[selectEl.selectedIndex];
-        if (!opt || !opt.value) return;
-        const nombrePila = opt.getAttribute('data-pila') || opt.getAttribute('data-nombre');
-        const email = opt.getAttribute('data-email') || '';
-        const idDonante = opt.value;
-
-        document.getElementById('correo_nombre').value = nombrePila;
-        document.getElementById('correo_email').value = email;
+      function manejarInputNombre(val) {
+        const nombre = (val || '').trim();
+        const datalist = document.getElementById('lista_donantes_datalist_donantes');
+        const emailInput = document.getElementById('correo_email');
         const idInput = document.getElementById('correo_id_donante');
-        if (idInput) idInput.value = idDonante;
 
         actualizarNombreEnMensaje();
+
+        if (!datalist) return;
+
+        const options = datalist.querySelectorAll('option');
+        for (let i = 0; i < options.length; i++) {
+          const opt = options[i];
+          if (opt.value.toLowerCase() === nombre.toLowerCase()) {
+            const email = opt.getAttribute('data-email') || '';
+            const idDonante = opt.getAttribute('data-id') || '';
+            if (emailInput && email) emailInput.value = email;
+            if (idInput) idInput.value = idDonante;
+            break;
+          }
+        }
       }
 
       function actualizarNombreEnMensaje() {
@@ -971,7 +970,7 @@ try {
       } else if (urlParams.get('status') === 'status_updated') {
         Swal.fire({ icon: 'success', title: 'Actualizado', text: 'El estado del donante fue actualizado.', timer: 2500, showConfirmButton: false });
       } else if (urlParams.get('status') === 'sent') {
-        Swal.fire({ icon: 'success', title: '¡Correo Enviado!', text: 'El mensaje con membrete fue enviado exitosamente.', timer: 2500, showConfirmButton: false });
+        Swal.fire({ icon: 'success', title: '¡Correo Enviado!', text: 'El mensaje fue enviado exitosamente.', timer: 2500, showConfirmButton: false });
       } else if (urlParams.get('status') === 'error') {
         Swal.fire({ icon: 'error', title: 'Error', text: urlParams.get('msg') || 'Ocurrió un error en la operación.' });
       }

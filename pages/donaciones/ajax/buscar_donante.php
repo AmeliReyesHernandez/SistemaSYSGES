@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../../../db/config.php';
 
@@ -10,7 +10,10 @@ try {
     }
 
     $stmt = $conn->prepare("
-        SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto, Email
+        SELECT ID_Donante, 
+               Nombre,
+               TRIM(CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, ''))) AS NombreCompleto, 
+               Email
         FROM donantes
         WHERE Nombre LIKE :q OR ApellidoPaterno LIKE :q OR ApellidoMaterno LIKE :q OR Email LIKE :q
         LIMIT 10

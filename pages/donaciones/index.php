@@ -683,25 +683,6 @@ try {
             <input type="hidden" name="id_donante" id="correo_id_donante" value="">
             <div class="modal-body p-4">
               
-              <!-- Selector Dinámico de Donante Registrado -->
-              <div class="mb-3 p-3 bg-light rounded-3 border">
-                <label class="form-label fw-bold text-purple mb-1">
-                  <i class="bi bi-person-check-fill me-1"></i> Seleccionar Donante (Autocompletar Datos):
-                </label>
-                <select class="form-select" id="correo_donante_select" onchange="seleccionarDonanteModal(this)">
-                  <option value="">-- Elige un donante registrado o escribe manualmente --</option>
-                  <?php foreach ($todosDonantes as $dn): ?>
-                    <option value="<?= $dn['ID_Donante'] ?>" 
-                            data-nombre="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
-                            data-pila="<?= htmlspecialchars($dn['Nombre']) ?>" 
-                            data-email="<?= htmlspecialchars($dn['Email']) ?>">
-                      <?= htmlspecialchars($dn['NombreCompleto']) ?> (<?= htmlspecialchars($dn['Email'] ?: 'Sin correo') ?>)
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-                <div class="form-text text-muted">Al seleccionar a una persona se cargará su correo y su nombre se insertará dinámicamente en el mensaje.</div>
-              </div>
-
               <div class="mb-3">
                 <label class="form-label fw-semibold">Seleccionar Plantilla Rápida</label>
                 <select class="form-select" id="plantillaSelect" onchange="cambiarPlantilla()">
@@ -716,7 +697,21 @@ try {
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Nombre del Donante / Saludo <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" name="nombre" id="correo_nombre" placeholder="Nombre completo o de pila" oninput="actualizarNombreEnMensaje()" required>
+                  <input type="text" class="form-control" name="nombre" id="correo_nombre" 
+                         list="lista_donantes_datalist_index" 
+                         placeholder="Nombre completo o de pila" 
+                         oninput="manejarInputNombre(this.value)" 
+                         onchange="manejarInputNombre(this.value)" 
+                         autocomplete="off" required>
+                  <datalist id="lista_donantes_datalist_index">
+                    <?php foreach ($todosDonantes as $dn): ?>
+                      <option value="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
+                              data-email="<?= htmlspecialchars($dn['Email'] ?? '') ?>" 
+                              data-id="<?= $dn['ID_Donante'] ?>">
+                        <?= htmlspecialchars($dn['Email'] ? $dn['Email'] : 'Sin correo') ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </datalist>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
@@ -828,8 +823,6 @@ try {
         document.getElementById('correo_email').value = email || '';
         const idInput = document.getElementById('correo_id_donante');
         if (idInput) idInput.value = idDonante || '';
-        const selectDonante = document.getElementById('correo_donante_select');
-        if (selectDonante) selectDonante.value = idDonante || '';
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
@@ -839,26 +832,32 @@ try {
         document.getElementById('correo_email').value = email || '';
         const idInput = document.getElementById('correo_id_donante');
         if (idInput) idInput.value = idDonante || '';
-        const selectDonante = document.getElementById('correo_donante_select');
-        if (selectDonante) selectDonante.value = idDonante || '';
         document.getElementById('plantillaSelect').value = 'cumpleanos';
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
-      function seleccionarDonanteModal(selectEl) {
-        const opt = selectEl.options[selectEl.selectedIndex];
-        if (!opt || !opt.value) return;
-        const nombrePila = opt.getAttribute('data-pila') || opt.getAttribute('data-nombre');
-        const email = opt.getAttribute('data-email') || '';
-        const idDonante = opt.value;
-
-        document.getElementById('correo_nombre').value = nombrePila;
-        document.getElementById('correo_email').value = email;
+      function manejarInputNombre(val) {
+        const nombre = (val || '').trim();
+        const datalist = document.getElementById('lista_donantes_datalist_index');
+        const emailInput = document.getElementById('correo_email');
         const idInput = document.getElementById('correo_id_donante');
-        if (idInput) idInput.value = idDonante;
 
         actualizarNombreEnMensaje();
+
+        if (!datalist) return;
+
+        const options = datalist.querySelectorAll('option');
+        for (let i = 0; i < options.length; i++) {
+          const opt = options[i];
+          if (opt.value.toLowerCase() === nombre.toLowerCase()) {
+            const email = opt.getAttribute('data-email') || '';
+            const idDonante = opt.getAttribute('data-id') || '';
+            if (emailInput && email) emailInput.value = email;
+            if (idInput) idInput.value = idDonante;
+            break;
+          }
+        }
       }
 
       function actualizarNombreEnMensaje() {

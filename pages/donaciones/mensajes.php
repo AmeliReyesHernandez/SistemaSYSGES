@@ -11,21 +11,46 @@ $where = [];
 $params = [];
 
 if ($search !== '') {
-    $where[] = "(NombreDestino LIKE :search OR EmailDestino LIKE :search OR Asunto LIKE :search OR Mensaje LIKE :search)";
+    $where[] = "(
+        m.NombreDestino LIKE :search 
+        OR m.EmailDestino LIKE :search 
+        OR m.Asunto LIKE :search 
+        OR m.Mensaje LIKE :search
+        OR dn.Nombre LIKE :search
+        OR dn.ApellidoPaterno LIKE :search
+        OR dn.ApellidoMaterno LIKE :search
+        OR dn_name.Nombre LIKE :search
+        OR dn_name.ApellidoPaterno LIKE :search
+        OR dn_name.ApellidoMaterno LIKE :search
+    )";
     $params[':search'] = "%$search%";
 }
 
 if ($filtroEstado !== '') {
-    $where[] = "Estado = :estado";
+    $where[] = "m.Estado = :estado";
     $params[':estado'] = $filtroEstado;
 }
 
 if ($filtroTipo !== '') {
-    $where[] = "TipoMensaje = :tipo";
+    $where[] = "m.TipoMensaje = :tipo";
     $params[':tipo'] = $filtroTipo;
 }
 
 $whereSql = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
+
+$fromJoins = "
+    FROM donaciones_mensajes m
+    LEFT JOIN donantes dn ON m.ID_Donante = dn.ID_Donante
+    LEFT JOIN (
+        SELECT ID_Donante, Nombre, ApellidoPaterno, ApellidoMaterno, Email
+        FROM donantes
+        GROUP BY ID_Donante
+    ) dn_name ON (m.ID_Donante IS NULL AND (
+        m.NombreDestino = CONCAT(dn_name.Nombre, ' ', dn_name.ApellidoPaterno, ' ', COALESCE(dn_name.ApellidoMaterno,''))
+        OR m.NombreDestino = CONCAT(dn_name.Nombre, ' ', dn_name.ApellidoPaterno)
+        OR m.NombreDestino = dn_name.Nombre
+    ))
+";
 
 // Métricas de Mensajes
 try {
@@ -33,10 +58,16 @@ try {
     $totalEnviados = (int)$conn->query("SELECT COUNT(*) FROM donaciones_mensajes WHERE Estado = 'Enviado'")->fetchColumn();
     $totalBorradores = (int)$conn->query("SELECT COUNT(*) FROM donaciones_mensajes WHERE Estado = 'Borrador'")->fetchColumn();
     $totalCumpleanos = (int)$conn->query("SELECT COUNT(*) FROM donaciones_mensajes WHERE TipoMensaje = 'Cumpleaños'")->fetchColumn();
-    $todosDonantesSelect = $conn->query("SELECT ID_Donante, Nombre, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, '')) AS NombreCompleto, Email FROM donantes ORDER BY Nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $todosDonantesLista = $conn->query("
+        SELECT ID_Donante, 
+               TRIM(CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, ''))) AS NombreCompleto, 
+               Email 
+        FROM donantes 
+        ORDER BY Nombre ASC
+    ")->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $totalMensajes = $totalEnviados = $totalBorradores = $totalCumpleanos = 0;
-    $todosDonantesSelect = [];
+    $todosDonantesLista = [];
 }
 
 // Paginación
@@ -47,10 +78,10 @@ $offset = ($pagina - 1) * $registrosPorPagina;
 
 // Conteo filtrado
 try {
-    $stmtCount = $conn->prepare("SELECT COUNT(*) FROM donaciones_mensajes $whereSql");
+    $stmtCount = $conn->prepare("SELECT COUNT(DISTINCT m.ID_Mensaje) $fromJoins $whereSql");
     $stmtCount->execute($params);
     $totalRegistros = (int)$stmtCount->fetchColumn();
-    $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
+    $totalPaginas = max(1, (int)ceil($totalRegistros / $registrosPorPagina));
 } catch (PDOException $e) {
     $totalRegistros = 0;
     $totalPaginas = 1;
@@ -59,10 +90,17 @@ try {
 // Lista de mensajes
 try {
     $sqlList = "
-        SELECT *
-        FROM donaciones_mensajes
+        SELECT m.ID_Mensaje, m.ID_Donante, m.NombreDestino, m.EmailDestino, m.Asunto, m.Mensaje,
+               m.ArchivoAdjunto, m.TipoMensaje, m.Estado, m.FechaRegistro,
+               COALESCE(
+                   NULLIF(TRIM(CONCAT(dn.Nombre, ' ', dn.ApellidoPaterno, ' ', COALESCE(dn.ApellidoMaterno,''))), ''),
+                   NULLIF(TRIM(CONCAT(dn_name.Nombre, ' ', dn_name.ApellidoPaterno, ' ', COALESCE(dn_name.ApellidoMaterno,''))), ''),
+                   m.NombreDestino
+               ) AS DestinatarioCompleto
+        $fromJoins
         $whereSql
-        ORDER BY ID_Mensaje DESC
+        GROUP BY m.ID_Mensaje
+        ORDER BY m.ID_Mensaje DESC
         LIMIT :limit OFFSET :offset
     ";
     $stmtList = $conn->prepare($sqlList);
@@ -214,39 +252,45 @@ try {
             </div>
           </div>
 
-          <!-- Filtro y buscador -->
+          <!-- Filtro y buscador en tiempo real -->
           <div class="card-sf mb-4">
             <div class="card-body p-3">
-              <form method="GET" action="mensajes.php" class="row g-2">
-                <div class="col-md-5">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-6 col-sm-6">
                   <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" class="form-control border-start-0 ps-0" name="search" placeholder="Buscar por destinatario, correo o asunto..." value="<?= htmlspecialchars($search) ?>">
+                    <span class="input-group-text bg-white"><i class="bi bi-search text-purple"></i></span>
+                    <input type="text" class="form-control" id="liveSearch"
+                           placeholder="Buscar por destinatario, correo o asunto..."
+                           value="<?= htmlspecialchars($search) ?>"
+                           autocomplete="off">
+                    <span class="input-group-text bg-white border-start-0" id="searchSpinner" style="display:none!important;">
+                      <span class="spinner-border spinner-border-sm text-purple" role="status"></span>
+                    </span>
+                    <button class="btn btn-outline-secondary" id="btnLimpiar" title="Limpiar" style="display:none;" onclick="limpiarBusqueda()">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
                   </div>
                 </div>
-                <div class="col-md-3">
-                  <select name="estado" class="form-select" onchange="this.form.submit()">
+                <div class="col-md-3 col-sm-3">
+                  <select id="filtroEstado" class="form-select" onchange="buscarMensajes()">
                     <option value="">Todos los Estados</option>
                     <option value="Enviado" <?= $filtroEstado === 'Enviado' ? 'selected' : '' ?>>Enviados</option>
                     <option value="Borrador" <?= $filtroEstado === 'Borrador' ? 'selected' : '' ?>>Borradores</option>
                     <option value="Fallido" <?= $filtroEstado === 'Fallido' ? 'selected' : '' ?>>Fallidos</option>
                   </select>
                 </div>
-                <div class="col-md-2">
-                  <select name="tipo" class="form-select" onchange="this.form.submit()">
+                <div class="col-md-3 col-sm-3">
+                  <select id="filtroTipo" class="form-select" onchange="buscarMensajes()">
                     <option value="">Todos los Tipos</option>
                     <option value="Manual" <?= $filtroTipo === 'Manual' ? 'selected' : '' ?>>Manuales</option>
                     <option value="Agradecimiento" <?= $filtroTipo === 'Agradecimiento' ? 'selected' : '' ?>>Agradecimientos</option>
                     <option value="Cumpleaños" <?= $filtroTipo === 'Cumpleaños' ? 'selected' : '' ?>>Cumpleaños</option>
                   </select>
                 </div>
-                <div class="col-md-2 d-flex gap-2">
-                  <button type="submit" class="btn btn-purple w-100 fw-semibold">Filtrar</button>
-                  <?php if ($search !== '' || $filtroEstado !== '' || $filtroTipo !== ''): ?>
-                    <a href="mensajes.php" class="btn btn-light" title="Limpiar Filtros"><i class="bi bi-x-lg"></i></a>
-                  <?php endif; ?>
-                </div>
-              </form>
+              </div>
+              <div class="mt-2" id="searchHint" style="display:none;">
+                <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Resultados para: <strong id="searchHintText"></strong></small>
+              </div>
             </div>
           </div>
 
@@ -254,7 +298,7 @@ try {
           <div class="card-sf">
             <div class="card-sf-header d-flex justify-content-between align-items-center">
               <span><i class="bi bi-envelope-paper-heart me-2"></i> Registro de Mensajes</span>
-              <small class="text-muted fw-normal">Total: <?= number_format($totalRegistros) ?> registros</small>
+              <small class="text-muted fw-normal">Total: <span id="contadorTotal"><?= number_format($totalRegistros) ?></span> registros</small>
             </div>
             <div class="card-body p-0">
               <div class="table-responsive">
@@ -267,10 +311,10 @@ try {
                       <th>Correo Electrónico</th>
                       <th>Asunto / Adjunto</th>
                       <th class="text-center">Fecha de Registro</th>
-                      <th class="text-center">Acciones</th>
+                      <th class="text-center" style="width: 70px;">Acciones</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="tbodyMensajes">
                     <?php if (empty($mensajesList)): ?>
                       <tr>
                         <td colspan="7" class="text-center py-4 text-muted">
@@ -300,7 +344,7 @@ try {
                             <?php endif; ?>
                           </td>
                           <td>
-                            <strong class="text-dark"><?= htmlspecialchars($m['NombreDestino']) ?></strong>
+                            <strong class="text-dark"><?= htmlspecialchars($m['DestinatarioCompleto'] ?: $m['NombreDestino']) ?></strong>
                           </td>
                           <td>
                             <span class="small text-muted"><i class="bi bi-envelope me-1"></i><?= htmlspecialchars($m['EmailDestino']) ?></span>
@@ -319,8 +363,8 @@ try {
                             </span>
                           </td>
                           <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-outline-purple" onclick="verDetalleMensaje(<?= htmlspecialchars(json_encode($m)) ?>)" title="Ver Contenido">
-                              <i class="bi bi-eye-fill"></i> Ver Detalle
+                            <button type="button" class="btn btn-sm btn-outline-purple" onclick="verDetalleMensaje(<?= htmlspecialchars(json_encode($m)) ?>)" title="Ver Detalle" style="padding: 4px 9px;">
+                              <i class="bi bi-eye-fill"></i>
                             </button>
                           </td>
                         </tr>
@@ -331,27 +375,29 @@ try {
               </div>
             </div>
 
-            <!-- Paginación -->
+            <!-- Paginación dinámica -->
+            <div id="paginacionContainer">
             <?php if ($totalPaginas > 1): ?>
               <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-3">
                 <small class="text-muted">Mostrando registros <?= $offset + 1 ?> a <?= min($offset + $registrosPorPagina, $totalRegistros) ?> de <?= $totalRegistros ?></small>
                 <nav>
                   <ul class="pagination pagination-sm mb-0">
                     <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
-                      <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&search=<?= urlencode($search) ?>&estado=<?= urlencode($filtroEstado) ?>&tipo=<?= urlencode($filtroTipo) ?>">Anterior</a>
+                      <a class="page-link" href="#" onclick="irPagina(<?= $pagina - 1 ?>);return false;">Anterior</a>
                     </li>
                     <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                       <li class="page-item <?= ($i === $pagina) ? 'active' : '' ?>">
-                        <a class="page-link" href="?pagina=<?= $i ?>&search=<?= urlencode($search) ?>&estado=<?= urlencode($filtroEstado) ?>&tipo=<?= urlencode($filtroTipo) ?>"><?= $i ?></a>
+                        <a class="page-link" href="#" onclick="irPagina(<?= $i ?>);return false;"><?= $i ?></a>
                       </li>
                     <?php endfor; ?>
                     <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
-                      <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&search=<?= urlencode($search) ?>&estado=<?= urlencode($filtroEstado) ?>&tipo=<?= urlencode($filtroTipo) ?>">Siguiente</a>
+                      <a class="page-link" href="#" onclick="irPagina(<?= $pagina + 1 ?>);return false;">Siguiente</a>
                     </li>
                   </ul>
                 </nav>
               </div>
             <?php endif; ?>
+            </div>
           </div>
 
         </main>
@@ -409,7 +455,7 @@ try {
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow">
           <div class="modal-header text-white" style="background:#721896;">
-            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Redactar Correo Institucional con Membrete</h5>
+            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Redactar Correo Institucional</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form action="acciones/enviar-correo.php" method="POST" enctype="multipart/form-data">
@@ -417,25 +463,6 @@ try {
             <input type="hidden" name="id_donante" id="correo_id_donante" value="">
             <div class="modal-body p-4">
               
-              <!-- Selector Dinámico de Donante Registrado -->
-              <div class="mb-3 p-3 bg-light rounded-3 border">
-                <label class="form-label fw-bold text-purple mb-1">
-                  <i class="bi bi-person-check-fill me-1"></i> Seleccionar Donante (Autocompletar Datos):
-                </label>
-                <select class="form-select" id="correo_donante_select" onchange="seleccionarDonanteModal(this)">
-                  <option value="">-- Elige un donante registrado o escribe manualmente --</option>
-                  <?php foreach ($todosDonantesSelect as $dn): ?>
-                    <option value="<?= $dn['ID_Donante'] ?>" 
-                            data-nombre="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
-                            data-pila="<?= htmlspecialchars($dn['Nombre']) ?>" 
-                            data-email="<?= htmlspecialchars($dn['Email']) ?>">
-                      <?= htmlspecialchars($dn['NombreCompleto']) ?> (<?= htmlspecialchars($dn['Email'] ?: 'Sin correo') ?>)
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-                <div class="form-text text-muted">Al seleccionar a una persona se cargará su correo y su nombre se insertará dinámicamente en el mensaje.</div>
-              </div>
-
               <div class="mb-3">
                 <label class="form-label fw-semibold">Seleccionar Plantilla Rápida</label>
                 <select class="form-select" id="plantillaSelect" onchange="cambiarPlantilla()">
@@ -450,7 +477,21 @@ try {
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Nombre del Donante / Saludo <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" name="nombre" id="correo_nombre" placeholder="Nombre completo o de pila" oninput="actualizarNombreEnMensaje()" required>
+                  <input type="text" class="form-control" name="nombre" id="correo_nombre" 
+                         list="lista_donantes_datalist" 
+                         placeholder="Nombre completo o de pila" 
+                         oninput="manejarInputNombre(this.value)" 
+                         onchange="manejarInputNombre(this.value)" 
+                         autocomplete="off" required>
+                  <datalist id="lista_donantes_datalist">
+                    <?php foreach ($todosDonantesLista as $dn): ?>
+                      <option value="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
+                              data-email="<?= htmlspecialchars($dn['Email'] ?? '') ?>" 
+                              data-id="<?= $dn['ID_Donante'] ?>">
+                        <?= htmlspecialchars($dn['Email'] ? $dn['Email'] : 'Sin correo') ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </datalist>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
@@ -480,7 +521,7 @@ try {
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               <div class="d-flex gap-2">
                 <button type="submit" name="accion" value="borrador" class="btn btn-outline-warning fw-semibold"><i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador</button>
-                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar con Membrete</button>
+                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar</button>
               </div>
             </div>
           </form>
@@ -496,26 +537,70 @@ try {
         document.getElementById('correo_email').value = '';
         const idInput = document.getElementById('correo_id_donante');
         if (idInput) idInput.value = '';
-        const selectDonante = document.getElementById('correo_donante_select');
-        if (selectDonante) selectDonante.value = '';
         document.getElementById('plantillaSelect').value = 'cumpleanos';
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
-      function seleccionarDonanteModal(selectEl) {
-        const opt = selectEl.options[selectEl.selectedIndex];
-        if (!opt || !opt.value) return;
-        const nombrePila = opt.getAttribute('data-pila') || opt.getAttribute('data-nombre');
-        const email = opt.getAttribute('data-email') || '';
-        const idDonante = opt.value;
-
-        document.getElementById('correo_nombre').value = nombrePila;
-        document.getElementById('correo_email').value = email;
+      function manejarInputNombre(val) {
+        const nombre = (val || '').trim();
+        const datalist = document.getElementById('lista_donantes_datalist');
+        const emailInput = document.getElementById('correo_email');
         const idInput = document.getElementById('correo_id_donante');
-        if (idInput) idInput.value = idDonante;
 
         actualizarNombreEnMensaje();
+
+        if (!datalist) return;
+
+        // Comprobar coincidencia exacta con opciones del datalist para autocompletar correo e ID
+        const options = datalist.querySelectorAll('option');
+        let encontrado = false;
+
+        for (let i = 0; i < options.length; i++) {
+          const opt = options[i];
+          if (opt.value.toLowerCase() === nombre.toLowerCase()) {
+            const email = opt.getAttribute('data-email') || '';
+            const idDonante = opt.getAttribute('data-id') || '';
+            if (emailInput && email) emailInput.value = email;
+            if (idInput) idInput.value = idDonante;
+            encontrado = true;
+            break;
+          }
+        }
+
+        // Si no coincide exactamente pero tiene al menos 2 letras, cargar donantes dinámicamente al datalist
+        if (!encontrado && nombre.length >= 2) {
+          buscarDonantesDatalist(nombre);
+        }
+      }
+
+      let timeoutDatalist = null;
+      async function buscarDonantesDatalist(q) {
+        clearTimeout(timeoutDatalist);
+        timeoutDatalist = setTimeout(async () => {
+          try {
+            const res = await fetch('ajax/buscar_donante.php?q=' + encodeURIComponent(q));
+            const donantes = await res.json();
+            if (!Array.isArray(donantes)) return;
+
+            const datalist = document.getElementById('lista_donantes_datalist');
+            if (!datalist) return;
+
+            donantes.forEach(d => {
+              const existe = Array.from(datalist.options).some(o => o.value.toLowerCase() === d.NombreCompleto.toLowerCase());
+              if (!existe) {
+                const opt = document.createElement('option');
+                opt.value = d.NombreCompleto;
+                opt.setAttribute('data-email', d.Email || '');
+                opt.setAttribute('data-id', d.ID_Donante);
+                opt.textContent = d.Email ? d.Email : 'Sin correo';
+                datalist.appendChild(opt);
+              }
+            });
+          } catch (e) {
+            console.error("Error al buscar donantes:", e);
+          }
+        }, 220);
       }
 
       function actualizarNombreEnMensaje() {
@@ -592,11 +677,12 @@ try {
       }
 
       function verDetalleMensaje(msg) {
-        document.getElementById('m_destino_nombre').innerText = msg.NombreDestino;
-        document.getElementById('m_destino_email').innerText = 'Correo: ' + msg.EmailDestino;
-        document.getElementById('m_asunto').innerText = msg.Asunto;
-        document.getElementById('m_contenido').innerText = msg.Mensaje;
-        document.getElementById('m_fecha').innerText = 'Fecha de Registro: ' + msg.FechaRegistro;
+        const nombreDest = msg.DestinatarioCompleto || msg.NombreDestino || 'Sin destinatario';
+        document.getElementById('m_destino_nombre').innerText = nombreDest;
+        document.getElementById('m_destino_email').innerText = 'Correo: ' + (msg.EmailDestino || 'Sin correo');
+        document.getElementById('m_asunto').innerText = msg.Asunto || '';
+        document.getElementById('m_contenido').innerText = msg.Mensaje || '';
+        document.getElementById('m_fecha').innerText = 'Fecha de Registro: ' + (msg.FechaRegistro || '');
 
         const contAdj = document.getElementById('m_container_adjunto');
         if (msg.ArchivoAdjunto) {
@@ -621,10 +707,155 @@ try {
         new bootstrap.Modal(document.getElementById('modalVerMensaje')).show();
       }
 
+      // ─── BÚSQUEDA EN TIEMPO REAL ─────────────────────────────────────────
+      let searchTimeout = null;
+      let paginaActual = <?= $pagina ?>;
+
+      const inputSearch   = document.getElementById('liveSearch');
+      const selEstado     = document.getElementById('filtroEstado');
+      const selTipo       = document.getElementById('filtroTipo');
+      const btnLimpiar    = document.getElementById('btnLimpiar');
+      const searchHint    = document.getElementById('searchHint');
+      const searchHintTxt = document.getElementById('searchHintText');
+      const spinner       = document.getElementById('searchSpinner');
+
+      inputSearch.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => { paginaActual = 1; buscarMensajes(); }, 320);
+        btnLimpiar.style.display = inputSearch.value.trim() !== '' ? '' : 'none';
+      });
+
+      function limpiarBusqueda() {
+        inputSearch.value = '';
+        btnLimpiar.style.display = 'none';
+        searchHint.style.display = 'none';
+        paginaActual = 1;
+        buscarMensajes();
+      }
+
+      function irPagina(p) { 
+        paginaActual = p; 
+        buscarMensajes(); 
+      }
+
+      function buscarMensajes() {
+        const q      = inputSearch.value.trim();
+        const estado = selEstado.value;
+        const tipo   = selTipo.value;
+        const url    = `ajax/buscar_mensajes.php?search=${encodeURIComponent(q)}&estado=${encodeURIComponent(estado)}&tipo=${encodeURIComponent(tipo)}&pagina=${paginaActual}`;
+
+        spinner.style.removeProperty('display');
+        fetch(url)
+          .then(r => r.json())
+          .then(data => {
+            spinner.style.display = 'none';
+            if (!data.success) return;
+            renderizarTabla(data);
+            if (q) { searchHintTxt.textContent = q; searchHint.style.display = ''; }
+            else { searchHint.style.display = 'none'; }
+          })
+          .catch(() => { spinner.style.display = 'none'; });
+      }
+
+      function badgeEstado(estado) {
+        if (estado === 'Enviado') {
+          return '<span class="badge bg-success-subtle text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i> Enviado</span>';
+        } else if (estado === 'Borrador') {
+          return '<span class="badge bg-warning-subtle text-warning px-2 py-1"><i class="bi bi-file-earmark-text me-1"></i> Borrador</span>';
+        } else {
+          return '<span class="badge bg-danger-subtle text-danger px-2 py-1"><i class="bi bi-exclamation-triangle me-1"></i> Fallido</span>';
+        }
+      }
+
+      function badgeTipo(tipo) {
+        if (tipo === 'Cumpleaños') {
+          return '<span class="badge bg-danger-subtle text-danger"><i class="bi bi-gift me-1"></i> Cumpleaños</span>';
+        } else if (tipo === 'Agradecimiento') {
+          return '<span class="badge px-2 py-1" style="background-color:#f3e8ff; color:#721896;"><i class="bi bi-heart-fill me-1"></i> Agradecimiento</span>';
+        } else {
+          return '<span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-send me-1"></i> Manual</span>';
+        }
+      }
+
+      function renderizarTabla(data) {
+        const tbody = document.getElementById('tbodyMensajes');
+        document.getElementById('contadorTotal').textContent = data.totalRegistros;
+
+        if (!data.mensajes || data.mensajes.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>No se encontraron mensajes registrados con los filtros aplicados.</td></tr>`;
+          document.getElementById('paginacionContainer').innerHTML = '';
+          return;
+        }
+
+        tbody.innerHTML = data.mensajes.map(m => {
+          const nombreCompleto = escHtml(m.DestinatarioCompleto || m.NombreDestino || 'Sin destinatario');
+          const adjuntoHtml = m.ArchivoAdjunto 
+            ? `<span class="badge bg-light text-primary border mt-1"><i class="bi bi-paperclip me-1"></i>${escHtml(m.ArchivoAdjunto)}</span>` 
+            : '';
+
+          let fechaStr = '';
+          if (m.FechaRegistro) {
+            const dateObj = new Date(m.FechaRegistro.replace(/-/g, '/'));
+            fechaStr = dateObj.toLocaleString('es-MX', {
+              day: '2-digit', month: '2-digit', year: 'numeric',
+              hour: '2-digit', minute: '2-digit', hour12: true
+            });
+          }
+
+          const msgJsonSafe = JSON.stringify(m).replace(/'/g, "&#39;");
+
+          return `<tr>
+            <td>${badgeEstado(m.Estado)}</td>
+            <td>${badgeTipo(m.TipoMensaje)}</td>
+            <td><strong class="text-dark">${nombreCompleto}</strong></td>
+            <td><span class="small text-muted"><i class="bi bi-envelope me-1"></i>${escHtml(m.EmailDestino || '')}</span></td>
+            <td>
+              <span class="fw-semibold text-dark d-block">${escHtml(m.Asunto || '')}</span>
+              ${adjuntoHtml}
+            </td>
+            <td class="text-center">
+              <span class="small text-secondary"><i class="bi bi-clock me-1"></i>${escHtml(fechaStr)}</span>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn btn-sm btn-outline-purple" onclick='verDetalleMensaje(${msgJsonSafe})' title="Ver Detalle" style="padding: 4px 9px;">
+                <i class="bi bi-eye-fill"></i>
+              </button>
+            </td>
+          </tr>`;
+        }).join('');
+
+        renderizarPaginacion(data);
+      }
+
+      function renderizarPaginacion(data) {
+        const cont = document.getElementById('paginacionContainer');
+        if (data.totalPaginas <= 1) { cont.innerHTML = ''; return; }
+        const offset = (data.pagina - 1) * 10;
+        const hasta  = Math.min(offset + 10, data.totalRegistros);
+        let links = '';
+        for (let i = 1; i <= data.totalPaginas; i++) {
+          links += `<li class="page-item ${i === data.pagina ? 'active' : ''}"><a class="page-link" href="#" onclick="irPagina(${i});return false;">${i}</a></li>`;
+        }
+        cont.innerHTML = `
+          <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-3">
+            <small class="text-muted">Mostrando registros ${offset + 1} a ${hasta} de ${data.totalRegistros}</small>
+            <nav><ul class="pagination pagination-sm mb-0">
+              <li class="page-item ${data.pagina <= 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="irPagina(${data.pagina - 1});return false;">Anterior</a></li>
+              ${links}
+              <li class="page-item ${data.pagina >= data.totalPaginas ? 'disabled' : ''}"><a class="page-link" href="#" onclick="irPagina(${data.pagina + 1});return false;">Siguiente</a></li>
+            </ul></nav>
+          </div>`;
+      }
+
+      function escHtml(str) {
+        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+      // ─────────────────────────────────────────────────────────────────────
+
       // Alertas de URL
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('status') === 'sent') {
-        Swal.fire({ icon: 'success', title: '¡Correo Enviado!', text: 'El mensaje con membrete ha sido enviado exitosamente.', timer: 2500, showConfirmButton: false });
+        Swal.fire({ icon: 'success', title: '¡Correo Enviado!', text: 'El mensaje ha sido enviado exitosamente.', timer: 2500, showConfirmButton: false });
       } else if (urlParams.get('status') === 'draft_saved') {
         Swal.fire({ icon: 'success', title: 'Borrador Guardado', text: 'El borrador se guardó en el historial.', timer: 2500, showConfirmButton: false });
       } else if (urlParams.get('status') === 'error') {

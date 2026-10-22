@@ -305,16 +305,16 @@ try {
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
-            <table class="table table-hover table-sm align-middle mb-0" style="font-size: 0.855rem;">
-              <thead class="table-light" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em;">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light small text-uppercase">
                 <tr>
-                  <th style="width: 52px; padding: 8px 10px;">ID</th>
-                  <th style="padding: 8px 10px;">Donante</th>
-                  <th style="padding: 8px 10px;">Correo</th>
-                  <th class="text-center" style="padding: 8px 10px;">Método / Tipo</th>
-                  <th class="text-center" style="padding: 8px 10px;">Fecha</th>
-                  <th class="text-end" style="padding: 8px 10px;">Monto</th>
-                  <th class="text-center" style="width: 90px; padding: 8px 10px;">Carta PDF</th>
+                  <th style="width: 60px;">ID</th>
+                  <th>Donante</th>
+                  <th>Correo</th>
+                  <th class="text-center">Método / Tipo</th>
+                  <th class="text-center">Fecha</th>
+                  <th class="text-end">Monto</th>
+                  <th class="text-center" style="width: 120px;">Carta PDF</th>
                 </tr>
               </thead>
               <tbody id="tbodyDonativos">
@@ -328,66 +328,64 @@ try {
                 <?php else: ?>
                   <?php foreach ($donativos as $don): ?>
                     <tr>
-                      <td class="text-muted fw-semibold" style="padding:7px 10px;">#<?= $don['ID_Donativo'] ?></td>
-                      <td style="padding:7px 10px;">
-                        <div class="fw-semibold text-dark" style="line-height:1.4;"><?= htmlspecialchars($don['Donante'] ?: 'Sin asignar') ?></div>
+                      <td class="text-muted fw-semibold">#<?= $don['ID_Donativo'] ?></td>
+                      <td>
+                        <div class="fw-semibold text-dark"><?= htmlspecialchars($don['Donante'] ?: 'Sin asignar') ?></div>
                       </td>
-                      <td style="padding:7px 10px;">
-                        <span class="text-muted" style="font-size:0.9rem;">
+                      <td>
+                        <span class="text-muted small">
                           <?= $don['Email'] ? htmlspecialchars($don['Email']) : 'Sin correo' ?>
                         </span>
                       </td>
-                      <td class="text-center" style="padding:7px 10px;">
+                      <td class="text-center">
                         <?php
                           $tipoLimpio = trim($don['TipoDonacion'] ?? '');
                           if ($tipoLimpio === 'En Especie' || $tipoLimpio === 'Bienes / Mobiliario'):
                         ?>
-                          <span class="badge px-2 py-1" style="background:#f3e8ff;color:#721896;border:1px solid #d1a8e7;font-weight:600;font-size:0.75rem;">
-                            <i class="bi bi-box-seam me-1" style="color:#721896;"></i><?= htmlspecialchars($tipoLimpio) ?>
+                          <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-box-seam me-1" style="color: #721896;"></i><?= htmlspecialchars($tipoLimpio) ?>
                           </span>
                         <?php elseif ($tipoLimpio === 'Efectivo'): ?>
-                          <span class="badge px-2 py-1" style="background:#eafaf1;color:#0f5132;border:1px solid #c3e6cb;font-weight:600;font-size:0.75rem;">
-                            <i class="bi bi-cash me-1" style="color:#198754;"></i>Efectivo
+                          <span class="badge px-2 py-1" style="background-color: #eafaf1; color: #0f5132; border: 1px solid #c3e6cb; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-cash me-1" style="color: #198754;"></i>Efectivo
                           </span>
                         <?php elseif ($tipoLimpio === 'PayPal'): ?>
-                          <span class="badge px-2 py-1" style="background:#e8f4fd;color:#003087;border:1px solid #b8daff;font-weight:600;font-size:0.75rem;">
-                            <i class="bi bi-paypal me-1" style="color:#0079C1;"></i>PayPal
+                          <span class="badge px-2 py-1" style="background-color: #e8f4fd; color: #003087; border: 1px solid #b8daff; font-weight: 600; font-size: 0.8rem;">
+                            <i class="bi bi-paypal me-1" style="color: #0079C1;"></i>PayPal
                           </span>
                         <?php elseif ($tipoLimpio === 'Cheque' || $tipoLimpio === 'Cheques'): ?>
-                          <span class="badge px-2 py-1" style="background:#f8f9fa;color:#495057;border:1px solid #ced4da;font-weight:600;font-size:0.75rem;">
+                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; font-weight: 600; font-size: 0.8rem;">
                             <?= htmlspecialchars($tipoLimpio) ?>
                           </span>
                         <?php elseif ($tipoLimpio === 'Autogestivo'): ?>
-                          <span class="badge px-2 py-1" style="background:#fff9e6;color:#856404;border:1px solid #ffeeba;font-weight:600;font-size:0.75rem;">Autogestivo</span>
+                          <span class="badge px-2 py-1" style="background-color: #fff9e6; color: #856404; border: 1px solid #ffeeba; font-weight: 600; font-size: 0.8rem;">Autogestivo</span>
                         <?php elseif ($tipoLimpio !== ''): ?>
-                          <span class="badge px-2 py-1" style="background:#f8f9fa;color:#212529;border:1px solid #dee2e6;font-weight:600;font-size:0.75rem;"><?= htmlspecialchars($tipoLimpio) ?></span>
+                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #212529; border: 1px solid #dee2e6; font-weight: 600; font-size: 0.8rem;"><?= htmlspecialchars($tipoLimpio) ?></span>
                         <?php else: ?>
-                          <span class="badge px-2 py-1" style="background:#f8f9fa;color:#6c757d;border:1px solid #dee2e6;font-size:0.75rem;">No especificado</span>
+                          <span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #6c757d; border: 1px solid #dee2e6; font-weight: 500; font-size: 0.8rem;">No especificado</span>
                         <?php endif; ?>
                       </td>
-                      <td class="text-center" style="padding:7px 10px;">
-                        <span class="text-secondary" style="font-size:0.8rem;">
-                          <?= !empty($don['FechaDonacion']) ? date('d/m/Y H:i', strtotime($don['FechaDonacion'])) : 'Auto' ?>
+                      <td class="text-center">
+                        <span class="small text-secondary">
+                          <i class="bi bi-clock me-1"></i><?= !empty($don['FechaDonacion']) ? date('d/m/Y h:i A', strtotime($don['FechaDonacion'])) : 'Automática' ?>
                         </span>
                       </td>
-                      <td class="text-end" style="padding:7px 10px;">
+                      <td class="text-end">
                         <?php $esEspecie = ($don['TipoDonacion'] === 'En Especie' || $don['TipoDonacion'] === 'Bienes / Mobiliario' || (float)$don['MontoDonacion'] <= 0); ?>
                         <?php if (!$esEspecie && (float)$don['MontoDonacion'] > 0): ?>
-                          <span class="badge bg-success-subtle text-success fw-bold px-2 py-1" style="font-size:0.82rem;">$<?= number_format((float)$don['MontoDonacion'], 2) ?></span>
+                          <span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">$<?= number_format((float)$don['MontoDonacion'], 2) ?></span>
                         <?php else: ?>
-                          <span class="text-dark fw-semibold" style="font-size:0.8rem;" title="<?= htmlspecialchars($don['DescripcionEspecie'] ?? '') ?>">
-                            <i class="bi bi-box-seam me-1 text-purple"></i><?= htmlspecialchars($don['DescripcionEspecie'] ? (mb_strlen($don['DescripcionEspecie']) > 22 ? mb_substr($don['DescripcionEspecie'], 0, 19) . '...' : $don['DescripcionEspecie']) : 'En especie') ?>
+                          <span class="text-dark small fw-semibold" title="<?= htmlspecialchars($don['DescripcionEspecie'] ?? '') ?>">
+                            <i class="bi bi-box-seam me-1 text-purple"></i><?= htmlspecialchars($don['DescripcionEspecie'] ? (mb_strlen($don['DescripcionEspecie']) > 30 ? mb_substr($don['DescripcionEspecie'], 0, 27) . '...' : $don['DescripcionEspecie']) : 'En especie') ?>
                           </span>
                         <?php endif; ?>
                       </td>
-                      <td class="text-center" style="padding:7px 10px;">
+                      <td class="text-center">
                         <a href="carta-agradecimiento.php?id=<?= $don['ID_Donativo'] ?>" target="_blank"
-                           style="display:inline-flex;align-items:center;gap:4px;font-size:0.76rem;padding:3px 7px;border-radius:6px;border:1.5px solid #721896;color:#721896;background:transparent;text-decoration:none;font-weight:600;white-space:nowrap;"
-                           title="Ver / Descargar Carta de Agradecimiento PDF"
-                           onmouseover="this.style.background='#721896';this.style.color='#fff';"
-                           onmouseout="this.style.background='transparent';this.style.color='#721896';">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>
-                          Carta
+                           class="btn btn-sm btn-outline-purple d-inline-flex align-items-center gap-1 px-2 py-1"
+                           title="Ver / Descargar Carta de Agradecimiento PDF" style="font-size: 0.78rem; white-space: nowrap;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>
+                          <span>Carta</span>
                         </a>
                       </td>
                     </tr>
@@ -476,7 +474,7 @@ try {
               </div>
 
               <div class="alert alert-light border p-2 small text-muted mb-0 rounded-3">
-                <i class="bi bi-info-circle text-purple me-1"></i> El reporte generado incluirá membrete institucional oficial de GesMujer, resumen ejecutivo, estadísticas métricas, desglose por método y tabla detallada.
+                <i class="bi bi-info-circle text-purple me-1"></i> El reporte generado incluirá un resumen ejecutivo, estadísticas métricas, desglose por método y tabla detallada.
               </div>
 
             </div>
@@ -519,7 +517,7 @@ try {
       const spinner      = document.getElementById('searchSpinner');
 
       // SVG inline del icóno carta (reutilizable)
-      const cartaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>`;
+      const cartaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>`;
 
       inputSearch.addEventListener('input', () => {
         clearTimeout(searchTimeout);
@@ -558,18 +556,18 @@ try {
       function badgeMetodo(tipo) {
         const t = (tipo || '').trim();
         if (t === 'En Especie' || t === 'Bienes / Mobiliario')
-          return `<span class="badge px-2 py-1" style="background:#f3e8ff;color:#721896;border:1px solid #d1a8e7;font-weight:600;font-size:0.75rem;">${escHtml(t)}</span>`;
+          return `<span class="badge px-2 py-1" style="background-color:#f3e8ff;color:#721896;border:1px solid #d1a8e7;font-weight:600;font-size:0.8rem;">${escHtml(t)}</span>`;
         if (t === 'Efectivo')
-          return `<span class="badge px-2 py-1" style="background:#eafaf1;color:#0f5132;border:1px solid #c3e6cb;font-weight:600;font-size:0.75rem;">Efectivo</span>`;
+          return `<span class="badge px-2 py-1" style="background-color:#eafaf1;color:#0f5132;border:1px solid #c3e6cb;font-weight:600;font-size:0.8rem;">Efectivo</span>`;
         if (t === 'PayPal')
-          return `<span class="badge px-2 py-1" style="background:#e8f4fd;color:#003087;border:1px solid #b8daff;font-weight:600;font-size:0.75rem;">PayPal</span>`;
+          return `<span class="badge px-2 py-1" style="background-color:#e8f4fd;color:#003087;border:1px solid #b8daff;font-weight:600;font-size:0.8rem;">PayPal</span>`;
         if (t === 'Cheque' || t === 'Cheques')
-          return `<span class="badge px-2 py-1" style="background:#f8f9fa;color:#495057;border:1px solid #ced4da;font-weight:600;font-size:0.75rem;">${escHtml(t)}</span>`;
+          return `<span class="badge px-2 py-1" style="background-color:#f8f9fa;color:#495057;border:1px solid #ced4da;font-weight:600;font-size:0.8rem;">${escHtml(t)}</span>`;
         if (t === 'Autogestivo')
-          return `<span class="badge px-2 py-1" style="background:#fff9e6;color:#856404;border:1px solid #ffeeba;font-weight:600;font-size:0.75rem;">Autogestivo</span>`;
+          return `<span class="badge px-2 py-1" style="background-color:#fff9e6;color:#856404;border:1px solid #ffeeba;font-weight:600;font-size:0.8rem;">Autogestivo</span>`;
         if (t !== '')
-          return `<span class="badge px-2 py-1" style="background:#f8f9fa;color:#212529;border:1px solid #dee2e6;font-weight:600;font-size:0.75rem;">${escHtml(t)}</span>`;
-        return `<span class="badge px-2 py-1" style="background:#f8f9fa;color:#6c757d;border:1px solid #dee2e6;font-size:0.75rem;">No especificado</span>`;
+          return `<span class="badge px-2 py-1" style="background-color:#f8f9fa;color:#212529;border:1px solid #dee2e6;font-weight:600;font-size:0.8rem;">${escHtml(t)}</span>`;
+        return `<span class="badge px-2 py-1" style="background-color:#f8f9fa;color:#6c757d;border:1px solid #dee2e6;font-weight:500;font-size:0.8rem;">No especificado</span>`;
       }
 
       function renderizarTabla(data) {
@@ -587,27 +585,25 @@ try {
           const monto    = parseFloat(d.MontoDonacion || 0);
           const esEspecie = (d.TipoDonacion === 'En Especie' || d.TipoDonacion === 'Bienes / Mobiliario' || monto <= 0);
           const montoHtml = !esEspecie && monto > 0
-            ? `<span class="badge bg-success-subtle text-success fw-bold px-2 py-1" style="font-size:0.82rem;">$${monto.toLocaleString('es-MX',{minimumFractionDigits:2})}</span>`
-            : `<span class="text-dark fw-semibold" style="font-size:0.8rem;" title="${escHtml(d.DescripcionEspecie||'')}">${escHtml(d.DescripcionEspecie ? (d.DescripcionEspecie.length>22?d.DescripcionEspecie.slice(0,19)+'...':d.DescripcionEspecie) : 'En especie')}</span>`;
+            ? `<span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">$${monto.toLocaleString('es-MX',{minimumFractionDigits:2})}</span>`
+            : `<span class="text-dark small fw-semibold" title="${escHtml(d.DescripcionEspecie||'')}"><i class="bi bi-box-seam me-1 text-purple"></i>${escHtml(d.DescripcionEspecie ? (d.DescripcionEspecie.length>30?d.DescripcionEspecie.slice(0,27)+'...':d.DescripcionEspecie) : 'En especie')}</span>`;
 
           const fecha = d.FechaDonacion
-            ? new Date(d.FechaDonacion).toLocaleString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
-            : 'Auto';
+            ? new Date(d.FechaDonacion).toLocaleString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})
+            : 'Automática';
 
           return `<tr>
-            <td class="text-muted fw-semibold" style="padding:7px 10px;font-size:0.855rem;">#${d.ID_Donativo}</td>
-            <td style="padding:7px 10px;font-size:0.855rem;"><div class="fw-semibold text-dark" style="line-height:1.2;">${escHtml(d.Donante||'Sin asignar')}</div></td>
-            <td style="padding:7px 10px;"><span class="text-muted" style="font-size:0.8rem;">${escHtml(d.Email||'Sin correo')}</span></td>
-            <td class="text-center" style="padding:7px 10px;">${badgeMetodo(d.TipoDonacion)}</td>
-            <td class="text-center" style="padding:7px 10px;"><span class="text-secondary" style="font-size:0.8rem;">${escHtml(fecha)}</span></td>
-            <td class="text-end" style="padding:7px 10px;">${montoHtml}</td>
-            <td class="text-center" style="padding:7px 10px;">
+            <td class="text-muted fw-semibold">#${d.ID_Donativo}</td>
+            <td><div class="fw-semibold text-dark">${escHtml(d.Donante||'Sin asignar')}</div></td>
+            <td><span class="text-muted small">${escHtml(d.Email||'Sin correo')}</span></td>
+            <td class="text-center">${badgeMetodo(d.TipoDonacion)}</td>
+            <td class="text-center"><span class="small text-secondary"><i class="bi bi-clock me-1"></i>${escHtml(fecha)}</span></td>
+            <td class="text-end">${montoHtml}</td>
+            <td class="text-center">
               <a href="carta-agradecimiento.php?id=${d.ID_Donativo}" target="_blank"
-                 style="display:inline-flex;align-items:center;gap:4px;font-size:0.76rem;padding:3px 7px;border-radius:6px;border:1.5px solid #721896;color:#721896;background:transparent;text-decoration:none;font-weight:600;white-space:nowrap;"
-                 title="Ver / Descargar Carta de Agradecimiento PDF"
-                 onmouseover="this.style.background='#721896';this.style.color='#fff';"
-                 onmouseout="this.style.background='transparent';this.style.color='#721896';">
-                ${cartaSVG} Carta
+                 class="btn btn-sm btn-outline-purple d-inline-flex align-items-center gap-1 px-2 py-1"
+                 title="Ver / Descargar Carta de Agradecimiento PDF" style="font-size: 0.78rem; white-space: nowrap;">
+                ${cartaSVG} <span>Carta</span>
               </a>
             </td>
           </tr>`;
