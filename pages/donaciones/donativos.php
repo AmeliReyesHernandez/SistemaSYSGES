@@ -464,10 +464,9 @@ try {
                   <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
                   <option value="Efectivo">Efectivo</option>
                   <option value="PayPal">PayPal</option>
-                  <option value="Cheques">Cheques / Cheque</option>
+                  <option value="Cheques">Cheque</option>
                   <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
                   <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
-                  <option value="Autogestivo">Autogestivo</option>
                   <option value="En Especie">En Especie</option>
                   <option value="Bienes / Mobiliario">Bienes / Mobiliario</option>
                 </select>

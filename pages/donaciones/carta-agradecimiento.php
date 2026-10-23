@@ -72,10 +72,17 @@ class CartaAgradecimientoPDF extends TCPDF {
     }
 
     public function Footer() {
+        $autoPageBreak = $this->AutoPageBreak;
+        $bMargin = $this->bMargin;
+        $this->SetAutoPageBreak(false, 0);
+
         $footerImg = realpath(__DIR__ . '/../../assets/img/membrete_footer.jpg');
         if ($footerImg && file_exists($footerImg)) {
-            $this->Image($footerImg, 12, 272, 186, 0, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            // Adaptar a todo lo ancho del pie de la hoja (0 a 210mm) al ras del borde inferior
+            $this->Image($footerImg, 0, 277.3, 210, 0, 'JPG', '', '', false, 300, '', false, false, 0, false, false, false);
         }
+
+        $this->SetAutoPageBreak($autoPageBreak, $bMargin);
     }
 }
 

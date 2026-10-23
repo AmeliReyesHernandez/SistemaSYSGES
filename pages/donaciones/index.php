@@ -675,7 +675,7 @@ try {
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow">
           <div class="modal-header text-white" style="background:#721896;">
-            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo Institucional con Membrete</h5>
+            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form action="acciones/enviar-correo.php" method="POST" enctype="multipart/form-data">
@@ -684,7 +684,7 @@ try {
             <div class="modal-body p-4">
               
               <div class="mb-3">
-                <label class="form-label fw-semibold">Seleccionar Plantilla Rápida</label>
+                <label class="form-label fw-semibold">Seleccionar Plantilla</label>
                 <select class="form-select" id="plantillaSelect" onchange="cambiarPlantilla()">
                   <option value="cumpleanos">Tarjeta de Feliz Cumpleaños</option>
                   <option value="agradecimiento">Carta de Agradecimiento por Donativo</option>
@@ -696,7 +696,7 @@ try {
 
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                  <label class="form-label fw-semibold">Nombre del Donante / Saludo <span class="text-danger">*</span></label>
+                  <label class="form-label fw-semibold">Nombre del Donante <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" name="nombre" id="correo_nombre" 
                          list="lista_donantes_datalist_index" 
                          placeholder="Nombre completo o de pila" 
@@ -731,7 +731,7 @@ try {
 
               <!-- Campo de Archivo Adjunto (Recibo PDF / Imagen / Doc) -->
               <div class="mb-2 p-3 bg-light rounded-3 border">
-                <label class="form-label fw-semibold mb-1"><i class="bi bi-paperclip text-purple me-1"></i> Adjuntar Recibo, Comprobante o Documento (Opcional)</label>
+                <label class="form-label fw-semibold mb-1"><i class="bi bi-paperclip text-purple me-1"></i> Adjuntar Recibo, Comprobante o Documento</label>
                 <input type="file" name="adjunto" id="correo_adjunto" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.xls,.xlsx">
                 <div class="form-text text-muted">Formatos permitidos: PDF, Word (DOC/DOCX), Imágenes (JPG, PNG) o Excel (hasta 15MB).</div>
               </div>
@@ -741,7 +741,7 @@ try {
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               <div class="d-flex gap-2">
                 <button type="submit" name="accion" value="borrador" class="btn btn-outline-warning fw-semibold"><i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador</button>
-                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar con Membrete</button>
+                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar</button>
               </div>
             </div>
           </form>
@@ -761,7 +761,7 @@ try {
             <div class="modal-body p-4">
               
               <div class="mb-3">
-                <label class="form-label fw-semibold">Seleccionar Periodo Rápido</label>
+                <label class="form-label fw-semibold">Seleccionar Periodo</label>
                 <select class="form-select" id="rangoRapidoIndex" onchange="cambiarRangoFechasIndex(this.value)">
                   <option value="mes_actual">Mes Actual (<?= date('F Y') ?>)</option>
                   <option value="mes_anterior">Mes Anterior</option>
@@ -793,14 +793,13 @@ try {
                   <option value="Cheques">Cheques / Cheque</option>
                   <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
                   <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
-                  <option value="Autogestivo">Autogestivo</option>
                   <option value="En Especie">En Especie</option>
                   <option value="Bienes / Mobiliario">Bienes / Mobiliario</option>
                 </select>
               </div>
 
               <div class="alert alert-light border p-2 small text-muted mb-0 rounded-3">
-                <i class="bi bi-info-circle text-purple me-1"></i> El reporte generado incluirá membrete institucional oficial de GesMujer, resumen ejecutivo, estadísticas métricas, desglose por método y tabla detallada.
+                <i class="bi bi-info-circle text-purple me-1"></i> El reporte generado incluirá el resumen ejecutivo, estadísticas métricas, desglose por método y tabla detallada.
               </div>
 
             </div>
@@ -854,7 +853,7 @@ try {
             const email = opt.getAttribute('data-email') || '';
             const idDonante = opt.getAttribute('data-id') || '';
             if (emailInput && email) emailInput.value = email;
-            if (idInput) idInput.value = idDonante;
+            if (idInput) idInp  ut.value = idDonante;
             break;
           }
         }
@@ -967,7 +966,7 @@ try {
           Swal.fire({
             icon: 'success',
             title: '¡Correo enviado!',
-            text: 'El mensaje con membrete ha sido enviado exitosamente al donante.',
+            text: 'El mensaje ha sido enviado exitosamente al donante.',
             confirmButtonColor: '#721896'
           });
         <?php elseif (isset($_GET['status']) && $_GET['status'] === 'error'): ?>
