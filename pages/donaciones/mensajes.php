@@ -12,7 +12,8 @@ $params = [];
 
 if ($search !== '') {
     $where[] = "(
-        m.NombreDestino LIKE :search 
+        m.ID_Mensaje LIKE :search
+        OR m.NombreDestino LIKE :search 
         OR m.EmailDestino LIKE :search 
         OR m.Asunto LIKE :search 
         OR m.Mensaje LIKE :search
@@ -222,6 +223,9 @@ try {
             <li class="nav-item">
               <a class="nav-link active" href="mensajes.php"><i class="bi bi-envelope-paper-fill me-1"></i> Historial de Mensajes</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="historial-cambios.php"><i class="bi bi-clock-history me-1"></i> Historial de Cambios</a>
+            </li>
           </ul>
 
           <!-- Resumen Métrico Rápido -->
@@ -297,14 +301,15 @@ try {
           <!-- Tabla de Mensajes -->
           <div class="card-sf">
             <div class="card-sf-header d-flex justify-content-between align-items-center">
-              <span><i class="bi bi-envelope-paper-heart me-2"></i> Registro de Mensajes</span>
-              <small class="text-muted fw-normal">Total: <span id="contadorTotal"><?= number_format($totalRegistros) ?></span> registros</small>
+              <span><i class="bi bi-envelope-paper-heart me-2 text-purple"></i> Registro de Mensajes (<span id="contadorTotal"><?= number_format($totalRegistros) ?></span>)</span>
+              <span class="badge bg-light text-dark border" id="paginaLabel">Página <?= $pagina ?> de <?= max(1, $totalPaginas) ?></span>
             </div>
             <div class="card-body p-0">
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                  <thead class="table-light">
+                  <thead class="table-light small text-uppercase">
                     <tr>
+                      <th style="width: 60px;">ID</th>
                       <th>Estado</th>
                       <th>Tipo</th>
                       <th>Destinatario</th>
@@ -317,7 +322,7 @@ try {
                   <tbody id="tbodyMensajes">
                     <?php if (empty($mensajesList)): ?>
                       <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">
+                        <td colspan="8" class="text-center py-4 text-muted">
                           <i class="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>
                           No se encontraron mensajes registrados con los filtros aplicados.
                         </td>
@@ -325,6 +330,7 @@ try {
                     <?php else: ?>
                       <?php foreach ($mensajesList as $m): ?>
                         <tr>
+                          <td class="text-muted fw-semibold">#<?= $m['ID_Mensaje'] ?></td>
                           <td>
                             <?php if ($m['Estado'] === 'Enviado'): ?>
                               <span class="badge bg-success-subtle text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i> Enviado</span>
@@ -677,6 +683,7 @@ try {
       }
 
       function verDetalleMensaje(msg) {
+        document.getElementById('m_titulo').innerHTML = '<i class="bi bi-envelope-paper me-2"></i> Detalle del Mensaje #' + (msg.ID_Mensaje || '');
         const nombreDest = msg.DestinatarioCompleto || msg.NombreDestino || 'Sin destinatario';
         document.getElementById('m_destino_nombre').innerText = nombreDest;
         document.getElementById('m_destino_email').innerText = 'Correo: ' + (msg.EmailDestino || 'Sin correo');
@@ -779,10 +786,12 @@ try {
 
       function renderizarTabla(data) {
         const tbody = document.getElementById('tbodyMensajes');
-        document.getElementById('contadorTotal').textContent = data.totalRegistros;
+        document.getElementById('contadorTotal').textContent = Number(data.totalRegistros).toLocaleString();
+        const pagLabel = document.getElementById('paginaLabel');
+        if (pagLabel) pagLabel.textContent = `Página ${data.pagina} de ${Math.max(1, data.totalPaginas)}`;
 
         if (!data.mensajes || data.mensajes.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>No se encontraron mensajes registrados con los filtros aplicados.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>No se encontraron mensajes registrados con los filtros aplicados.</td></tr>`;
           document.getElementById('paginacionContainer').innerHTML = '';
           return;
         }
@@ -805,6 +814,7 @@ try {
           const msgJsonSafe = JSON.stringify(m).replace(/'/g, "&#39;");
 
           return `<tr>
+            <td class="text-muted fw-semibold">#${m.ID_Mensaje}</td>
             <td>${badgeEstado(m.Estado)}</td>
             <td>${badgeTipo(m.TipoMensaje)}</td>
             <td><strong class="text-dark">${nombreCompleto}</strong></td>

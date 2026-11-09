@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 $msj= false;
-    $stmt = $conn->prepare("SELECT ID_Personal, Password, ID_Rol FROM personal WHERE Email = :email ");
+    $stmt = $conn->prepare("SELECT ID_Personal, Password, ID_Rol, Nombre FROM personal WHERE Email = :email ");
     $stmt->bindParam(':email', $email);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,6 +24,7 @@ $msj= false;
         // Las credenciales son válidas
         $_SESSION['user_id'] = $user['ID_Personal']; // Almacena el ID de usuario en la sesión
         $_SESSION['role_id'] = $user['ID_Rol']; // Almacena el ID del rol en la sesión
+        $_SESSION['user_name'] = $user['Nombre']; // Almacena el Nombre del usuario en la sesión
             
         // Redirigir según el rol
         if ($_SESSION['role_id'] == 1) {

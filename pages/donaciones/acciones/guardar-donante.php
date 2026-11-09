@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../seccion.php';
 require_once __DIR__ . '/../../../db/config.php';
+require_once __DIR__ . '/auditoria-servicio.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../donantes.php");
@@ -26,8 +27,44 @@ if ($estatus !== 'Activo' && $estatus !== 'Inactivo') {
 
 if ($nombre === '' || $apellidoPaterno === '' || $email === '') {
     $volver = $idDonante ? "../donante-editar.php?id=$idDonante" : "../donante-nuevo.php";
-    header("Location: $volver&status=error&msg=" . urlencode("Por favor completa los campos obligatorios."));
+    header("Location: $volver?status=error&msg=" . urlencode("Por favor completa los campos obligatorios."));
     exit();
+}
+
+// Protección contra registros duplicados
+$permitirDuplicado = isset($_POST['permitir_duplicado']) && $_POST['permitir_duplicado'] === '1';
+
+if (!$idDonante && !$permitirDuplicado) {
+    try {
+        $stmtDup = $conn->prepare("
+            SELECT ID_Donante, CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno,'')) AS NombreCompleto, Email, Telefono
+            FROM donantes
+            WHERE LOWER(TRIM(Email)) = LOWER(:email)
+               OR (LOWER(TRIM(Nombre)) = LOWER(:nom) AND LOWER(TRIM(ApellidoPaterno)) = LOWER(:ap))
+            LIMIT 1
+        ");
+        $stmtDup->execute([
+            ':email' => $email,
+            ':nom'   => $nombre,
+            ':ap'    => $apellidoPaterno
+        ]);
+        $dupFound = $stmtDup->fetch(PDO::FETCH_ASSOC);
+
+        if ($dupFound) {
+            $msg = "Atención: Ya existe un donante registrado con información similar (" . trim($dupFound['NombreCompleto']) . " - " . $dupFound['Email'] . "). Si estás segura de que es una persona diferente, confirma para guardar.";
+            header("Location: ../donante-nuevo.php?status=duplicado&msg=" . urlencode($msg) . 
+                   "&nombre=" . urlencode($nombre) . 
+                   "&apellido_paterno=" . urlencode($apellidoPaterno) . 
+                   "&apellido_materno=" . urlencode($apellidoMaterno) . 
+                   "&email=" . urlencode($email) . 
+                   "&telefono=" . urlencode($telefono) . 
+                   "&rfc=" . urlencode($rfc) . 
+                   "&id_duplicado=" . (int)$dupFound['ID_Donante']);
+            exit();
+        }
+    } catch (Exception $e) {
+        // En caso de error en la verificación, continuar
+    }
 }
 
 try {
@@ -72,6 +109,33 @@ try {
     $stmt->bindParam(':estatus', $estatus);
 
     $stmt->execute();
+
+    // Registrar en auditoría
+    $nombreComp = trim("$nombre $apellidoPaterno $apellidoMaterno");
+    if ($idDonante) {
+        registrarCambioAuditoria(
+            $conn, 
+            'Donante', 
+            $idDonante, 
+            'Modificación', 
+            'Actualización de Expediente', 
+            'Datos anteriores', 
+            $nombreComp, 
+            "Actualización: Correo: $email, Tel: $telefono, Estatus: $estatus"
+        );
+    } else {
+        $nuevoId = (int)$conn->lastInsertId();
+        registrarCambioAuditoria(
+            $conn, 
+            'Donante', 
+            $nuevoId, 
+            'Registro', 
+            'Alta de Donante', 
+            'Sin registrar', 
+            $nombreComp, 
+            "Registro inicial de donante: Correo: $email, RFC: $rfc, Estatus: $estatus"
+        );
+    }
 
     header("Location: ../donantes.php?status=saved");
     exit();

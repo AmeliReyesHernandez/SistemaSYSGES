@@ -378,7 +378,7 @@ try {
           
           <!-- Botones de Acción Rápida -->
           <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-outline-danger btn-sm px-3 py-2 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalReportePDF">
+            <button class="btn btn-outline-danger btn-sm px-3 py-2 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalReportePDF" onclick="recargarPreviewPDFIndex()">
               <i class="bi bi-file-earmark-pdf-fill me-1"></i> Generar Reporte PDF
             </button>
             <a href="donante-nuevo.php" class="btn btn-outline-purple btn-sm px-3 py-2 fw-semibold">
@@ -432,6 +432,9 @@ try {
         </li>
         <li class="nav-item">
           <a class="nav-link" href="mensajes.php"><i class="bi bi-envelope-paper-fill me-1"></i> Historial de Mensajes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="historial-cambios.php"><i class="bi bi-clock-history me-1"></i> Historial de Cambios</a>
         </li>
       </ul>
 
@@ -749,65 +752,93 @@ try {
       </div>
     </div>
 
-    <!-- Modal: Generar Reporte PDF por Rango de Fechas -->
+    <!-- Modal: Generar Reporte PDF con Vista Previa al Lado (Agrupado por Categorías) -->
     <div class="modal fade" id="modalReportePDF" tabindex="-1" aria-labelledby="modalReportePDFLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down">
         <div class="modal-content border-0 shadow">
           <div class="modal-header text-white" style="background:#721896;">
-            <h5 class="modal-title" id="modalReportePDFLabel"><i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i> Generar Reporte PDF de Aportaciones</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="d-flex align-items-center gap-2">
+              <h5 class="modal-title mb-0" id="modalReportePDFLabel">
+                <i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i> Generar Reporte PDF de Aportaciones
+              </h5>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
           </div>
-          <form action="reporte-pdf.php" method="GET" target="_blank">
-            <div class="modal-body p-4">
+          
+          <div class="modal-body p-0">
+            <div class="row g-0">
               
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Seleccionar Periodo</label>
-                <select class="form-select" id="rangoRapidoIndex" onchange="cambiarRangoFechasIndex(this.value)">
-                  <option value="mes_actual">Mes Actual (<?= date('F Y') ?>)</option>
-                  <option value="mes_anterior">Mes Anterior</option>
-                  <option value="anio_actual">Todo el Año Actual (<?= date('Y') ?>)</option>
-                  <option value="ultimos_3_meses">Últimos 3 Meses</option>
-                  <option value="todos">Todo el Historial Histórico</option>
-                  <option value="personalizado" selected>Rango Personalizado de Fechas</option>
-                </select>
-              </div>
+              <!-- Columna Izquierda: Parámetros del Reporte -->
+              <div class="col-lg-4 col-md-5 p-3 p-md-4 border-end bg-light d-flex flex-column justify-content-between">
+                <div>
+                  <h6 class="fw-bold text-dark mb-3">
+                    <i class="bi bi-sliders2 text-purple me-1"></i> Parámetros del Reporte
+                  </h6>
 
-              <div class="row g-3 mb-3">
-                <div class="col-6">
-                  <label class="form-label fw-semibold">Fecha Inicio</label>
-                  <input type="date" class="form-control" name="fecha_inicio" id="rep_fecha_inicio_idx" value="<?= date('Y-m-01') ?>">
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold small text-muted text-uppercase">Periodo Rápido</label>
+                    <select class="form-select form-select-sm" id="rangoRapidoIndex" onchange="cambiarRangoFechasIndex(this.value)">
+                      <option value="mes_actual">Mes Actual (<?= date('F Y') ?>)</option>
+                      <option value="mes_anterior">Mes Anterior</option>
+                      <option value="anio_actual">Todo el Año Actual (<?= date('Y') ?>)</option>
+                      <option value="ultimos_3_meses">Últimos 3 Meses</option>
+                      <option value="todos">Todo el Historial Histórico</option>
+                      <option value="personalizado" selected>Rango Personalizado de Fechas</option>
+                    </select>
+                  </div>
+
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label class="form-label fw-semibold small text-muted text-uppercase">Fecha Inicio</label>
+                      <input type="date" class="form-control form-control-sm" name="fecha_inicio" id="rep_fecha_inicio_idx" value="<?= date('Y-m-01') ?>">
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label fw-semibold small text-muted text-uppercase">Fecha Fin</label>
+                      <input type="date" class="form-control form-control-sm" name="fecha_fin" id="rep_fecha_fin_idx" value="<?= date('Y-m-d') ?>">
+                    </div>
+                  </div>
+
+
+                  <button type="button" class="btn btn-outline-purple btn-sm w-100 mb-2" onclick="recargarPreviewPDFIndex()">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Actualizar Vista Previa
+                  </button>
                 </div>
-                <div class="col-6">
-                  <label class="form-label fw-semibold">Fecha Fin</label>
-                  <input type="date" class="form-control" name="fecha_fin" id="rep_fecha_fin_idx" value="<?= date('Y-m-d') ?>">
+
+                <div class="pt-3 border-top mt-2">
                 </div>
               </div>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Filtrar por Método / Tipo de Donativo</label>
-                <select class="form-select" name="metodo" id="rep_metodo_idx">
-                  <option value="">Todos los Métodos y Tipos</option>
-                  <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
-                  <option value="Efectivo">Efectivo</option>
-                  <option value="PayPal">PayPal</option>
-                  <option value="Cheques">Cheques / Cheque</option>
-                  <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
-                  <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
-                  <option value="En Especie">En Especie</option>
-                  <option value="Bienes / Mobiliario">Bienes / Mobiliario</option>
-                </select>
-              </div>
+              <!-- Columna Derecha: Visualización del Reporte al Ladito -->
+              <div class="col-lg-8 col-md-7 p-3 bg-white d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom flex-wrap gap-2">
+                  <div>
+                    <span class="fw-semibold text-dark small">
+                      <i class="bi bi-eye-fill text-purple me-1"></i> Vista Previa del Documento
+                    </span>
+                  </div>
+                  <div>
+                    <a href="reporte-pdf.php?fecha_inicio=<?= date('Y-m-01') ?>&fecha_fin=<?= date('Y-m-d') ?>&descargar=1" id="btnDescargarTopIdx" class="btn btn-sm btn-danger fw-semibold" title="Descargar archivo PDF">
+                      <i class="bi bi-download me-1"></i> Descargar Reporte PDF
+                    </a>
+                  </div>
+                </div>
 
-              <div class="alert alert-light border p-2 small text-muted mb-0 rounded-3">
-                <i class="bi bi-info-circle text-purple me-1"></i> El reporte generado incluirá el resumen ejecutivo, estadísticas métricas, desglose por método y tabla detallada.
+                <div class="position-relative flex-grow-1 border rounded-3 bg-light overflow-hidden" style="min-height: 520px; height: 560px;">
+                  <div id="previewSpinnerIdx" class="position-absolute top-50 start-50 translate-middle text-center" style="display:none; z-index:10;">
+                    <div class="spinner-border text-purple" role="status"></div>
+                    <small class="text-muted d-block mt-2 fw-semibold">Generando vista previa del reporte...</small>
+                  </div>
+                  <iframe id="iframePreviewReporteIndex" src="reporte-preview.php?fecha_inicio=<?= date('Y-m-01') ?>&fecha_fin=<?= date('Y-m-d') ?>" style="width: 100%; height: 100%; border: 0;" title="Vista previa del reporte PDF"></iframe>
+                </div>
               </div>
 
             </div>
-            <div class="modal-footer bg-light justify-content-between">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-danger fw-semibold"><i class="bi bi-download me-1"></i> Descargar Reporte PDF</button>
-            </div>
-          </form>
+          </div>
+
+          <div class="modal-footer bg-light py-2 px-3 justify-content-between">
+            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -853,7 +884,7 @@ try {
             const email = opt.getAttribute('data-email') || '';
             const idDonante = opt.getAttribute('data-id') || '';
             if (emailInput && email) emailInput.value = email;
-            if (idInput) idInp  ut.value = idDonante;
+            if (idInput) idInput.value = idDonante;
             break;
           }
         }
@@ -939,7 +970,12 @@ try {
         const fi = document.getElementById('rep_fecha_inicio_idx');
         const ff = document.getElementById('rep_fecha_fin_idx');
 
-        const format = (d) => d.toISOString().split('T')[0];
+        const format = (d) => {
+          const year = d.getFullYear();
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        };
 
         if (tipo === 'mes_actual') {
           fi.value = format(new Date(y, m, 1));
@@ -957,10 +993,80 @@ try {
           fi.value = '';
           ff.value = '';
         }
+        recargarPreviewPDFIndex();
+      }
+
+      function obtenerURLPreviewIndex() {
+        const fi = document.getElementById('rep_fecha_inicio_idx')?.value || '';
+        const ff = document.getElementById('rep_fecha_fin_idx')?.value || '';
+        const params = new URLSearchParams();
+        if (fi) params.set('fecha_inicio', fi);
+        if (ff) params.set('fecha_fin', ff);
+        return 'reporte-preview.php?' + params.toString();
+      }
+
+      function obtenerURLPDFIndex(esDescarga = false) {
+        const fi = document.getElementById('rep_fecha_inicio_idx')?.value || '';
+        const ff = document.getElementById('rep_fecha_fin_idx')?.value || '';
+        const params = new URLSearchParams();
+        if (fi) params.set('fecha_inicio', fi);
+        if (ff) params.set('fecha_fin', ff);
+        if (esDescarga) params.set('descargar', '1');
+        return 'reporte-pdf.php?' + params.toString();
+      }
+
+      function recargarPreviewPDFIndex() {
+        const iframe = document.getElementById('iframePreviewReporteIndex');
+        const spinner = document.getElementById('previewSpinnerIdx');
+        const badge = document.getElementById('previewEstadoBadgeIdx');
+        if (!iframe) return;
+
+        const urlPreview = obtenerURLPreviewIndex();
+        const urlVerPDF = obtenerURLPDFIndex(false);
+        const urlDescarga = obtenerURLPDFIndex(true);
+
+        const btnDesc = document.getElementById('btnDescargarPDFIdx');
+        const btnDescTop = document.getElementById('btnDescargarTopIdx');
+        const btnDescFooter = document.getElementById('btnDescargarFooterIdx');
+        if (btnDesc) btnDesc.href = urlDescarga;
+        if (btnDescTop) btnDescTop.href = urlDescarga;
+        if (btnDescFooter) btnDescFooter.href = urlDescarga;
+
+        if (spinner) spinner.style.display = 'block';
+        if (badge) {
+          badge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle ms-1';
+          badge.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Actualizando...';
+        }
+
+        iframe.src = urlPreview;
+        iframe.onload = function() {
+          if (spinner) spinner.style.display = 'none';
+          if (badge) {
+            badge.className = 'badge bg-success-subtle text-success border border-success-subtle ms-1';
+            badge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Listo para verificar';
+          }
+        };
       }
 
       document.addEventListener('DOMContentLoaded', () => {
         cambiarPlantilla();
+
+        const modalReporte = document.getElementById('modalReportePDF');
+        if (modalReporte) {
+          modalReporte.addEventListener('shown.bs.modal', () => {
+            recargarPreviewPDFIndex();
+          });
+        }
+        document.getElementById('rep_fecha_inicio_idx')?.addEventListener('change', () => {
+          const sel = document.getElementById('rangoRapidoIndex');
+          if (sel) sel.value = 'personalizado';
+          recargarPreviewPDFIndex();
+        });
+        document.getElementById('rep_fecha_fin_idx')?.addEventListener('change', () => {
+          const sel = document.getElementById('rangoRapidoIndex');
+          if (sel) sel.value = 'personalizado';
+          recargarPreviewPDFIndex();
+        });
 
         <?php if (isset($_GET['status']) && $_GET['status'] === 'sent'): ?>
           Swal.fire({

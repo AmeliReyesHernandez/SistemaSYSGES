@@ -197,6 +197,9 @@ try {
         <li class="nav-item">
           <a class="nav-link" href="mensajes.php"><i class="bi bi-envelope-paper-fill me-1"></i> Historial de Mensajes</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="historial-cambios.php"><i class="bi bi-clock-history me-1"></i> Historial de Cambios</a>
+        </li>
       </ul>
 
       <!-- Filtro y buscador (búsqueda en tiempo real) -->

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../seccion.php';
 require_once __DIR__ . '/../../../db/config.php';
+require_once __DIR__ . '/auditoria-servicio.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -26,6 +27,19 @@ try {
         ':estatus' => $nuevoEstatus,
         ':id' => $idDonante
     ]);
+
+    // Registrar en bitácora de auditoría
+    $prevEstatus = isset($current) ? $current : (($nuevoEstatus === 'Activo') ? 'Inactivo' : 'Activo');
+    registrarCambioAuditoria(
+        $conn, 
+        'Donante', 
+        $idDonante, 
+        'Cambio de Estatus', 
+        'Estatus de Cuenta', 
+        $prevEstatus, 
+        $nuevoEstatus, 
+        "Modificación de estatus a $nuevoEstatus"
+    );
 
     // Si es petición GET estándar, redirigir
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['ajax'])) {

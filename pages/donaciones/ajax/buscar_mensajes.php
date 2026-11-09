@@ -16,7 +16,8 @@ try {
 
     if ($search !== '') {
         $whereConditions[] = "(
-            m.NombreDestino LIKE :s 
+            m.ID_Mensaje LIKE :s
+            OR m.NombreDestino LIKE :s 
             OR m.EmailDestino LIKE :s 
             OR m.Asunto LIKE :s 
             OR m.Mensaje LIKE :s

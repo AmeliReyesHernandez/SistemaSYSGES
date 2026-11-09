@@ -26,6 +26,9 @@ $stmt2 = $conn->prepare($sqls);
 $stmt2->bindParam(':id', $idUsuario, PDO::PARAM_INT);
 $stmt2->execute();
 $usuarios3 = $stmt2->fetch(PDO::FETCH_ASSOC);
+if (!empty($usuarios3['Nombre'])) {
+    $_SESSION['user_name'] = $usuarios3['Nombre'];
+}
 
 // Si no hay foto guardada, usar una por defecto
 

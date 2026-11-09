@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../../../db/config.php';
+require_once __DIR__ . '/auditoria-servicio.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception; 
@@ -28,7 +29,22 @@ function registrarMensajeEnHistorial($conn, $idDonante, $nombreDestino, $emailDe
             ':tipo' => $tipoMensaje,
             ':estado' => $estado
         ]);
-        return $conn->lastInsertId();
+        $insertId = (int)$conn->lastInsertId();
+
+        // Registrar en bitácora de auditoría
+        $accionAud = ($estado === 'Borrador') ? 'Borrador Guardado' : (($estado === 'Fallido') ? 'Fallo de Envío' : 'Envío de Correo');
+        registrarCambioAuditoria(
+            $conn,
+            'Mensaje',
+            $insertId,
+            $accionAud,
+            "Comunicación ($tipoMensaje)",
+            'Sin enviar',
+            "Destino: $nombreDestino ($emailDestino)",
+            "Asunto: $asunto"
+        );
+
+        return $insertId;
     } catch (Exception $e) {
         return false;
     }

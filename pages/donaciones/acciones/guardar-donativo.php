@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../seccion.php';
 require_once __DIR__ . '/../../../db/config.php';
 require_once __DIR__ . '/servicio-correo.php';
+require_once __DIR__ . '/auditoria-servicio.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../donativos.php");
@@ -118,6 +119,33 @@ try {
 
             enviarCorreoInstitucional($email, $nombreCompleto ?: $saludoNombre, $asunto, $mensaje, 'Agradecimiento', $idDonante);
         }
+    }
+
+    // Registrar en auditoría
+    $montoTxt = $esEspecie ? "En Especie: $descripcionEspecie" : '$' . number_format((float)$montoDonacion, 2) . " MXN ($tipoDonacion)";
+    if ($esNuevo) {
+        $nuevoIdDonativo = (int)$conn->lastInsertId();
+        registrarCambioAuditoria(
+            $conn,
+            'Donativo',
+            $nuevoIdDonativo,
+            'Registro',
+            'Aportación Recibida',
+            '$0.00 MXN',
+            $montoTxt,
+            "Registro de donativo asignado al Donante #$idDonante"
+        );
+    } else {
+        registrarCambioAuditoria(
+            $conn,
+            'Donativo',
+            $idDonativo,
+            'Modificación',
+            'Modificación de Aportación',
+            'Datos previos',
+            $montoTxt,
+            "Actualización del donativo #$idDonativo para Donante #$idDonante"
+        );
     }
 
     header("Location: ../donativos.php?status=saved");
