@@ -98,11 +98,31 @@ try {
  * Genera la descripción amigable del movimiento
  */
 function renderDescripcionMovimiento($h) {
+    $id      = $h['ID_Historial'] ?? '';
     $entidad = $h['Entidad'] ?? '';
     $accion  = $h['Accion'] ?? '';
     $campo   = $h['Campo'] ?? '';
     $valNue  = trim($h['ValorNuevo'] ?? '');
     $det     = trim($h['Detalles'] ?? '');
+
+    // Función auxiliar para formatear texto con botón de ver más si es extenso
+    $renderConVerMas = function($textoPrincipal, $sub, $tituloModal, $subModal) use ($id) {
+        $maxLen = 55;
+        $esLargo = mb_strlen($textoPrincipal) > $maxLen;
+        $textoMostrar = $esLargo ? (mb_substr($textoPrincipal, 0, 50) . '...') : $textoPrincipal;
+        $textoEsc = htmlspecialchars($textoMostrar);
+
+        $btnVerMas = '';
+        if ($esLargo) {
+            $tituloEsc = htmlspecialchars($tituloModal, ENT_QUOTES, 'UTF-8');
+            $subModalEsc = htmlspecialchars($subModal, ENT_QUOTES, 'UTF-8');
+            $btnVerMas = "<div class='mt-1'><button type='button' class='btn btn-link btn-sm p-0 text-purple text-decoration-none fw-semibold' style='font-size: 0.74rem;' onclick=\"abrirTextoCompletoDesdeMapa($id, '$tituloEsc', '$subModalEsc')\"><i class='bi bi-eye me-1'></i>Ver descripción completa</button></div>";
+        }
+
+        $subHtml = !empty($sub) ? "<small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;'>" . htmlspecialchars($sub) . "</small>" : "";
+
+        return "<div class='fw-semibold text-dark' style='word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;'>$textoEsc</div>$btnVerMas$subHtml";
+    };
 
     if ($entidad === 'Mensaje' || strpos($accion, 'Correo') !== false) {
         $dest = '';
@@ -110,34 +130,35 @@ function renderDescripcionMovimiento($h) {
             $dest = $matches[0];
         }
         $titulo = !empty($dest) ? "Agradecimiento enviado a: <strong class='text-dark'>$dest</strong>" : htmlspecialchars($valNue);
-        $sub = !empty($det) ? htmlspecialchars($det) : "Comunicación por correo electrónico";
-        return "<div class='text-dark'>$titulo</div><small class='text-muted d-block'>$sub</small>";
+        $sub = !empty($det) ? $det : "Comunicación por correo electrónico";
+        return "<div class='text-dark' style='word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;'>$titulo</div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;'>" . htmlspecialchars($sub) . "</small>";
     }
 
     if ($entidad === 'Donativo') {
         if ($accion === 'Generación' || strpos($campo, 'Carta') !== false) {
-            $sub = !empty($det) ? htmlspecialchars($det) : "Documento oficial generado";
-            return "<div class='fw-semibold text-dark'><i class='bi bi-file-earmark-pdf text-danger me-1'></i> Carta de agradecimiento en PDF generada</div><small class='text-muted d-block'>$sub</small>";
+            $sub = !empty($det) ? $det : "Documento oficial generado";
+            return "<div class='fw-semibold text-dark' style='word-break: break-word; overflow-wrap: anywhere;'><i class='bi bi-file-earmark-pdf text-danger me-1'></i> Carta de agradecimiento en PDF generada</div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;'>" . htmlspecialchars($sub) . "</small>";
         }
-        $sub = !empty($det) ? htmlspecialchars($det) : "Aportación registrada";
-        return "<div class='fw-semibold text-dark'>" . htmlspecialchars($valNue) . "</div><small class='text-muted d-block'>$sub</small>";
+        $sub = !empty($det) ? $det : "Aportación registrada";
+        return $renderConVerMas($valNue, $sub, "Aportación #$id", "Donativos y Aportaciones");
     }
 
     if ($entidad === 'Donante') {
         if ($accion === 'Registro' || strpos($campo, 'Alta') !== false) {
-            $sub = !empty($det) ? htmlspecialchars($det) : "Nuevo registro de donante en el padrón";
-            return "<div class='fw-semibold text-dark'><i class='bi bi-person-check text-success me-1'></i> " . htmlspecialchars($valNue) . "</div><small class='text-muted d-block'>$sub</small>";
+            $sub = !empty($det) ? $det : "Nuevo registro de donante en el padrón";
+            return "<div class='fw-semibold text-dark' style='word-break: break-word; overflow-wrap: anywhere;'><i class='bi bi-person-check text-success me-1'></i> " . htmlspecialchars($valNue) . "</div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;'>" . htmlspecialchars($sub) . "</small>";
         }
         if ($campo === 'Estatus de Cuenta' || $accion === 'Cambio de Estatus') {
-            $sub = !empty($det) ? htmlspecialchars($det) : "Cambio de estatus del donante";
-            return "<div class='fw-semibold text-dark'>Estatus actualizado a: <span class='badge bg-success-subtle text-success border border-success-subtle'>" . htmlspecialchars($valNue) . "</span></div><small class='text-muted d-block'>$sub</small>";
+            $sub = !empty($det) ? $det : "Cambio de estatus del donante";
+            return "<div class='fw-semibold text-dark' style='word-break: break-word; overflow-wrap: anywhere;'>Estatus actualizado a: <span class='badge bg-success-subtle text-success border border-success-subtle'>" . htmlspecialchars($valNue) . "</span></div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;'>" . htmlspecialchars($sub) . "</small>";
         }
-        $sub = !empty($det) ? htmlspecialchars($det) : "Modificación de datos";
-        return "<div class='fw-semibold text-dark'>Actualización en expediente de " . htmlspecialchars($valNue) . "</div><small class='text-muted d-block'>$sub</small>";
+        $sub = !empty($det) ? $det : "Modificación de datos";
+        return $renderConVerMas("Actualización en expediente de $valNue", $sub, "Movimiento de Donante #$id", "Directorio de Donantes");
     }
 
-    $sub = !empty($det) ? htmlspecialchars($det) : htmlspecialchars($campo);
-    return "<div class='fw-semibold text-dark'>" . htmlspecialchars($valNue ?: $campo) . "</div><small class='text-muted d-block'>$sub</small>";
+    $sub = !empty($det) ? $det : $campo;
+    $textoPrincipal = $valNue ?: $campo;
+    return $renderConVerMas($textoPrincipal, $sub, "Movimiento #$id", $entidad ?: "Historial");
 }
 ?>
 <!DOCTYPE html>
@@ -262,6 +283,27 @@ function renderDescripcionMovimiento($h) {
         padding: 3px 8px;
         border-radius: 12px;
       }
+      .table-sf th, .table-sf td {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+      .col-desc-movimiento {
+        min-width: 240px;
+        max-width: 380px;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+      #modalDetalleAuditoria table {
+        table-layout: fixed;
+        width: 100%;
+      }
+      #modalDetalleAuditoria th, #modalDetalleAuditoria td {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+      .swal2-container {
+        z-index: 1065 !important;
+      }
     </style>
   </head>
   <body>
@@ -279,8 +321,8 @@ function renderDescripcionMovimiento($h) {
           <!-- Encabezado Limpio y Profesional -->
           <div class="sf-header shadow-xs">
             <div class="d-flex align-items-center gap-3">
-              <div class="rounded-3 p-2 d-flex align-items-center justify-content-center text-white shadow-sm" style="background:#721896; width:44px; height:44px;">
-                <i class="bi bi-clock-history fs-4"></i>
+              <div class="rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0" style="background:#721896; width:44px; height:44px; line-height:1;">
+                <i class="bi bi-clock-history fs-4" style="line-height:1;"></i>
               </div>
               <div>
                 <h1 class="sf-header-title mb-0">Historial de Actividades</h1>
@@ -389,12 +431,12 @@ function renderDescripcionMovimiento($h) {
                   <thead class="table-light small text-uppercase">
                     <tr>
                       <th style="width: 60px;">ID</th>
-                      <th style="width: 155px;">Fecha / Hora</th>
+                      <th style="width: 145px;">Fecha / Hora</th>
                       <th style="width: 130px;">Usuario</th>
                       <th style="width: 135px;">Sección</th>
-                      <th style="width: 180px;">Acción Realizada</th>
-                      <th>Descripción del Movimiento</th>
-                      <th class="text-center" style="width: 60px;">Detalle</th>
+                      <th style="width: 175px;">Acción Realizada</th>
+                      <th class="col-desc-movimiento">Descripción del Movimiento</th>
+                      <th class="text-center" style="width: 68px; white-space: nowrap;">Detalle</th>
                     </tr>
                   </thead>
                   <tbody id="tbodyHistorial">
@@ -442,7 +484,7 @@ function renderDescripcionMovimiento($h) {
                             <strong class="text-dark d-block" style="font-size:0.87rem;"><?= htmlspecialchars($h['Campo']) ?></strong>
                             <small class="text-muted" style="font-size:0.75rem;"><i class="bi bi-arrow-right-short"></i> <?= htmlspecialchars($h['Accion']) ?></small>
                           </td>
-                          <td>
+                          <td class="col-desc-movimiento">
                             <?= renderDescripcionMovimiento($h) ?>
                           </td>
                           <td class="text-center">
@@ -520,37 +562,44 @@ function renderDescripcionMovimiento($h) {
             </div>
 
             <!-- Tabla Formal con Bordes (Estándar SYSGES) -->
-            <div class="table-responsive mb-3">
-              <table class="table table-bordered align-middle mb-0" style="font-size: 0.9rem;">
+            <div class="table-responsive mb-3" style="overflow-x: hidden;">
+              <table class="table table-bordered align-middle mb-0" style="font-size: 0.9rem; table-layout: fixed; width: 100%;">
                 <tbody>
                   <tr>
-                    <th class="bg-light text-muted" style="width: 30%; font-weight: 600;">ID del movimiento</th>
-                    <td>
+                    <th class="bg-light text-muted" style="width: 28%; font-weight: 600;">ID del movimiento</th>
+                    <td style="width: 72%; word-break: break-word; overflow-wrap: anywhere;">
                       <span class="badge bg-light text-dark border font-monospace fs-6">#<span id="mdl_id_historial"></span></span>
                       <span class="text-muted ms-2 small" id="mdl_id_registro_asociado"></span>
                     </td>
                   </tr>
                   <tr>
                     <th class="bg-light text-muted" style="font-weight: 600;">Usuario responsable</th>
-                    <td>
+                    <td style="word-break: break-word; overflow-wrap: anywhere;">
                       <span class="sf-user-tag"><i class="bi bi-person-fill text-purple"></i> <span id="mdl_usuario"></span></span>
                     </td>
                   </tr>
                   <tr>
                     <th class="bg-light text-muted" style="font-weight: 600;">Módulo / Sección</th>
-                    <td id="mdl_seccion_nombre" class="fw-semibold text-dark"></td>
+                    <td id="mdl_seccion_nombre" class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;"></td>
                   </tr>
                   <tr>
                     <th class="bg-light text-muted" style="font-weight: 600;">Tipo de acción</th>
-                    <td id="mdl_tipo_accion" class="text-dark"></td>
+                    <td id="mdl_tipo_accion" class="text-dark" style="word-break: break-word; overflow-wrap: anywhere;"></td>
                   </tr>
                   <tr>
                     <th class="bg-light text-muted" style="font-weight: 600;">Descripción del cambio</th>
-                    <td id="mdl_descripcion_principal" class="fw-bold text-dark"></td>
+                    <td style="word-break: break-word; overflow-wrap: anywhere;">
+                      <div id="mdl_descripcion_principal" class="fw-bold text-dark" style="line-height: 1.45;"></div>
+                      <div id="mdl_desc_btn_ver_completa" class="mt-1" style="display: none;">
+                        <button type="button" class="btn btn-link btn-sm p-0 text-purple text-decoration-none fw-semibold" style="font-size: 0.78rem;" onclick="verDescripcionModalCompleta()">
+                          <i class="bi bi-eye me-1"></i>Ver descripción completa
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                   <tr id="mdl_fila_observaciones">
                     <th class="bg-light text-muted" style="font-weight: 600;">Detalles / Observaciones</th>
-                    <td id="mdl_observaciones" class="text-muted"></td>
+                    <td id="mdl_observaciones" class="text-muted" style="word-break: break-word; overflow-wrap: anywhere; line-height: 1.45;"></td>
                   </tr>
                 </tbody>
               </table>
@@ -563,16 +612,26 @@ function renderDescripcionMovimiento($h) {
               </div>
               <div class="card-body p-3">
                 <div class="row g-2">
-                  <div class="col-6">
-                    <div class="p-2 rounded bg-light border small">
+                  <div class="col-sm-6">
+                    <div class="p-2 rounded bg-light border small h-100">
                       <span class="text-muted d-block small mb-1 fw-bold">VALOR ANTERIOR</span>
-                      <span id="mdl_val_ant" class="text-danger fw-semibold"></span>
+                      <div id="mdl_val_ant" class="text-danger fw-semibold" style="word-break: break-word; overflow-wrap: anywhere; white-space: pre-wrap; max-height: 140px; overflow-y: auto;"></div>
+                      <div id="mdl_val_ant_btn_ver" class="mt-1" style="display:none;">
+                        <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none fw-semibold" style="font-size: 0.75rem;" onclick="verValorAnteriorCompleto()">
+                          <i class="bi bi-eye me-1"></i>Ver descripción completa
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="p-2 rounded bg-light border small">
+                  <div class="col-sm-6">
+                    <div class="p-2 rounded bg-light border small h-100">
                       <span class="text-muted d-block small mb-1 fw-bold">VALOR ACTUALIZADO</span>
-                      <span id="mdl_val_nue" class="text-success fw-bold"></span>
+                      <div id="mdl_val_nue" class="text-success fw-bold" style="word-break: break-word; overflow-wrap: anywhere; white-space: pre-wrap; max-height: 140px; overflow-y: auto;"></div>
+                      <div id="mdl_val_nue_btn_ver" class="mt-1" style="display:none;">
+                        <button type="button" class="btn btn-link btn-sm p-0 text-purple text-decoration-none fw-semibold" style="font-size: 0.75rem;" onclick="verValorActualizadoCompleto()">
+                          <i class="bi bi-eye me-1"></i>Ver descripción completa
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -595,6 +654,8 @@ function renderDescripcionMovimiento($h) {
     <script>
       let searchTimeout = null;
       let paginaActual = <?= $pagina ?>;
+      window.historialMap = <?= !empty($historialList) ? json_encode(array_column($historialList, null, 'ID_Historial'), JSON_UNESCAPED_UNICODE) : '{}' ?>;
+      let modalItemActual = null;
 
       const liveSearch    = document.getElementById('liveSearch');
       const filtroEntidad = document.getElementById('filtroEntidad');
@@ -624,45 +685,118 @@ function renderDescripcionMovimiento($h) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
+      function mostrarDetalleTextoAuditoria(titulo, texto, subtitulo) {
+        const contenido = String(texto || '').trim();
+        Swal.fire({
+          title: `<span style="font-size: 1.15rem; color: #721896;"><i class="bi bi-card-text me-2"></i>${escHtml(titulo || 'Detalle del Movimiento')}</span>`,
+          html: `
+            <div class="text-start p-3 bg-light rounded-3 border mt-2">
+              ${subtitulo ? `<div class="small text-muted mb-2"><strong>Sección:</strong> <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7;">${escHtml(subtitulo)}</span></div>` : ''}
+              <div class="small text-muted mb-1"><strong>Descripción completa registrada:</strong></div>
+              <div class="p-3 bg-white rounded border text-dark" style="white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; max-height: 240px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; text-align: left;">${escHtml(contenido)}</div>
+            </div>
+          `,
+          confirmButtonText: 'Cerrar',
+          confirmButtonColor: '#721896'
+        });
+      }
+
+      function abrirTextoCompletoDesdeMapa(id, titulo, subModal) {
+        const h = (window.historialMap && window.historialMap[id]) ? window.historialMap[id] : null;
+        const texto = h ? (h.ValorNuevo || h.Detalles || '') : '';
+        mostrarDetalleTextoAuditoria(titulo || `Detalle del Movimiento #${id}`, texto, subModal);
+      }
+
+      function verDescripcionModalCompleta() {
+        if (!modalItemActual) return;
+        const h = modalItemActual;
+        const entidad = h.Entidad || '';
+        const valNue = (h.ValorNuevo || '').trim();
+        let descCompleta = valNue;
+        if (entidad === 'Donativo' && !valNue.startsWith('Aportación')) {
+          descCompleta = `Aportación recibida: ${valNue}`;
+        }
+        mostrarDetalleTextoAuditoria(`Detalle de ${h.Campo || 'Movimiento'} #${h.ID_Historial}`, descCompleta, `${h.Entidad} - ${h.Accion}`);
+      }
+
+      function verValorActualizadoCompleto() {
+        if (!modalItemActual) return;
+        const h = modalItemActual;
+        mostrarDetalleTextoAuditoria(`Valor Actualizado #${h.ID_Historial}`, h.ValorNuevo, `${h.Entidad} - ${h.Campo}`);
+      }
+
+      function verValorAnteriorCompleto() {
+        if (!modalItemActual) return;
+        const h = modalItemActual;
+        mostrarDetalleTextoAuditoria(`Valor Anterior #${h.ID_Historial}`, h.ValorAnterior, `${h.Entidad} - ${h.Campo}`);
+      }
+
+      function escAttr(str) {
+        return String(str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      }
+
       function formatDescripcionJS(h) {
         const entidad = h.Entidad || '';
         const accion  = h.Accion || '';
         const campo   = h.Campo || '';
-        const valNue  = h.ValorNuevo || '';
-        const det     = h.Detalles || '';
+        const valNue  = (h.ValorNuevo || '').trim();
+        const det     = (h.Detalles || '').trim();
+        const id      = h.ID_Historial || '';
+
+        // Registrar en mapa para acceso directo
+        window.historialMap = window.historialMap || {};
+        window.historialMap[id] = h;
+
+        const renderConVerMasJS = function(texto, sub, tituloModal, subModal) {
+          const maxLen = 55;
+          const esLargo = texto.length > maxLen;
+          const textoMostrar = esLargo ? (texto.substring(0, 50) + '...') : texto;
+          const textoEsc = escHtml(textoMostrar);
+
+          let btnVerMas = '';
+          if (esLargo) {
+            btnVerMas = `<div class="mt-1">
+              <button type="button" class="btn btn-link btn-sm p-0 text-purple text-decoration-none fw-semibold" style="font-size: 0.74rem;" onclick="abrirTextoCompletoDesdeMapa(${id}, '${escAttr(tituloModal)}', '${escAttr(subModal)}')">
+                <i class="bi bi-eye me-1"></i>Ver descripción completa
+              </button>
+            </div>`;
+          }
+          const subHtml = sub ? `<small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;">${escHtml(sub)}</small>` : '';
+          return `<div class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;">${textoEsc}</div>${btnVerMas}${subHtml}`;
+        };
 
         if (entidad === 'Mensaje' || accion.includes('Correo')) {
           const emailMatch = valNue.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
           const dest = emailMatch ? emailMatch[0] : '';
           const titulo = dest ? `Agradecimiento enviado a: <strong class="text-dark">${escHtml(dest)}</strong>` : escHtml(valNue);
           const sub = det ? escHtml(det) : "Comunicación por correo electrónico";
-          return `<div class="text-dark">${titulo}</div><small class="text-muted d-block">${sub}</small>`;
+          return `<div class="text-dark" style="word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;">${titulo}</div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;">${sub}</small>`;
         }
 
         if (entidad === 'Donativo') {
           if (accion === 'Generación' || campo.includes('Carta')) {
             const sub = det ? escHtml(det) : "Documento oficial generado";
-            return `<div class="fw-semibold text-dark"><i class="bi bi-file-earmark-pdf text-danger me-1"></i> Carta de agradecimiento en PDF generada</div><small class="text-muted d-block">${sub}</small>`;
+            return `<div class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;"><i class="bi bi-file-earmark-pdf text-danger me-1"></i> Carta de agradecimiento en PDF generada</div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;">${sub}</small>`;
           }
-          const sub = det ? escHtml(det) : "Aportación registrada";
-          return `<div class="fw-semibold text-dark">${escHtml(valNue)}</div><small class="text-muted d-block">${sub}</small>`;
+          const sub = det || "Aportación registrada";
+          return renderConVerMasJS(valNue, sub, `Aportación #${id}`, "Donativos y Aportaciones");
         }
 
         if (entidad === 'Donante') {
           if (accion === 'Registro' || campo.includes('Alta')) {
-            const sub = det ? escHtml(det) : "Nuevo registro de donante en el padrón";
-            return `<div class="fw-semibold text-dark"><i class="bi bi-person-check text-success me-1"></i> ${escHtml(valNue)}</div><small class="text-muted d-block">${sub}</small>`;
+            const sub = det || "Nuevo registro de donante en el padrón";
+            return `<div class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;"><i class="bi bi-person-check text-success me-1"></i> ${escHtml(valNue)}</div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;">${escHtml(sub)}</small>`;
           }
           if (campo === 'Estatus de Cuenta' || accion === 'Cambio de Estatus') {
-            const sub = det ? escHtml(det) : "Cambio de estatus del donante";
-            return `<div class="fw-semibold text-dark">Estatus actualizado a: <span class="badge bg-success-subtle text-success border border-success-subtle">${escHtml(valNue)}</span></div><small class="text-muted d-block">${sub}</small>`;
+            const sub = det || "Cambio de estatus del donante";
+            return `<div class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;">Estatus actualizado a: <span class="badge bg-success-subtle text-success border border-success-subtle">${escHtml(valNue)}</span></div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.75rem;">${escHtml(sub)}</small>`;
           }
-          const sub = det ? escHtml(det) : "Modificación de datos";
-          return `<div class="fw-semibold text-dark">Actualización en expediente de ${escHtml(valNue)}</div><small class="text-muted d-block">${sub}</small>`;
+          const sub = det || "Modificación de datos";
+          return renderConVerMasJS(`Actualización en expediente de ${valNue}`, sub, `Movimiento de Donante #${id}`, "Directorio de Donantes");
         }
 
-        const sub = det ? escHtml(det) : escHtml(campo);
-        return `<div class="fw-semibold text-dark">${escHtml(valNue || campo)}</div><small class="text-muted d-block">${sub}</small>`;
+        const sub = det || campo;
+        return renderConVerMasJS(valNue || campo, sub, `Movimiento #${id}`, entidad || "Historial");
       }
 
       function badgeEntidad(entidad, id) {
@@ -743,7 +877,7 @@ function renderDescripcionMovimiento($h) {
               <strong class="text-dark d-block" style="font-size:0.87rem;">${escHtml(h.Campo)}</strong>
               <small class="text-muted" style="font-size:0.75rem;"><i class="bi bi-arrow-right-short"></i> ${escHtml(h.Accion)}</small>
             </td>
-            <td>${formatDescripcionJS(h)}</td>
+            <td class="col-desc-movimiento">${formatDescripcionJS(h)}</td>
             <td class="text-center">
               <button type="button" class="btn btn-sm btn-outline-secondary p-1" style="line-height:1;" title="Ver Detalle Completo" onclick='verDetalleAuditoria(${hJsonSafe})'>
                 <i class="bi bi-eye"></i>
@@ -776,12 +910,13 @@ function renderDescripcionMovimiento($h) {
       }
 
       function verDetalleAuditoria(h) {
+        modalItemActual = h;
         const entidad = h.Entidad || '';
         const accion  = h.Accion || '';
         const campo   = h.Campo || '';
-        const valNue  = h.ValorNuevo || '';
-        const valAnt  = h.ValorAnterior || '';
-        const det     = h.Detalles || '';
+        const valNue  = (h.ValorNuevo || '').trim();
+        const valAnt  = (h.ValorAnterior || '').trim();
+        const det     = (h.Detalles || '').trim();
 
         // 1. Módulo / Sección formal (SIN IDs artificiales como "#8")
         let seccionNombre = '';
@@ -872,7 +1007,17 @@ function renderDescripcionMovimiento($h) {
         document.getElementById('mdl_usuario').textContent               = h.NombreUsuario;
         document.getElementById('mdl_seccion_nombre').textContent        = seccionNombre;
         document.getElementById('mdl_tipo_accion').textContent           = `${h.Campo} (${h.Accion})`;
-        document.getElementById('mdl_descripcion_principal').textContent = descripcionPrincipal;
+        
+        // Manejo de descripción principal (recorte si es muy larga + botón para ver completo)
+        const elDesc = document.getElementById('mdl_descripcion_principal');
+        const btnDescVer = document.getElementById('mdl_desc_btn_ver_completa');
+        if (descripcionPrincipal.length > 85) {
+          elDesc.textContent = descripcionPrincipal.substring(0, 80) + '...';
+          btnDescVer.style.display = 'block';
+        } else {
+          elDesc.textContent = descripcionPrincipal;
+          btnDescVer.style.display = 'none';
+        }
 
         // Fila de observaciones: solo mostrar si aporta información no repetida
         const filaObs = document.getElementById('mdl_fila_observaciones');
@@ -886,8 +1031,26 @@ function renderDescripcionMovimiento($h) {
         // Panel de comparación (solo si hubo un cambio real de datos y no son iguales)
         const panelCambio = document.getElementById('mdl_panel_cambio');
         if (valAnt && valAnt.trim() !== '' && valAnt !== valNue) {
-          document.getElementById('mdl_val_ant').textContent = valAnt;
-          document.getElementById('mdl_val_nue').textContent = valNue;
+          const elValAnt = document.getElementById('mdl_val_ant');
+          const btnValAntVer = document.getElementById('mdl_val_ant_btn_ver');
+          if (valAnt.length > 85) {
+            elValAnt.textContent = valAnt.substring(0, 80) + '...';
+            btnValAntVer.style.display = 'block';
+          } else {
+            elValAnt.textContent = valAnt;
+            btnValAntVer.style.display = 'none';
+          }
+
+          const elValNue = document.getElementById('mdl_val_nue');
+          const btnValNueVer = document.getElementById('mdl_val_nue_btn_ver');
+          if (valNue.length > 85) {
+            elValNue.textContent = valNue.substring(0, 80) + '...';
+            btnValNueVer.style.display = 'block';
+          } else {
+            elValNue.textContent = valNue;
+            btnValNueVer.style.display = 'none';
+          }
+
           panelCambio.style.display = 'block';
         } else {
           panelCambio.style.display = 'none';

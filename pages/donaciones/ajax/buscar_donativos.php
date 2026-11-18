@@ -34,6 +34,9 @@ try {
     // Datos
     $sql = "
         SELECT d.ID_Donativo, d.MontoDonacion, d.TipoDonacion, d.DescripcionEspecie, d.FechaDonacion,
+               COALESCE(d.RequiereRecibo, 0) AS RequiereRecibo,
+               COALESCE(d.FacturacionDiferente, 0) AS FacturacionDiferente,
+               d.TipoPersonaFiscal, d.RFC_Fiscal, d.RazonSocial_Fiscal,
                CONCAT(dn.Nombre, ' ', dn.ApellidoPaterno, ' ', COALESCE(dn.ApellidoMaterno,'')) AS Donante,
                dn.Email
         FROM donativos d

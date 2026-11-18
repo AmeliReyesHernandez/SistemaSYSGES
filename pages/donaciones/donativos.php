@@ -55,6 +55,9 @@ try {
     // Listado paginado
     $sql = "
         SELECT d.ID_Donativo, d.MontoDonacion, d.TipoDonacion, d.DescripcionEspecie, d.FechaDonacion, d.ID_Donante,
+               COALESCE(d.RequiereRecibo, 0) AS RequiereRecibo,
+               COALESCE(d.FacturacionDiferente, 0) AS FacturacionDiferente,
+               d.TipoPersonaFiscal, d.RFC_Fiscal, d.RazonSocial_Fiscal,
                CONCAT(dn.Nombre, ' ', dn.ApellidoPaterno, ' ', dn.ApellidoMaterno) AS Donante,
                dn.Email, dn.Telefono
         FROM donativos d
@@ -317,7 +320,7 @@ try {
                   <th class="text-center">Método / Tipo</th>
                   <th class="text-center">Fecha</th>
                   <th class="text-end">Monto</th>
-                  <th class="text-center" style="width: 120px;">Carta PDF</th>
+                  <th class="text-center" style="width: 130px;">Acciones</th>
                 </tr>
               </thead>
               <tbody id="tbodyDonativos">
@@ -334,6 +337,22 @@ try {
                       <td class="text-muted fw-semibold">#<?= $don['ID_Donativo'] ?></td>
                       <td>
                         <div class="fw-semibold text-dark"><?= htmlspecialchars($don['Donante'] ?: 'Sin asignar') ?></div>
+                        <?php if (!empty($don['RequiereRecibo'])): ?>
+                          <div class="mt-1 d-flex flex-wrap gap-1 align-items-center">
+                            <span class="badge bg-purple-subtle text-purple border" style="font-size:0.72rem; padding: 2px 6px;" title="Requiere Recibo Deducible (CFDI)">
+                              <i class="bi bi-receipt me-1"></i>Deducible
+                            </span>
+                            <?php if (!empty($don['FacturacionDiferente'])): ?>
+                              <span class="badge bg-info-subtle text-dark border" style="font-size:0.72rem; padding: 2px 6px;" title="Facturado a: <?= htmlspecialchars($don['RazonSocial_Fiscal'] ?? '') ?> (RFC: <?= htmlspecialchars($don['RFC_Fiscal'] ?? '') ?>)">
+                                <i class="bi bi-building me-1"></i><?= htmlspecialchars($don['RazonSocial_Fiscal'] ? (mb_strlen($don['RazonSocial_Fiscal']) > 22 ? mb_substr($don['RazonSocial_Fiscal'], 0, 19) . '...' : $don['RazonSocial_Fiscal']) : 'Empresa / Tercero') ?>
+                              </span>
+                            <?php elseif (!empty($don['RFC_Fiscal'])): ?>
+                              <span class="badge bg-light text-secondary border font-monospace" style="font-size:0.72rem; padding: 2px 6px;">
+                                <?= htmlspecialchars($don['RFC_Fiscal']) ?>
+                              </span>
+                            <?php endif; ?>
+                          </div>
+                        <?php endif; ?>
                       </td>
                       <td>
                         <span class="text-muted small">
@@ -373,7 +392,7 @@ try {
                           <i class="bi bi-clock me-1"></i><?= !empty($don['FechaDonacion']) ? date('d/m/Y h:i A', strtotime($don['FechaDonacion'])) : 'Automática' ?>
                         </span>
                       </td>
-                      <td class="text-end">
+                      <td class="text-end" style="word-break: break-word; overflow-wrap: anywhere;">
                         <?php $esEspecie = ($don['TipoDonacion'] === 'En Especie' || $don['TipoDonacion'] === 'Bienes / Mobiliario' || (float)$don['MontoDonacion'] <= 0); ?>
                         <?php if (!$esEspecie && (float)$don['MontoDonacion'] > 0): ?>
                           <span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">$<?= number_format((float)$don['MontoDonacion'], 2) ?></span>
@@ -384,12 +403,19 @@ try {
                         <?php endif; ?>
                       </td>
                       <td class="text-center">
-                        <a href="carta-agradecimiento.php?id=<?= $don['ID_Donativo'] ?>" target="_blank"
-                           class="btn btn-sm btn-outline-purple d-inline-flex align-items-center gap-1 px-2 py-1"
-                           title="Ver / Descargar Carta de Agradecimiento PDF" style="font-size: 0.78rem; white-space: nowrap;">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>
-                          <span>Carta</span>
-                        </a>
+                        <div class="d-inline-flex gap-1">
+                          <a href="donativo-editar.php?id=<?= $don['ID_Donativo'] ?>"
+                             class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-2 py-1"
+                             title="Editar Donativo" style="font-size: 0.78rem; white-space: nowrap;">
+                            <i class="bi bi-pencil"></i>
+                          </a>
+                          <a href="carta-agradecimiento.php?id=<?= $don['ID_Donativo'] ?>" target="_blank"
+                             class="btn btn-sm btn-outline-purple d-inline-flex align-items-center gap-1 px-2 py-1"
+                             title="Ver / Descargar Carta de Agradecimiento PDF" style="font-size: 0.78rem; white-space: nowrap;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"/></svg>
+                            <span>Carta</span>
+                          </a>
+                        </div>
                       </td>
                     </tr>
                   <?php endforeach; ?>
@@ -735,19 +761,43 @@ try {
             ? new Date(d.FechaDonacion).toLocaleString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})
             : 'Automática';
 
+          let badgesFiscal = '';
+          if (parseInt(d.RequiereRecibo || 0) === 1) {
+            badgesFiscal = `<div class="mt-1 d-flex flex-wrap gap-1 align-items-center">
+              <span class="badge bg-purple-subtle text-purple border" style="font-size:0.72rem; padding: 2px 6px;" title="Requiere Recibo Deducible (CFDI)"><i class="bi bi-receipt me-1"></i>Deducible</span>`;
+            if (parseInt(d.FacturacionDiferente || 0) === 1) {
+              const razon = escHtml(d.RazonSocial_Fiscal || 'Empresa / Tercero');
+              const razonCorta = razon.length > 22 ? razon.slice(0, 19) + '...' : razon;
+              badgesFiscal += `<span class="badge bg-info-subtle text-dark border" style="font-size:0.72rem; padding: 2px 6px;" title="Facturado a: ${razon} (RFC: ${escHtml(d.RFC_Fiscal||'')}"><i class="bi bi-building me-1"></i>${razonCorta}</span>`;
+            } else if (d.RFC_Fiscal) {
+              badgesFiscal += `<span class="badge bg-light text-secondary border font-monospace" style="font-size:0.72rem; padding: 2px 6px;">${escHtml(d.RFC_Fiscal)}</span>`;
+            }
+            badgesFiscal += `</div>`;
+          }
+
           return `<tr>
             <td class="text-muted fw-semibold">#${d.ID_Donativo}</td>
-            <td><div class="fw-semibold text-dark">${escHtml(d.Donante||'Sin asignar')}</div></td>
+            <td>
+              <div class="fw-semibold text-dark">${escHtml(d.Donante||'Sin asignar')}</div>
+              ${badgesFiscal}
+            </td>
             <td><span class="text-muted small">${escHtml(d.Email||'Sin correo')}</span></td>
             <td class="text-center">${badgeMetodo(d.TipoDonacion)}</td>
             <td class="text-center"><span class="small text-secondary"><i class="bi bi-clock me-1"></i>${escHtml(fecha)}</span></td>
             <td class="text-end">${montoHtml}</td>
             <td class="text-center">
-              <a href="carta-agradecimiento.php?id=${d.ID_Donativo}" target="_blank"
-                 class="btn btn-sm btn-outline-purple d-inline-flex align-items-center gap-1 px-2 py-1"
-                 title="Ver / Descargar Carta de Agradecimiento PDF" style="font-size: 0.78rem; white-space: nowrap;">
-                ${cartaSVG} <span>Carta</span>
-              </a>
+              <div class="d-inline-flex gap-1">
+                <a href="donativo-editar.php?id=${d.ID_Donativo}"
+                   class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-2 py-1"
+                   title="Editar Donativo" style="font-size: 0.78rem; white-space: nowrap;">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <a href="carta-agradecimiento.php?id=${d.ID_Donativo}" target="_blank"
+                   class="btn btn-sm btn-outline-purple d-inline-flex align-items-center gap-1 px-2 py-1"
+                   title="Ver / Descargar Carta de Agradecimiento PDF" style="font-size: 0.78rem; white-space: nowrap;">
+                  ${cartaSVG} <span>Carta</span>
+                </a>
+              </div>
             </td>
           </tr>`;
         }).join('');

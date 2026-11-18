@@ -143,9 +143,6 @@ $statusAlerta   = trim($_GET['status'] ?? '');
           <div class="card-sf">
             <div class="card-sf-header d-flex justify-content-between align-items-center">
               <span><i class="bi bi-person-plus-fill me-2 text-primary"></i> Datos del Donante</span>
-              <span class="badge bg-light text-muted border fw-normal" style="font-size:0.75rem;">
-                <i class="bi bi-shield-check text-success me-1"></i> Verificación Anti-duplicados activa
-              </span>
             </div>
             <div class="card-body p-4">
 
@@ -172,7 +169,7 @@ $statusAlerta   = trim($_GET['status'] ?? '');
                     <div class="flex-grow-1">
                       <div class="d-flex justify-content-between align-items-center mb-1">
                         <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">
-                          ⚠️ Posible Registro Duplicado Detectado
+                           Posible Registro Duplicado Detectado
                         </h6>
                         <span class="badge bg-warning text-dark border border-warning" id="badgeTotalDuplicados">1 coincidencia</span>
                       </div>
@@ -283,18 +280,151 @@ $statusAlerta   = trim($_GET['status'] ?? '');
 
                 <hr class="my-4">
 
-                <!-- Bloque 3: Datos Fiscales Opcionales -->
+                <!-- Bloque 3: Aportación Inicial del Donante -->
                 <div class="mb-4">
-                  <h6 class="fw-bold text-uppercase text-purple mb-3" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
-                    <i class="bi bi-receipt me-1"></i> Información Fiscal (Opcional)
-                  </h6>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label for="rfc" class="form-label fw-semibold">RFC</label>
-                      <input type="text" class="form-control" id="rfc" name="rfc" placeholder="12 o 13 caracteres" maxlength="20" style="text-transform: uppercase;" value="<?= $valRfc ?>" autocomplete="off">
-                      <div class="form-text text-muted">Para emisión de comprobantes o recibos deducibles.</div>
+                  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                    <div>
+                      <h6 class="fw-bold text-uppercase text-purple mb-0" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-cash-coin me-1"></i> Aportación Inicial del Donante
+                      </h6>
+                      <small class="text-muted">Registra el primer donativo recibido al dar de alta al donante en el padrón.</small>
                     </div>
+                    <div>
+                    
+                    </div>
+                  </div>
 
+                  <div class="p-3 rounded-3 border bg-light-subtle">
+                    <div class="row g-3">
+                      <!-- Método / Tipo de Donativo -->
+                      <div class="col-md-6">
+                        <label for="tipo_donacion" class="form-label fw-semibold">Método / Tipo de Donativo <span class="text-danger">*</span></label>
+                        <select class="form-select" id="tipo_donacion" name="tipo_donacion" onchange="toggleTipoDonativo()" required>
+                          <option value="">Seleccione una opción...</option>
+                          <option value="Transferencia Bancaria">Transferencia Bancaria (SPEI)</option>
+                          <option value="Efectivo" selected>Efectivo</option>
+                          <option value="PayPal">PayPal</option>
+                          <option value="Cheques">Cheques / Cheque</option>
+                          <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
+                          <option value="Depósito en Ventanilla">Depósito en Ventanilla</option>
+                          <option value="Autogestivo">Autogestivo (Recaudación propia / Eventos / Bazar)</option>
+                          <option value="En Especie">En Especie (Alimentos, Ropa, Insumos)</option>
+                          <option value="Bienes / Mobiliario">Bienes / Mobiliario / Equipo</option>
+                          <option value="Otro">Otro</option>
+                        </select>
+                        <div class="invalid-feedback">Selecciona el método o tipo de donativo.</div>
+                      </div>
+
+                      <!-- Monto Monetario (MXN) -->
+                      <div class="col-md-6" id="container_monto">
+                        <label for="monto_donacion" class="form-label fw-semibold">Monto de la Aportación (MXN) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                          <span class="input-group-text fw-bold">$</span>
+                          <input type="number" step="0.01" min="1" class="form-control" id="monto_donacion" name="monto_donacion" placeholder="0.00" required>
+                          <div class="invalid-feedback">Ingresa un monto válido mayor a $0.00.</div>
+                        </div>
+                      </div>
+
+                      <!-- Descripción en Especie / Bienes -->
+                      <div class="col-12 d-none" id="container_especie">
+                        <label for="descripcion_especie" class="form-label fw-semibold">Descripción del Donativo en Especie / Bienes <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="descripcion_especie" name="descripcion_especie" rows="3" placeholder="Describe detalladamente los artículos o bienes donados (Ej. 10 cobijas térmicas, 5 cajas de despensa, 2 escritorios)..."></textarea>
+                        <div class="invalid-feedback">Describe lo que fue donado en especie o bienes.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Bloque 4: Datos Fiscales para Recibos Deducibles de Impuestos -->
+                <div class="mb-4">
+                  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                    <div>
+                      <h6 class="fw-bold text-uppercase text-purple mb-0" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-receipt me-1"></i> Datos Fiscales (Deducibles de Impuestos)
+                      </h6>
+                      <small class="text-muted">Información para emitir comprobantes o recibos deducibles ante el SAT.</small>
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-outline-purple btn-sm fw-semibold shadow-sm" onclick="copiarDatosFacturacion()" title="Copiar nombre personal, domicilio y correo a datos fiscales">
+                        <i class="bi bi-clipboard2-check me-1"></i> Copiar Datos Personales a Fiscales
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="p-3 rounded-3 border bg-light-subtle mb-3">
+                    <div class="row g-3">
+                      <!-- Tipo de Persona Fiscal -->
+                      <div class="col-md-4">
+                        <label for="tipo_persona_fiscal" class="form-label fw-semibold">Tipo de Persona Fiscal</label>
+                        <select class="form-select" id="tipo_persona_fiscal" name="tipo_persona_fiscal" onchange="cambiarTipoPersonaFiscal(this.value)">
+                          <option value="Fisica" selected>Persona Física (A título personal)</option>
+                          <option value="Moral">Persona Moral (Empresa / Negocio)</option>
+                        </select>
+                      </div>
+
+                      <!-- RFC -->
+                      <div class="col-md-4">
+                        <label for="rfc" class="form-label fw-semibold">RFC</label>
+                        <input type="text" class="form-control text-uppercase" id="rfc" name="rfc" placeholder="13 caracteres" maxlength="13" value="<?= $valRfc ?>" autocomplete="off">
+                        <div class="form-text text-muted" id="rfcHelp">Ej. PEPJ800101XYZ (13 caracteres)</div>
+                      </div>
+
+                      <!-- Código Postal Fiscal -->
+                      <div class="col-md-4">
+                        <label for="codigo_postal_fiscal" class="form-label fw-semibold">Código Postal Fiscal (SAT)</label>
+                        <input type="text" class="form-control" id="codigo_postal_fiscal" name="codigo_postal_fiscal" placeholder="Ej. 68000" maxlength="5" autocomplete="off">
+                      </div>
+
+                      <!-- Razón Social Fiscal -->
+                      <div class="col-md-6">
+                        <label for="razon_social_fiscal" class="form-label fw-semibold">Nombre o Razón Social Fiscal</label>
+                        <input type="text" class="form-control" id="razon_social_fiscal" name="razon_social_fiscal" placeholder="Nombre completo o Razón Social de empresa" autocomplete="off">
+                        <div class="form-text text-muted" id="razonSocialHelp">Para personas físicas, el nombre completo; para empresas, la denominación sin régimen societario.</div>
+                      </div>
+
+                      <!-- Correo Electrónico para Facturación / Recibos -->
+                      <div class="col-md-6">
+                        <label for="email_fiscal" class="form-label fw-semibold">Correo para Facturación (Recibos)</label>
+                        <div class="input-group">
+                          <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                          <input type="email" class="form-control" id="email_fiscal" name="email_fiscal" placeholder="facturacion@ejemplo.com" autocomplete="off">
+                        </div>
+                      </div>
+
+                      <!-- Régimen Fiscal -->
+                      <div class="col-md-6">
+                        <label for="regimen_fiscal" class="form-label fw-semibold">Régimen Fiscal (SAT)</label>
+                        <select class="form-select" id="regimen_fiscal" name="regimen_fiscal">
+                          <option value="">Seleccione el régimen fiscal...</option>
+                          <optgroup label="Personas Físicas" id="optgroup_fisica">
+                            <option value="605 - Sueldos y Salarios e Ingresos Asimilados a Salarios">605 - Sueldos y Salarios e Ingresos Asimilados</option>
+                            <option value="611 - Ingresos por Dividendos">611 - Ingresos por Dividendos</option>
+                            <option value="614 - Ingresos por Intereses">614 - Ingresos por Intereses</option>
+                            <option value="616 - Sin obligaciones fiscales">616 - Sin obligaciones fiscales</option>
+                          </optgroup>
+                          <optgroup label="Personas Morales (Empresas)" id="optgroup_moral">
+                            <option value="601 - General de Ley Personas Morales">601 - General de Ley Personas Morales</option>
+                            <option value="626 - Régimen Simplificado de Confianza (RESICO Moral)">626 - RESICO (Personas Morales)</option>
+                          </optgroup>
+                        </select>
+                      </div>
+
+                      <!-- Uso de CFDI -->
+                      <div class="col-md-6">
+                        <label for="uso_cfdi" class="form-label fw-semibold">Uso de CFDI</label>
+                        <select class="form-select" id="uso_cfdi" name="uso_cfdi">
+                          <option value="D04 - Donativos" selected>D04 - Donativos (Recomendado)</option>
+                          <option value="S01 - Sin efectos fiscales">S01 - Sin efectos fiscales</option>
+                          <option value="G03 - Gastos en general">G03 - Gastos en general</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Estatus del Donante -->
+                  <div class="row g-3">
                     <div class="col-md-6">
                       <label for="estatus" class="form-label fw-semibold">Estado del Donante <span class="text-danger">*</span></label>
                       <select class="form-select" id="estatus" name="estatus" required>
@@ -328,6 +458,68 @@ $statusAlerta   = trim($_GET['status'] ?? '');
     <script src="../../assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+      // Función para copiar datos personales a la sección fiscal
+      function copiarDatosFacturacion() {
+        const nom = document.getElementById('nombre')?.value.trim() || '';
+        const ap = document.getElementById('apellido_paterno')?.value.trim() || '';
+        const am = document.getElementById('apellido_materno')?.value.trim() || '';
+        const email = document.getElementById('email')?.value.trim() || '';
+        const dom = document.getElementById('domicilio')?.value.trim() || '';
+        
+        let cpMatch = dom.match(/\b\d{5}\b/);
+        const razonSocial = [nom, ap, am].filter(Boolean).join(' ');
+        
+        const inputRazon = document.getElementById('razon_social_fiscal');
+        const inputEmailFisc = document.getElementById('email_fiscal');
+        const inputCP = document.getElementById('codigo_postal_fiscal');
+        const selectTipoPersona = document.getElementById('tipo_persona_fiscal');
+        
+        if (selectTipoPersona) {
+          selectTipoPersona.value = 'Fisica';
+          cambiarTipoPersonaFiscal('Fisica');
+        }
+        if (inputRazon && razonSocial) inputRazon.value = razonSocial;
+        if (inputEmailFisc && email) inputEmailFisc.value = email;
+        if (inputCP && cpMatch) inputCP.value = cpMatch[0];
+
+        const toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true
+        });
+        toast.fire({
+          icon: 'success',
+          title: 'Datos de contacto copiados a datos fiscales'
+        });
+      }
+
+      // Alternar ayuda y longitud de RFC según tipo de persona
+      function cambiarTipoPersonaFiscal(tipo) {
+        const rfcInput = document.getElementById('rfc');
+        const rfcHelp = document.getElementById('rfcHelp');
+        const razonSocialHelp = document.getElementById('razonSocialHelp');
+        const optFisica = document.getElementById('optgroup_fisica');
+        const optMoral = document.getElementById('optgroup_moral');
+        
+        if (tipo === 'Moral') {
+          if (rfcInput) {
+            rfcInput.maxLength = 12;
+            rfcInput.placeholder = "12 caracteres (Empresa)";
+          }
+          if (rfcHelp) rfcHelp.textContent = "Ej. COM850101ABC (12 caracteres para empresas)";
+          if (razonSocialHelp) razonSocialHelp.textContent = "Denominación o razón social de la empresa (sin régimen societario como S.A. de C.V.).";
+        } else {
+          if (rfcInput) {
+            rfcInput.maxLength = 13;
+            rfcInput.placeholder = "13 caracteres (Persona física)";
+          }
+          if (rfcHelp) rfcHelp.textContent = "Ej. PEPJ800101XYZ (13 caracteres para personas físicas)";
+          if (razonSocialHelp) razonSocialHelp.textContent = "Para personas físicas, el nombre completo tal como está registrado ante el SAT.";
+        }
+      }
+
       let debounceTimer = null;
       let duplicadosDetectados = [];
 
@@ -441,6 +633,103 @@ $statusAlerta   = trim($_GET['status'] ?? '');
         }
       });
 
+      // Alternar campos de donativo según tipo (Monetario vs En Especie)
+      function toggleTipoDonativo() {
+        const tipo = document.getElementById('tipo_donacion')?.value || '';
+        const containerMonto = document.getElementById('container_monto');
+        const containerEspecie = document.getElementById('container_especie');
+        const inputMonto = document.getElementById('monto_donacion');
+        const textareaEspecie = document.getElementById('descripcion_especie');
+
+        const esEspecie = (tipo === 'En Especie' || tipo === 'Bienes / Mobiliario');
+
+        if (esEspecie) {
+          if (containerMonto) containerMonto.classList.add('d-none');
+          if (containerEspecie) containerEspecie.classList.remove('d-none');
+          if (inputMonto) {
+            inputMonto.removeAttribute('required');
+            inputMonto.value = '';
+          }
+          if (textareaEspecie) {
+            textareaEspecie.setAttribute('required', 'required');
+          }
+        } else {
+          if (containerMonto) containerMonto.classList.remove('d-none');
+          if (containerEspecie) containerEspecie.classList.add('d-none');
+          if (inputMonto) {
+            inputMonto.setAttribute('required', 'required');
+          }
+          if (textareaEspecie) {
+            textareaEspecie.removeAttribute('required');
+            textareaEspecie.value = '';
+          }
+        }
+      }
+
+      // Pantalla de carga profesional con puntitos animados y barra de progreso
+      function mostrarPantallaCargando(titulo = 'Guardando registro...') {
+        Swal.fire({
+          title: `<span style="color:#721896; font-size:1.25rem; font-weight:700;">${escHtml(titulo)}</span>`,
+          html: `
+            <div class="py-3 text-center">
+              <div class="mb-3" style="color: #721896;">
+                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s;"></span>
+                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s; animation-delay: 0.2s;"></span>
+                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 0.8s; animation-delay: 0.4s;"></span>
+              </div>
+              <p class="text-muted small mb-3">Estamos procesando y registrando los datos en el sistema, por favor espera un momento...</p>
+              <div class="progress" style="height: 10px; border-radius: 8px; background-color: #f3e8ff;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%; background-color: #721896;"></div>
+              </div>
+            </div>
+          `,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false
+        });
+      }
+
+      // Validación detallada que extrae nombre del campo y motivo de error
+      function validarCamposFormulario(form) {
+        const errores = [];
+        const elementos = form.elements;
+
+        for (let i = 0; i < elementos.length; i++) {
+          const el = elementos[i];
+          if (el.disabled || el.type === 'button' || el.type === 'submit' || el.type === 'reset' || el.type === 'hidden') continue;
+          if (el.closest('.d-none') || el.offsetParent === null) continue;
+
+          if (!el.checkValidity()) {
+            let nombreCampo = el.getAttribute('data-nombre-campo');
+            if (!nombreCampo) {
+              const label = form.querySelector(`label[for="${el.id}"]`);
+              if (label) {
+                nombreCampo = label.textContent.replace('*', '').trim();
+              } else {
+                nombreCampo = el.placeholder || el.name || 'Campo requerido';
+              }
+            }
+
+            let motivo = '';
+            if (el.validity.valueMissing) {
+              motivo = 'Es obligatorio y se encuentra vacío.';
+            } else if (el.validity.typeMismatch) {
+              if (el.type === 'email') motivo = 'Formato de correo no válido (ej. correo@ejemplo.com).';
+              else motivo = 'El formato ingresado es incorrecto.';
+            } else if (el.validity.rangeUnderflow) {
+              motivo = `El monto debe ser mayor a 0 (mínimo $${el.min || 1}).`;
+            } else if (el.validity.tooShort) {
+              motivo = `Debe tener al menos ${el.minLength} caracteres.`;
+            } else {
+              motivo = 'Por favor verifica la información ingresada en este campo.';
+            }
+
+            errores.push({ elemento: el, nombre: nombreCampo, motivo: motivo });
+          }
+        }
+        return errores;
+      }
+
       // Validación nativa y confirmación SweetAlert2 antes de enviar
       (() => {
         'use strict'
@@ -448,14 +737,44 @@ $statusAlerta   = trim($_GET['status'] ?? '');
         if (!form) return;
 
         form.addEventListener('submit', event => {
-          if (!form.checkValidity()) {
+          // 1. Revisar si hay campos obligatorios faltantes o con error
+          const errores = validarCamposFormulario(form);
+          if (errores.length > 0) {
             event.preventDefault();
             event.stopPropagation();
             form.classList.add('was-validated');
+
+            // Enfocar y desplazar al primer campo con error
+            const primerError = errores[0].elemento;
+            primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            primerError.focus();
+
+            Swal.fire({
+              icon: 'warning',
+              title: 'Faltan campos por completar',
+              html: `
+                <div class="text-start" style="font-size: 0.92rem;">
+                  <p class="text-muted mb-2">Por favor revisa los siguientes campos requeridos antes de continuar:</p>
+                  <div class="p-3 bg-light rounded border mb-2" style="max-height: 220px; overflow-y: auto;">
+                    <ul class="mb-0 ps-3">
+                      ${errores.map(err => `
+                        <li class="mb-1">
+                          <strong class="text-dark">${escHtml(err.nombre)}:</strong>
+                          <span class="text-danger small d-block">${escHtml(err.motivo)}</span>
+                        </li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                  <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Los campos con observaciones se han resaltado en rojo.</small>
+                </div>
+              `,
+              confirmButtonColor: '#721896',
+              confirmButtonText: '<i class="bi bi-pencil-square me-1"></i> Corregir campos'
+            });
             return;
           }
 
-          // Si hay duplicados detectados y el usuario no marcó la casilla de confirmación
+          // 2. Si hay duplicados detectados y el usuario no marcó la casilla de confirmación
           const chkConfirmar = document.getElementById('chkIgnorarDuplicado');
           if (duplicadosDetectados.length > 0 && chkConfirmar && !chkConfirmar.checked) {
             event.preventDefault();
@@ -492,14 +811,30 @@ $statusAlerta   = trim($_GET['status'] ?? '');
             }).then((result) => {
               if (result.isConfirmed) {
                 chkConfirmar.checked = true;
+                mostrarPantallaCargando('Guardando nuevo donante y aportación...');
+                const btnSubmit = form.querySelector('button[type="submit"]');
+                if (btnSubmit) {
+                  btnSubmit.disabled = true;
+                  btnSubmit.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span>Guardando...`;
+                }
                 form.submit();
               }
             });
             return;
           }
 
+          // 3. Todo correcto: Mostrar animación de carga y deshabilitar botón
           form.classList.add('was-validated');
+          mostrarPantallaCargando('Guardando nuevo donante y aportación inicial...');
+          const btnSubmit = form.querySelector('button[type="submit"]');
+          if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span>Guardando...`;
+          }
         }, false);
+
+        // Inicializar visibilidad de campos de donativo
+        toggleTipoDonativo();
 
         // Si ya venían datos precargados (por ejemplo al volver con error), disparar chequeo inicial
         if (document.getElementById('email')?.value || document.getElementById('nombre')?.value) {

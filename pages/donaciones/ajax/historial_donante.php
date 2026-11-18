@@ -35,7 +35,10 @@ try {
 
     // 2. Historial completo de donativos del donante
     $stmtDonativos = $conn->prepare("
-        SELECT ID_Donativo, MontoDonacion, TipoDonacion, DescripcionEspecie, FechaDonacion
+        SELECT ID_Donativo, MontoDonacion, TipoDonacion, DescripcionEspecie, FechaDonacion,
+               COALESCE(RequiereRecibo, 0) AS RequiereRecibo,
+               COALESCE(FacturacionDiferente, 0) AS FacturacionDiferente,
+               RFC_Fiscal, RazonSocial_Fiscal
         FROM donativos
         WHERE ID_Donante = :id
         ORDER BY ID_Donativo DESC

@@ -376,15 +376,18 @@ try {
                   </div>
                 </div>
               </div>
-              <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-secondary" id="fd_btn_toggle_estatus" onclick="toggleEstatusModal()">
-                  <i class="bi bi-arrow-repeat me-1"></i> Cambiar Estado
-                </button>
-                <a href="#" class="btn btn-sm btn-purple" id="fd_btn_donar">
+              <div class="d-flex gap-2 flex-wrap">
+                <a href="#" class="btn btn-sm btn-primary fw-semibold shadow-sm px-3" id="fd_btn_editar_link_top" title="Editar información personal y fiscal del donante">
+                  <i class="bi bi-pencil-square me-1"></i> Editar Donante
+                </a>
+                <a href="#" class="btn btn-sm btn-purple shadow-sm" id="fd_btn_donar">
                   <i class="bi bi-cash-stack me-1"></i> + Nueva Aportación
                 </a>
                 <button class="btn btn-sm btn-outline-purple" id="fd_btn_correo">
                   <i class="bi bi-envelope-paper-heart me-1"></i> Redactar Correo
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" id="fd_btn_toggle_estatus" onclick="toggleEstatusModal()">
+                  <i class="bi bi-arrow-repeat me-1"></i> Cambiar Estado
                 </button>
               </div>
             </div>
@@ -412,7 +415,7 @@ try {
             </div>
 
             <!-- Fila de Información Personal y de Contacto -->
-            <div class="card border mb-4 bg-light">
+            <div class="card border mb-3 bg-light">
               <div class="card-body p-3">
                 <div class="row g-3 small">
                   <div class="col-md-4">
@@ -439,18 +442,57 @@ try {
               </div>
             </div>
 
+            <!-- Fila de Datos Fiscales (CFDI 4.0 / SAT) -->
+            <div class="card border mb-4" style="background-color: #faf5ff; border-color: #e9d5ff !important;">
+              <div class="card-body p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom" style="border-color: #e9d5ff !important;">
+                  <span class="fw-bold small text-purple" style="color: #721896; letter-spacing: 0.3px;">
+                    <i class="bi bi-receipt me-1"></i> Datos Fiscales (Deducibles de Impuestos / SAT)
+                  </span>
+                  <span id="fd_badge_fiscal_estado" class="badge bg-secondary-subtle text-secondary" style="font-size: 0.72rem;">Sin datos fiscales</span>
+                </div>
+                <div class="row g-3 small">
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Razón Social Fiscal:</span>
+                    <strong class="text-dark" id="fd_razon_social">-</strong>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">RFC:</span>
+                    <strong class="text-dark font-monospace" id="fd_rfc_completo">-</strong>
+                    <span class="badge bg-light text-secondary border ms-1" id="fd_tipo_persona">-</span>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Código Postal Fiscal (SAT):</span>
+                    <strong class="text-dark" id="fd_cp_fiscal">-</strong>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Régimen Fiscal:</span>
+                    <strong class="text-dark" id="fd_regimen">-</strong>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Uso de CFDI:</span>
+                    <strong class="text-dark" id="fd_uso_cfdi">-</strong>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-muted d-block">Correo de Facturación:</span>
+                    <strong class="text-dark" id="fd_email_fiscal">-</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Tabla del Historial de Donativos -->
             <h6 class="fw-bold text-purple mb-3 text-uppercase" style="color:#721896; letter-spacing: 0.5px;">
               <i class="bi bi-clock-history me-1"></i> Historial Completo de Aportaciones
             </h6>
             <div class="table-responsive border rounded-3 bg-white mb-2">
-              <table class="table table-hover align-middle mb-0" id="fd_tabla_donativos">
+              <table class="table table-hover align-middle mb-0" id="fd_tabla_donativos" style="table-layout: fixed; width: 100%;">
                 <thead class="table-light small text-uppercase">
                   <tr>
                     <th style="width: 70px;">Folio</th>
-                    <th>Fecha y Hora</th>
-                    <th>Método / Tipo</th>
-                    <th class="text-end">Monto / Detalle</th>
+                    <th style="width: 170px;">Fecha y Hora</th>
+                    <th style="width: 180px;">Método / Tipo</th>
+                    <th class="text-end" style="width: auto;">Monto / Detalle</th>
                     <th class="text-center" style="width: 110px;">Carta PDF</th>
                   </tr>
                 </thead>
@@ -462,7 +504,6 @@ try {
 
           </div>
           <div class="modal-footer bg-light justify-content-between">
-            <a href="#" class="btn btn-outline-primary" id="fd_btn_editar_link"><i class="bi bi-pencil-square me-1"></i> Editar Datos</a>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar Ficha</button>
           </div>
         </div>
@@ -738,39 +779,120 @@ try {
             document.getElementById('fd_ocupacion').innerText = d.Ocupacion || 'No especificada';
             document.getElementById('fd_domicilio').innerText = [d.Domicilio, d.Ciudad, d.Estado].filter(Boolean).join(', ') || 'No registrado';
 
+            // Datos fiscales
+            const tieneFiscal = (d.RFC && d.RFC.trim() !== '') || (d.RazonSocialFiscal && d.RazonSocialFiscal.trim() !== '');
+            const badgeFiscal = document.getElementById('fd_badge_fiscal_estado');
+            if (badgeFiscal) {
+              if (tieneFiscal) {
+                badgeFiscal.className = 'badge bg-success-subtle text-success border border-success-subtle';
+                badgeFiscal.innerHTML = '<i class="bi bi-check-circle me-1"></i>Registrados (CFDI 4.0)';
+              } else {
+                badgeFiscal.className = 'badge bg-warning-subtle text-dark border border-warning-subtle';
+                badgeFiscal.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>Sin datos fiscales';
+              }
+            }
+
+            document.getElementById('fd_razon_social').innerText = d.RazonSocialFiscal || d.NombreCompleto || 'No registrada';
+            document.getElementById('fd_rfc_completo').innerText = d.RFC || 'Sin RFC';
+            document.getElementById('fd_tipo_persona').innerText = d.TipoPersonaFiscal === 'Moral' ? 'Persona Moral' : 'Persona Física';
+            document.getElementById('fd_cp_fiscal').innerText = d.CodigoPostalFiscal || 'No registrado';
+            document.getElementById('fd_regimen').innerText = d.RegimenFiscal || 'No especificado';
+            document.getElementById('fd_uso_cfdi').innerText = d.UsoCFDI || 'D04 - Donativos';
+            document.getElementById('fd_email_fiscal').innerText = d.EmailFiscal || d.Email || 'Sin correo fiscal';
+
             // Botones de acción del modal
-            document.getElementById('fd_btn_donar').href = `donativo-nuevo.php?id_donante=${d.ID_Donante}`;
-            document.getElementById('fd_btn_editar_link').href = `donante-editar.php?id=${d.ID_Donante}`;
-            document.getElementById('fd_btn_correo').onclick = () => {
-              modal.hide();
-              prepararCorreoDonante(d.NombreCompleto, d.Email, d.ID_Donante);
-            };
+            const btnDonar = document.getElementById('fd_btn_donar');
+            if (btnDonar) btnDonar.href = `donativo-nuevo.php?id_donante=${d.ID_Donante}`;
+
+            const btnEditFoot = document.getElementById('fd_btn_editar_link');
+            if (btnEditFoot) btnEditFoot.href = `donante-editar.php?id=${d.ID_Donante}`;
+
+            const btnEditTop = document.getElementById('fd_btn_editar_link_top');
+            if (btnEditTop) btnEditTop.href = `donante-editar.php?id=${d.ID_Donante}`;
+
+            const btnCorreo = document.getElementById('fd_btn_correo');
+            if (btnCorreo) {
+              btnCorreo.onclick = () => {
+                modal.hide();
+                prepararCorreoDonante(d.NombreCompleto, d.Email, d.ID_Donante);
+              };
+            }
 
             // Tabla de donativos
             const tbody = document.getElementById('fd_tbody_donativos');
             tbody.innerHTML = '';
             if (donativos.length === 0) {
-              tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">Este donante aún no tiene aportaciones registradas.</td></tr>`;
+              tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">Este donante aún no tiene aportaciones registradas.</td></tr>`;
             } else {
               donativos.forEach(item => {
-                const montoHtml = parseFloat(item.MontoDonacion) > 0 
-                  ? `<span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">$${parseFloat(item.MontoDonacion).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>`
-                  : `<span class="text-dark small fw-semibold"><i class="bi bi-box-seam me-1 text-purple"></i>${item.DescripcionEspecie || 'En especie'}</span>`;
+                const esMonetario = parseFloat(item.MontoDonacion || 0) > 0;
+                let montoHtml = '';
 
-                const fechaStr = item.FechaDonacion ? new Date(item.FechaDonacion).toLocaleString('es-MX') : 'Automática';
-                let badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #212529; border: 1px solid #dee2e6; font-weight: 600;"><i class="bi bi-credit-card-2-front me-1 text-primary"></i>${item.TipoDonacion || 'No especificado'}</span>`;
-                if (item.TipoDonacion === 'En Especie' || item.TipoDonacion === 'Bienes / Mobiliario') {
-                  badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600;"><i class="bi bi-box-seam me-1" style="color: #721896;"></i>${item.TipoDonacion}</span>`;
-                } else if (item.TipoDonacion === 'Efectivo') {
+                if (esMonetario) {
+                  montoHtml = `<span class="badge bg-success-subtle text-success fs-6 fw-bold px-2 py-1">$${parseFloat(item.MontoDonacion).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>`;
+                } else {
+                  const desc = (item.DescripcionEspecie || '').trim();
+                  if (desc) {
+                    const esLargo = desc.length > 32;
+                    const descCorta = esLargo ? desc.substring(0, 30) + '...' : desc;
+                    const descEsc = escHtml(desc);
+                    const descCortaEsc = escHtml(descCorta);
+                    const descEncoded = encodeURIComponent(desc);
+                    const tipoEsc = escHtml(item.TipoDonacion || 'Bienes / Especie');
+
+                    montoHtml = `
+                      <div class="d-inline-flex flex-column align-items-end" style="max-width: 100%;">
+                        <span class="badge text-start text-break border px-2 py-1" 
+                              style="background-color: #faf5ff; color: #721896; border-color: #d1a8e7 !important; font-size: 0.8rem; font-weight: 500; max-width: 100%; white-space: normal; word-break: break-word; overflow-wrap: anywhere;"
+                              title="${descEsc}">
+                          <i class="bi bi-box-seam me-1 text-purple"></i>${descCortaEsc}
+                        </span>
+                        ${esLargo ? `
+                          <button type="button" class="btn btn-link btn-sm p-0 text-purple text-decoration-none mt-1 fw-semibold" 
+                                  style="font-size: 0.72rem;" 
+                                  onclick="mostrarDetalleEspecie(${item.ID_Donativo}, '${tipoEsc}', '${descEncoded}')">
+                            <i class="bi bi-eye me-1"></i>Ver descripción completa
+                          </button>
+                        ` : ''}
+                      </div>
+                    `;
+                  } else {
+                    montoHtml = `<span class="badge bg-light text-secondary border px-2 py-1"><i class="bi bi-box-seam me-1"></i>En especie</span>`;
+                  }
+                }
+
+                const fechaStr = item.FechaDonacion 
+                  ? new Date(item.FechaDonacion).toLocaleString('es-MX', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:true })
+                  : 'Automática';
+
+                const tipo = (item.TipoDonacion || '').trim();
+                let badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #212529; border: 1px solid #dee2e6; font-weight: 600;"><i class="bi bi-credit-card-2-front me-1 text-primary"></i>${escHtml(tipo || 'No especificado')}</span>`;
+                if (tipo === 'En Especie' || tipo === 'Bienes / Mobiliario') {
+                  badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7; font-weight: 600;"><i class="bi bi-box-seam me-1" style="color: #721896;"></i>${escHtml(tipo)}</span>`;
+                } else if (tipo === 'Efectivo') {
                   badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #eafaf1; color: #0f5132; border: 1px solid #c3e6cb; font-weight: 600;"><i class="bi bi-cash me-1 text-success"></i>Efectivo</span>`;
+                } else if (tipo === 'PayPal') {
+                  badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #e8f4fd; color: #003087; border: 1px solid #b8daff; font-weight: 600;"><i class="bi bi-paypal me-1"></i>PayPal</span>`;
+                } else if (tipo === 'Cheque' || tipo === 'Cheques') {
+                  badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; font-weight: 600;"><i class="bi bi-card-text me-1"></i>${escHtml(tipo)}</span>`;
+                } else if (tipo === 'Autogestivo') {
+                  badgeMetodo = `<span class="badge px-2 py-1" style="background-color: #fff9e6; color: #856404; border: 1px solid #ffeeba; font-weight: 600;">Autogestivo</span>`;
+                }
+
+                let badgeDeducible = '';
+                if (parseInt(item.RequiereRecibo || 0) === 1) {
+                  badgeDeducible = `<span class="badge bg-purple-subtle text-purple border border-purple mt-1 d-inline-block" style="font-size:0.7rem; padding: 2px 6px;" title="Recibo Deducible (CFDI)"><i class="bi bi-receipt me-1"></i>Deducible</span>`;
                 }
 
                 tbody.innerHTML += `
                   <tr>
                     <td class="fw-semibold text-muted">#${item.ID_Donativo}</td>
-                    <td><i class="bi bi-calendar-event me-1 text-secondary"></i>${fechaStr}</td>
-                    <td>${badgeMetodo}</td>
-                    <td class="text-end">${montoHtml}</td>
+                    <td><span class="small text-secondary"><i class="bi bi-calendar-event me-1"></i>${fechaStr}</span></td>
+                    <td>
+                      <div>${badgeMetodo}</div>
+                      ${badgeDeducible ? `<div>${badgeDeducible}</div>` : ''}
+                    </td>
+                    <td class="text-end" style="word-break: break-word; overflow-wrap: anywhere;">${montoHtml}</td>
                     <td class="text-center">
                       <a href="carta-agradecimiento.php?id=${item.ID_Donativo}" target="_blank"
                          style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;padding:4px 8px;border-radius:6px;border:1.5px solid #721896;color:#721896;background:transparent;text-decoration:none;font-weight:600;white-space:nowrap;"
@@ -789,9 +911,26 @@ try {
             document.getElementById('fd_contenido').classList.remove('d-none');
           })
           .catch(err => {
-            Swal.fire({ icon: 'error', title: 'Error de red', text: 'No se pudo comunicar con el servidor.' });
+            console.error("Error al cargar ficha del donante:", err);
+            Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo cargar la información de la ficha.' });
             modal.hide();
           });
+      }
+
+      function mostrarDetalleEspecie(id, tipo, descEncoded) {
+        const descripcion = decodeURIComponent(descEncoded).trim();
+        Swal.fire({
+          title: `<span style="font-size: 1.15rem; color: #721896;"><i class="bi bi-box-seam me-2"></i>Detalle de Aportación #${id}</span>`,
+          html: `
+            <div class="text-start p-3 bg-light rounded-3 border mt-2">
+              <div class="small text-muted mb-2"><strong>Tipo de Donativo:</strong> <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7;">${tipo}</span></div>
+              <div class="small text-muted mb-1"><strong>Descripción completa de los bienes o especie:</strong></div>
+              <div class="p-3 bg-white rounded border text-dark" style="white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; max-height: 240px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; text-align: left;">${escHtml(descripcion)}</div>
+            </div>
+          `,
+          confirmButtonText: 'Cerrar',
+          confirmButtonColor: '#721896'
+        });
       }
 
       // Cambiar estatus de donante

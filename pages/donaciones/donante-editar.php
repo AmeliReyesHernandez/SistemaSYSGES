@@ -241,18 +241,99 @@ try {
 
                 <hr class="my-4">
 
-                <!-- Bloque 3: Datos Fiscales Opcionales -->
+                <!-- Bloque 3: Datos Fiscales para Recibos Deducibles de Impuestos -->
                 <div class="mb-4">
-                  <h6 class="fw-bold text-uppercase text-purple mb-3" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
-                    <i class="bi bi-receipt me-1"></i> Información Fiscal (Opcional)
-                  </h6>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label for="rfc" class="form-label fw-semibold">RFC</label>
-                      <input type="text" class="form-control" id="rfc" name="rfc" value="<?= htmlspecialchars($donante['RFC'] ?? '') ?>" placeholder="12 o 13 caracteres" maxlength="20" style="text-transform: uppercase;">
-                      <div class="form-text text-muted">Para emisión de comprobantes o recibos deducibles.</div>
+                  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                    <div>
+                      <h6 class="fw-bold text-uppercase text-purple mb-0" style="color:#721896; font-size: 0.85rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-receipt me-1"></i> Datos Fiscales (Deducibles de Impuestos)
+                      </h6>
+                      <small class="text-muted">Información para emitir comprobantes o recibos deducibles ante el SAT.</small>
                     </div>
+                    <div>
+                      <button type="button" class="btn btn-outline-purple btn-sm fw-semibold shadow-sm" onclick="copiarDatosFacturacion()" title="Copiar nombre personal, domicilio y correo a datos fiscales">
+                        <i class="bi bi-clipboard2-check me-1"></i> Copiar Datos Personales a Fiscales
+                      </button>
+                    </div>
+                  </div>
 
+                  <div class="p-3 rounded-3 border bg-light-subtle mb-3">
+                    <div class="row g-3">
+                      <!-- Tipo de Persona Fiscal -->
+                      <div class="col-md-4">
+                        <label for="tipo_persona_fiscal" class="form-label fw-semibold">Tipo de Persona Fiscal</label>
+                        <?php $tpf = $donante['TipoPersonaFiscal'] ?? 'Fisica'; ?>
+                        <select class="form-select" id="tipo_persona_fiscal" name="tipo_persona_fiscal" onchange="cambiarTipoPersonaFiscal(this.value)">
+                          <option value="Fisica" <?= $tpf === 'Fisica' ? 'selected' : '' ?>>Persona Física (A título personal)</option>
+                          <option value="Moral" <?= $tpf === 'Moral' ? 'selected' : '' ?>>Persona Moral (Empresa / Negocio)</option>
+                        </select>
+                      </div>
+
+                      <!-- RFC -->
+                      <div class="col-md-4">
+                        <label for="rfc" class="form-label fw-semibold">RFC</label>
+                        <input type="text" class="form-control text-uppercase" id="rfc" name="rfc" value="<?= htmlspecialchars($donante['RFC'] ?? '') ?>" placeholder="<?= $tpf === 'Moral' ? '12 caracteres' : '13 caracteres' ?>" maxlength="13" autocomplete="off">
+                        <div class="form-text text-muted" id="rfcHelp">
+                          <?= $tpf === 'Moral' ? 'Ej. COM850101ABC (12 caracteres)' : 'Ej. PEPJ800101XYZ (13 caracteres)' ?>
+                        </div>
+                      </div>
+
+                      <!-- Código Postal Fiscal -->
+                      <div class="col-md-4">
+                        <label for="codigo_postal_fiscal" class="form-label fw-semibold">Código Postal Fiscal (SAT)</label>
+                        <input type="text" class="form-control" id="codigo_postal_fiscal" name="codigo_postal_fiscal" value="<?= htmlspecialchars($donante['CodigoPostalFiscal'] ?? '') ?>" placeholder="Ej. 68000" maxlength="5" autocomplete="off">
+                      </div>
+
+                      <!-- Razón Social Fiscal -->
+                      <div class="col-md-6">
+                        <label for="razon_social_fiscal" class="form-label fw-semibold">Nombre o Razón Social Fiscal</label>
+                        <input type="text" class="form-control" id="razon_social_fiscal" name="razon_social_fiscal" value="<?= htmlspecialchars($donante['RazonSocialFiscal'] ?? '') ?>" placeholder="Nombre completo o Razón Social de empresa" autocomplete="off">
+                        <div class="form-text text-muted" id="razonSocialHelp">Para personas físicas, el nombre completo; para empresas, la denominación sin régimen societario.</div>
+                      </div>
+
+                      <!-- Correo Electrónico para Facturación / Recibos -->
+                      <div class="col-md-6">
+                        <label for="email_fiscal" class="form-label fw-semibold">Correo para Facturación (Recibos)</label>
+                        <div class="input-group">
+                          <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                          <input type="email" class="form-control" id="email_fiscal" name="email_fiscal" value="<?= htmlspecialchars($donante['EmailFiscal'] ?? '') ?>" placeholder="facturacion@ejemplo.com" autocomplete="off">
+                        </div>
+                      </div>
+
+                      <!-- Régimen Fiscal -->
+                      <div class="col-md-6">
+                        <label for="regimen_fiscal" class="form-label fw-semibold">Régimen Fiscal (SAT)</label>
+                        <?php $rfVal = $donante['RegimenFiscal'] ?? ''; ?>
+                        <select class="form-select" id="regimen_fiscal" name="regimen_fiscal">
+                          <option value="">Seleccione el régimen fiscal...</option>
+                          <optgroup label="Personas Físicas" id="optgroup_fisica">
+                            <option value="605 - Sueldos y Salarios e Ingresos Asimilados a Salarios" <?= strpos($rfVal, '605') !== false ? 'selected' : '' ?>>605 - Sueldos y Salarios e Ingresos Asimilados</option>
+                            <option value="611 - Ingresos por Dividendos" <?= strpos($rfVal, '611') !== false ? 'selected' : '' ?>>611 - Ingresos por Dividendos</option>
+                            <option value="614 - Ingresos por Intereses" <?= strpos($rfVal, '614') !== false ? 'selected' : '' ?>>614 - Ingresos por Intereses</option>
+                            <option value="616 - Sin obligaciones fiscales" <?= strpos($rfVal, '616') !== false ? 'selected' : '' ?>>616 - Sin obligaciones fiscales</option>
+                          </optgroup>
+                          <optgroup label="Personas Morales (Empresas)" id="optgroup_moral">
+                            <option value="601 - General de Ley Personas Morales" <?= strpos($rfVal, '601') !== false ? 'selected' : '' ?>>601 - General de Ley Personas Morales</option>
+                            <option value="626 - Régimen Simplificado de Confianza (RESICO Moral)" <?= ($rfVal === '626 - Régimen Simplificado de Confianza (RESICO Moral)') ? 'selected' : '' ?>>626 - RESICO (Personas Morales)</option>
+                          </optgroup>
+                        </select>
+                      </div>
+
+                      <!-- Uso de CFDI -->
+                      <div class="col-md-6">
+                        <label for="uso_cfdi" class="form-label fw-semibold">Uso de CFDI</label>
+                        <?php $usoVal = $donante['UsoCFDI'] ?? 'D04 - Donativos'; ?>
+                        <select class="form-select" id="uso_cfdi" name="uso_cfdi">
+                          <option value="D04 - Donativos" <?= strpos($usoVal, 'D04') !== false ? 'selected' : '' ?>>D04 - Donativos (Recomendado)</option>
+                          <option value="S01 - Sin efectos fiscales" <?= strpos($usoVal, 'S01') !== false ? 'selected' : '' ?>>S01 - Sin efectos fiscales</option>
+                          <option value="G03 - Gastos en general" <?= strpos($usoVal, 'G03') !== false ? 'selected' : '' ?>>G03 - Gastos en general</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Estatus del Donante -->
+                  <div class="row g-3">
                     <div class="col-md-6">
                       <label for="estatus" class="form-label fw-semibold">Estado del Donante <span class="text-danger">*</span></label>
                       <select class="form-select" id="estatus" name="estatus" required>
@@ -284,20 +365,182 @@ try {
 </div>
 
     <script src="../../assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+      function copiarDatosFacturacion() {
+        const nom = document.getElementById('nombre')?.value.trim() || '';
+        const ap = document.getElementById('apellido_paterno')?.value.trim() || '';
+        const am = document.getElementById('apellido_materno')?.value.trim() || '';
+        const email = document.getElementById('email')?.value.trim() || '';
+        const dom = document.getElementById('domicilio')?.value.trim() || '';
+        
+        let cpMatch = dom.match(/\b\d{5}\b/);
+        const razonSocial = [nom, ap, am].filter(Boolean).join(' ');
+        
+        const inputRazon = document.getElementById('razon_social_fiscal');
+        const inputEmailFisc = document.getElementById('email_fiscal');
+        const inputCP = document.getElementById('codigo_postal_fiscal');
+        const selectTipoPersona = document.getElementById('tipo_persona_fiscal');
+        
+        if (selectTipoPersona) {
+          selectTipoPersona.value = 'Fisica';
+          cambiarTipoPersonaFiscal('Fisica');
+        }
+        if (inputRazon && razonSocial) inputRazon.value = razonSocial;
+        if (inputEmailFisc && email) inputEmailFisc.value = email;
+        if (inputCP && cpMatch) inputCP.value = cpMatch[0];
+
+        const toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true
+        });
+        toast.fire({
+          icon: 'success',
+          title: 'Datos de contacto copiados a datos fiscales'
+        });
+      }
+
+      function cambiarTipoPersonaFiscal(tipo) {
+        const rfcInput = document.getElementById('rfc');
+        const rfcHelp = document.getElementById('rfcHelp');
+        const razonSocialHelp = document.getElementById('razonSocialHelp');
+        
+        if (tipo === 'Moral') {
+          if (rfcInput) {
+            rfcInput.maxLength = 12;
+            rfcInput.placeholder = "12 caracteres (Empresa)";
+          }
+          if (rfcHelp) rfcHelp.textContent = "Ej. COM850101ABC (12 caracteres para empresas)";
+          if (razonSocialHelp) razonSocialHelp.textContent = "Denominación o razón social de la empresa (sin régimen societario como S.A. de C.V.).";
+        } else {
+          if (rfcInput) {
+            rfcInput.maxLength = 13;
+            rfcInput.placeholder = "13 caracteres (Persona física)";
+          }
+          if (rfcHelp) rfcHelp.textContent = "Ej. PEPJ800101XYZ (13 caracteres para personas físicas)";
+          if (razonSocialHelp) razonSocialHelp.textContent = "Para personas físicas, el nombre completo tal como está registrado ante el SAT.";
+        }
+      }
+
+      function escHtml(str) {
+        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // Pantalla de carga profesional con puntitos animados y barra de progreso
+      function mostrarPantallaCargando(titulo = 'Actualizando información...') {
+        Swal.fire({
+          title: `<span style="color:#721896; font-size:1.25rem; font-weight:700;">${escHtml(titulo)}</span>`,
+          html: `
+            <div class="py-3 text-center">
+              <div class="mb-3" style="color: #721896;">
+                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s;"></span>
+                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s; animation-delay: 0.2s;"></span>
+                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 0.8s; animation-delay: 0.4s;"></span>
+              </div>
+              <p class="text-muted small mb-3">Estamos procesando y actualizando el expediente en el sistema, por favor espera un momento...</p>
+              <div class="progress" style="height: 10px; border-radius: 8px; background-color: #f3e8ff;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%; background-color: #721896;"></div>
+              </div>
+            </div>
+          `,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false
+        });
+      }
+
+      // Validación detallada que extrae nombre del campo y motivo de error
+      function validarCamposFormulario(form) {
+        const errores = [];
+        const elementos = form.elements;
+
+        for (let i = 0; i < elementos.length; i++) {
+          const el = elementos[i];
+          if (el.disabled || el.type === 'button' || el.type === 'submit' || el.type === 'reset' || el.type === 'hidden') continue;
+          if (el.closest('.d-none') || el.offsetParent === null) continue;
+
+          if (!el.checkValidity()) {
+            let nombreCampo = el.getAttribute('data-nombre-campo');
+            if (!nombreCampo) {
+              const label = form.querySelector(`label[for="${el.id}"]`);
+              if (label) {
+                nombreCampo = label.textContent.replace('*', '').trim();
+              } else {
+                nombreCampo = el.placeholder || el.name || 'Campo requerido';
+              }
+            }
+
+            let motivo = '';
+            if (el.validity.valueMissing) {
+              motivo = 'Es obligatorio y se encuentra vacío.';
+            } else if (el.validity.typeMismatch) {
+              if (el.type === 'email') motivo = 'Formato de correo no válido (ej. correo@ejemplo.com).';
+              else motivo = 'El formato ingresado es incorrecto.';
+            } else if (el.validity.tooShort) {
+              motivo = `Debe tener al menos ${el.minLength} caracteres.`;
+            } else {
+              motivo = 'Por favor verifica la información ingresada en este campo.';
+            }
+
+            errores.push({ elemento: el, nombre: nombreCampo, motivo: motivo });
+          }
+        }
+        return errores;
+      }
+
       (() => {
         'use strict'
-        const forms = document.querySelectorAll('.needs-validation')
-        Array.from(forms).forEach(form => {
-          form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-              event.preventDefault()
-              event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-          }, false)
-        })
-      })()
+        const form = document.getElementById('formDonante') || document.querySelector('.needs-validation');
+        if (!form) return;
+
+        form.addEventListener('submit', event => {
+          const errores = validarCamposFormulario(form);
+          if (errores.length > 0) {
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add('was-validated');
+
+            const primerError = errores[0].elemento;
+            primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            primerError.focus();
+
+            Swal.fire({
+              icon: 'warning',
+              title: 'Faltan campos por completar',
+              html: `
+                <div class="text-start" style="font-size: 0.92rem;">
+                  <p class="text-muted mb-2">Por favor revisa los siguientes campos requeridos antes de guardar:</p>
+                  <div class="p-3 bg-light rounded border mb-2" style="max-height: 220px; overflow-y: auto;">
+                    <ul class="mb-0 ps-3">
+                      ${errores.map(err => `
+                        <li class="mb-1">
+                          <strong class="text-dark">${escHtml(err.nombre)}:</strong>
+                          <span class="text-danger small d-block">${escHtml(err.motivo)}</span>
+                        </li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                  <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Los campos con observaciones se han resaltado en rojo.</small>
+                </div>
+              `,
+              confirmButtonColor: '#721896',
+              confirmButtonText: '<i class="bi bi-pencil-square me-1"></i> Corregir campos'
+            });
+            return;
+          }
+
+          form.classList.add('was-validated');
+          mostrarPantallaCargando('Actualizando expediente del donante...');
+          const btnSubmit = form.querySelector('button[type="submit"]');
+          if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span>Actualizando...`;
+          }
+        }, false);
+      })();
     </script>
   </body>
 </html>

@@ -24,6 +24,33 @@ try {
         header("Location: donativos.php?status=error&msg=" . urlencode("Donación no encontrada."));
         exit();
     }
+
+    // Obtener también los datos fiscales actuales del donante
+    $stmtDonante = $conn->prepare("
+        SELECT ID_Donante, Nombre, 
+               TRIM(CONCAT(Nombre, ' ', ApellidoPaterno, ' ', COALESCE(ApellidoMaterno, ''))) AS NombreCompleto,
+               Email, RFC,
+               COALESCE(TipoPersonaFiscal, 'Fisica') AS TipoPersonaFiscal,
+               COALESCE(RazonSocialFiscal, '') AS RazonSocialFiscal,
+               COALESCE(CodigoPostalFiscal, '') AS CodigoPostalFiscal,
+               COALESCE(RegimenFiscal, '') AS RegimenFiscal,
+               COALESCE(UsoCFDI, 'D04 - Donativos') AS UsoCFDI,
+               COALESCE(EmailFiscal, '') AS EmailFiscal
+        FROM donantes
+        WHERE ID_Donante = :id
+    ");
+    $stmtDonante->execute([':id' => $donativo['ID_Donante']]);
+    $donanteFiscalData = $stmtDonante->fetch(PDO::FETCH_ASSOC) ?: null;
+
+    $requiereRecibo = (int)($donativo['RequiereRecibo'] ?? 0);
+    $facturacionDiferente = (int)($donativo['FacturacionDiferente'] ?? 0);
+    $factTipoPersona = $donativo['TipoPersonaFiscal'] ?: 'Moral';
+    $factRFC = $donativo['RFC_Fiscal'] ?? '';
+    $factRazonSocial = $donativo['RazonSocial_Fiscal'] ?? '';
+    $factCP = $donativo['CP_Fiscal'] ?? '';
+    $factRegimen = $donativo['Regimen_Fiscal'] ?? '';
+    $factUsoCFDI = $donativo['UsoCFDI_Fiscal'] ?? 'D04 - Donativos';
+    $factEmail = $donativo['Email_Fiscal'] ?? '';
 } catch (PDOException $e) {
     header("Location: donativos.php?status=error&msg=" . urlencode($e->getMessage()));
     exit();
@@ -233,6 +260,155 @@ try {
                     <div class="invalid-feedback">Describe lo que fue donado en especie o bienes.</div>
                   </div>
 
+                  <!-- ========================================== -->
+                  <!-- SECCIÓN: DATOS FISCALES / RECIBO DEDUCIBLE -->
+                  <!-- ========================================== -->
+                  <div class="col-12 mt-4">
+                    <div class="card border rounded-3 p-3 bg-light shadow-sm">
+                      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-3">
+                          <div class="form-check form-switch fs-4 mb-0">
+                            <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="requiere_recibo" name="requiere_recibo" value="1" <?= $requiereRecibo === 1 ? 'checked' : '' ?> onchange="toggleRequiereRecibo(this.checked)">
+                          </div>
+                          <div>
+                            <label class="form-check-label fw-bold text-dark mb-0 cursor-pointer" for="requiere_recibo">
+                              <i class="bi bi-receipt text-purple me-1"></i> ¿El donante requiere Recibo Deducible de Impuestos (CFDI)?
+                            </label>
+                            <div class="small text-muted">Active esta opción si el donante solicita recibo deducible oficial ante el SAT.</div>
+                          </div>
+                        </div>
+                        <span class="badge <?= $requiereRecibo === 1 ? 'bg-purple-subtle text-purple border border-purple' : 'bg-secondary-subtle text-secondary' ?> px-2 py-1" id="badgeEstadoRecibo">
+                          <?= $requiereRecibo === 1 ? '<i class="bi bi-check-circle-fill me-1"></i> Recibo Solicitado' : 'No solicitado' ?>
+                        </span>
+                      </div>
+
+                      <!-- Contenedor Desplegable Fiscal -->
+                      <div id="seccion_fiscal" class="<?= $requiereRecibo === 1 ? '' : 'd-none' ?> mt-3 pt-3 border-top">
+                        
+                        <!-- Modo de facturación -->
+                        <div class="mb-3">
+                          <label class="form-label fw-semibold small text-uppercase text-muted">¿A nombre de quién se emitirá el recibo deducible?</label>
+                          <div class="row g-2">
+                            <div class="col-md-6">
+                              <label class="p-3 border rounded-3 bg-white d-flex align-items-start gap-2 cursor-pointer h-100" for="modo_donante">
+                                <input class="form-check-input mt-1" type="radio" name="facturacion_modo" id="modo_donante" value="donante" <?= $facturacionDiferente === 0 ? 'checked' : '' ?> onchange="cambiarModoFacturacion('donante')">
+                                <div>
+                                  <strong class="d-block text-dark small"><i class="bi bi-person-check text-purple me-1"></i> Datos fiscales habituales del Donante</strong>
+                                  <span class="text-muted small" style="font-size: 0.8rem;">Emitir con el RFC y razón social guardados en el perfil de este donante.</span>
+                                </div>
+                              </label>
+                            </div>
+                            <div class="col-md-6">
+                              <label class="p-3 border rounded-3 bg-white d-flex align-items-start gap-2 cursor-pointer h-100" for="modo_diferente">
+                                <input class="form-check-input mt-1" type="radio" name="facturacion_modo" id="modo_diferente" value="diferente" <?= $facturacionDiferente === 1 ? 'checked' : '' ?> onchange="cambiarModoFacturacion('diferente')">
+                                <div>
+                                  <strong class="d-block text-dark small"><i class="bi bi-building text-primary me-1"></i> Facturar a nombre de Empresa u otro RFC</strong>
+                                  <span class="text-muted small" style="font-size: 0.8rem;">El donante aporta personalmente pero el recibo sale a nombre de su empresa o un tercero.</span>
+                                </div>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Resumen datos del donante -->
+                        <div id="resumen_fiscal_donante" class="<?= $facturacionDiferente === 0 ? '' : 'd-none' ?> p-3 rounded-3 bg-white border">
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-bold text-dark"><i class="bi bi-file-earmark-person text-purple me-1"></i> Datos Fiscales del Perfil del Donante</span>
+                            <span id="badge_tiene_fiscales" class="badge bg-secondary-subtle text-secondary">Verificando...</span>
+                          </div>
+                          <div id="detalle_fiscal_donante" class="small text-secondary">
+                            Cargando datos fiscales del donante...
+                          </div>
+                        </div>
+
+                        <!-- Campos para Facturación Diferente / Empresa -->
+                        <div id="campos_fiscales_diferente" class="<?= $facturacionDiferente === 1 ? '' : 'd-none' ?> p-3 rounded-3 bg-white border">
+                          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3 pb-2 border-bottom">
+                            <div>
+                              <h6 class="fw-bold mb-0 text-purple" style="font-size:0.88rem;">
+                                <i class="bi bi-building-gear me-1"></i> Datos de Facturación para este Donativo (Empresa o Tercero)
+                              </h6>
+                              <small class="text-muted">Estos datos fiscales se aplicarán únicamente a esta aportación.</small>
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="copiarFiscalesDonanteACamposDiferente()" title="Cargar los datos del donante para modificarlos">
+                              <i class="bi bi-clipboard-data me-1"></i> Cargar base del donante
+                            </button>
+                          </div>
+
+                          <div class="row g-3">
+                            <div class="col-md-4">
+                              <label for="fact_tipo_persona" class="form-label fw-semibold small">Tipo de Persona Fiscal</label>
+                              <select class="form-select form-select-sm" id="fact_tipo_persona" name="fact_tipo_persona" onchange="cambiarTipoPersonaFiscalDonativo(this.value)">
+                                <option value="Moral" <?= $factTipoPersona === 'Moral' ? 'selected' : '' ?>>Persona Moral (Empresa / Negocio)</option>
+                                <option value="Fisica" <?= $factTipoPersona === 'Fisica' ? 'selected' : '' ?>>Persona Física (A título personal / Tercero)</option>
+                              </select>
+                            </div>
+
+                            <div class="col-md-4">
+                              <label for="fact_rfc" class="form-label fw-semibold small">RFC Receptor <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control form-select-sm text-uppercase" id="fact_rfc" name="fact_rfc" value="<?= htmlspecialchars($factRFC) ?>" placeholder="12 caracteres (Moral)" maxlength="<?= $factTipoPersona === 'Fisica' ? 13 : 12 ?>" autocomplete="off">
+                              <div class="form-text small text-muted" id="fact_rfc_help"><?= $factTipoPersona === 'Fisica' ? '13 caracteres para Persona Física' : '12 caracteres para Persona Moral (Empresas)' ?></div>
+                              <div class="invalid-feedback">Ingresa un RFC válido.</div>
+                            </div>
+
+                            <div class="col-md-4">
+                              <label for="fact_cp" class="form-label fw-semibold small">C.P. Fiscal (SAT) <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control form-select-sm" id="fact_cp" name="fact_cp" value="<?= htmlspecialchars($factCP) ?>" placeholder="5 dígitos" maxlength="5" autocomplete="off">
+                              <div class="invalid-feedback">Ingresa el C.P. fiscal de 5 dígitos.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                              <label for="fact_razon_social" class="form-label fw-semibold small">Nombre o Razón Social Fiscal <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control form-select-sm" id="fact_razon_social" name="fact_razon_social" value="<?= htmlspecialchars($factRazonSocial) ?>" placeholder="Denominación o Razón Social registrada ante SAT" autocomplete="off">
+                              <div class="form-text small text-muted">Sin régimen societario (ej. sin S.A. de C.V.).</div>
+                              <div class="invalid-feedback">Ingresa la razón social.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                              <label for="fact_email" class="form-label fw-semibold small">Correo para Envío del CFDI / Recibo <span class="text-danger">*</span></label>
+                              <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                                <input type="email" class="form-control" id="fact_email" name="fact_email" value="<?= htmlspecialchars($factEmail) ?>" placeholder="facturacion@empresa.com" autocomplete="off">
+                                <div class="invalid-feedback">Ingresa un correo electrónico para el envío.</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-6">
+                              <label for="fact_regimen" class="form-label fw-semibold small">Régimen Fiscal (SAT) <span class="text-danger">*</span></label>
+                              <select class="form-select form-select-sm" id="fact_regimen" name="fact_regimen">
+                                <option value="">Seleccione el régimen fiscal...</option>
+                                <optgroup label="Personas Morales (Empresas)" id="optgroup_fact_moral">
+                                  <option value="601 - General de Ley Personas Morales" <?= strpos($factRegimen, '601') === 0 ? 'selected' : '' ?>>601 - General de Ley Personas Morales</option>
+                                  <option value="603 - Personas Morales con Fines no Lucrativos" <?= strpos($factRegimen, '603') === 0 ? 'selected' : '' ?>>603 - Personas Morales con Fines no Lucrativos</option>
+                                  <option value="626 - Régimen Simplificado de Confianza (RESICO Moral)" <?= (strpos($factRegimen, '626') === 0 && $factTipoPersona === 'Moral') ? 'selected' : '' ?>>626 - RESICO (Personas Morales)</option>
+                                </optgroup>
+                                <optgroup label="Personas Físicas" id="optgroup_fact_fisica">
+                                  <option value="605 - Sueldos y Salarios e Ingresos Asimilados a Salarios" <?= strpos($factRegimen, '605') === 0 ? 'selected' : '' ?>>605 - Sueldos y Salarios e Ingresos Asimilados</option>
+                                  <option value="612 - Personas Físicas con Actividades Empresariales y Profesionales" <?= strpos($factRegimen, '612') === 0 ? 'selected' : '' ?>>612 - Actividades Empresariales y Profesionales</option>
+                                  <option value="626 - Régimen Simplificado de Confianza (RESICO)" <?= (strpos($factRegimen, '626') === 0 && $factTipoPersona === 'Fisica') ? 'selected' : '' ?>>626 - Régimen Simplificado de Confianza (RESICO)</option>
+                                  <option value="611 - Ingresos por Dividendos" <?= strpos($factRegimen, '611') === 0 ? 'selected' : '' ?>>611 - Ingresos por Dividendos</option>
+                                  <option value="614 - Ingresos por Intereses" <?= strpos($factRegimen, '614') === 0 ? 'selected' : '' ?>>614 - Ingresos por Intereses</option>
+                                  <option value="616 - Sin obligaciones fiscales" <?= strpos($factRegimen, '616') === 0 ? 'selected' : '' ?>>616 - Sin obligaciones fiscales</option>
+                                </optgroup>
+                              </select>
+                              <div class="invalid-feedback">Selecciona el régimen fiscal.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                              <label for="fact_uso_cfdi" class="form-label fw-semibold small">Uso de CFDI</label>
+                              <select class="form-select form-select-sm" id="fact_uso_cfdi" name="fact_uso_cfdi">
+                                <option value="D04 - Donativos" <?= strpos($factUsoCFDI, 'D04') === 0 ? 'selected' : '' ?>>D04 - Donativos (Recomendado)</option>
+                                <option value="S01 - Sin efectos fiscales" <?= strpos($factUsoCFDI, 'S01') === 0 ? 'selected' : '' ?>>S01 - Sin efectos fiscales</option>
+                                <option value="G03 - Gastos en general" <?= strpos($factUsoCFDI, 'G03') === 0 ? 'selected' : '' ?>>G03 - Gastos en general</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
                 <hr class="my-4">
@@ -255,11 +431,25 @@ try {
 </div>
 
     <script src="../../assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+      let donanteFiscalActual = <?= $donanteFiscalData ? json_encode($donanteFiscalData) : 'null' ?>;
+
       document.addEventListener("DOMContentLoaded", () => {
         const input = document.getElementById("input_donante");
         const sugerencias = document.getElementById("sug_donante");
         const inputHidden = document.getElementById("id_donante");
+
+        toggleTipoDonativo();
+        if (donanteFiscalActual) {
+          actualizarResumenFiscalDonante();
+        }
+
+        const modoDiferenteActivo = document.getElementById('modo_diferente').checked;
+        const requiereReciboActivo = document.getElementById('requiere_recibo').checked;
+        if (requiereReciboActivo && modoDiferenteActivo) {
+          asignarRequiredFiscalesDiferente();
+        }
 
         input.addEventListener("input", async () => {
           const q = input.value.trim();
@@ -282,7 +472,7 @@ try {
               item.innerHTML = `
                 <div>
                   <strong>${donante.NombreCompleto}</strong>
-                  <small class="text-muted d-block">${donante.Email || 'Sin correo'}</small>
+                  <small class="text-muted d-block">${donante.Email || 'Sin correo'}${donante.RFC ? ' • RFC: ' + donante.RFC : ''}</small>
                 </div>
                 <span class="badge bg-secondary-subtle text-secondary small">#${donante.ID_Donante}</span>
               `;
@@ -292,6 +482,9 @@ try {
                 sugerencias.innerHTML = "";
                 input.classList.remove("is-invalid");
                 input.classList.add("is-valid");
+
+                donanteFiscalActual = donante;
+                actualizarResumenFiscalDonante();
               });
               sugerencias.appendChild(item);
             });
@@ -303,8 +496,8 @@ try {
         document.addEventListener("click", (e) => {
           if (!input.contains(e.target) && !sugerencias.contains(e.target)) {
             sugerencias.innerHTML = "";
-        // Ejecutar estado inicial de campos
-        toggleTipoDonativo();
+          }
+        });
       });
 
       function toggleTipoDonativo() {
@@ -334,29 +527,348 @@ try {
         document.getElementById("id_donante").value = "";
         document.getElementById("input_donante").classList.remove("is-valid");
         document.getElementById("sug_donante").innerHTML = "";
+        donanteFiscalActual = null;
+        actualizarResumenFiscalDonante();
         document.getElementById("input_donante").focus();
       }
 
-      // Validación
+      function toggleRequiereRecibo(activo) {
+        const seccion = document.getElementById('seccion_fiscal');
+        const badge = document.getElementById('badgeEstadoRecibo');
+        if (activo) {
+          seccion.classList.remove('d-none');
+          badge.className = 'badge bg-purple-subtle text-purple border border-purple px-2 py-1';
+          badge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Recibo Solicitado';
+          actualizarResumenFiscalDonante();
+          if (document.getElementById('modo_diferente').checked) {
+            asignarRequiredFiscalesDiferente();
+          }
+        } else {
+          seccion.classList.add('d-none');
+          badge.className = 'badge bg-secondary-subtle text-secondary px-2 py-1';
+          badge.textContent = 'No solicitado';
+          removerRequiredFiscalesDiferente();
+        }
+      }
+
+      function cambiarModoFacturacion(modo) {
+        const resumenDonante = document.getElementById('resumen_fiscal_donante');
+        const camposDiferente = document.getElementById('campos_fiscales_diferente');
+
+        if (modo === 'donante') {
+          resumenDonante.classList.remove('d-none');
+          camposDiferente.classList.add('d-none');
+          removerRequiredFiscalesDiferente();
+        } else {
+          resumenDonante.classList.add('d-none');
+          camposDiferente.classList.remove('d-none');
+          if (document.getElementById('requiere_recibo').checked) {
+            asignarRequiredFiscalesDiferente();
+          }
+        }
+      }
+
+      function asignarRequiredFiscalesDiferente() {
+        document.getElementById('fact_rfc').setAttribute('required', 'required');
+        document.getElementById('fact_cp').setAttribute('required', 'required');
+        document.getElementById('fact_razon_social').setAttribute('required', 'required');
+        document.getElementById('fact_email').setAttribute('required', 'required');
+        document.getElementById('fact_regimen').setAttribute('required', 'required');
+      }
+
+      function removerRequiredFiscalesDiferente() {
+        document.getElementById('fact_rfc').removeAttribute('required');
+        document.getElementById('fact_cp').removeAttribute('required');
+        document.getElementById('fact_razon_social').removeAttribute('required');
+        document.getElementById('fact_email').removeAttribute('required');
+        document.getElementById('fact_regimen').removeAttribute('required');
+      }
+
+      function cambiarTipoPersonaFiscalDonativo(tipo) {
+        const rfcInput = document.getElementById('fact_rfc');
+        const rfcHelp = document.getElementById('fact_rfc_help');
+        const optMoral = document.getElementById('optgroup_fact_moral');
+        const optFisica = document.getElementById('optgroup_fact_fisica');
+        const regimenSelect = document.getElementById('fact_regimen');
+
+        if (tipo === 'Moral') {
+          rfcInput.maxLength = 12;
+          rfcInput.placeholder = '12 caracteres (Moral)';
+          rfcHelp.textContent = '12 caracteres alfanuméricos para Persona Moral (Empresas)';
+          optMoral.disabled = false;
+          optFisica.disabled = true;
+          if (regimenSelect.value.startsWith('605') || regimenSelect.value.startsWith('612') || regimenSelect.value.startsWith('611') || regimenSelect.value.startsWith('614') || regimenSelect.value.startsWith('616')) {
+            regimenSelect.value = '601 - General de Ley Personas Morales';
+          }
+        } else {
+          rfcInput.maxLength = 13;
+          rfcInput.placeholder = '13 caracteres (Física)';
+          rfcHelp.textContent = '13 caracteres alfanuméricos para Persona Física';
+          optMoral.disabled = true;
+          optFisica.disabled = false;
+          if (regimenSelect.value.startsWith('601') || regimenSelect.value.startsWith('603')) {
+            regimenSelect.value = '605 - Sueldos y Salarios e Ingresos Asimilados a Salarios';
+          }
+        }
+      }
+
+      function actualizarResumenFiscalDonante() {
+        const detalle = document.getElementById('detalle_fiscal_donante');
+        const badge = document.getElementById('badge_tiene_fiscales');
+
+        if (!donanteFiscalActual) {
+          badge.className = 'badge bg-secondary-subtle text-secondary';
+          badge.textContent = 'Sin donante seleccionado';
+          detalle.innerHTML = '<span class="text-muted"><i class="bi bi-info-circle me-1"></i> Selecciona un donante en el campo de arriba para ver sus datos fiscales registrados.</span>';
+          return;
+        }
+
+        const d = donanteFiscalActual;
+        const tieneRfc = d.RFC && d.RFC.trim() !== '';
+        const tieneRazon = d.RazonSocialFiscal && d.RazonSocialFiscal.trim() !== '';
+
+        if (tieneRfc || tieneRazon) {
+          badge.className = 'badge bg-success-subtle text-success border border-success-subtle';
+          badge.innerHTML = '<i class="bi bi-check-circle me-1"></i> Perfil fiscal configurado';
+
+          const razon = d.RazonSocialFiscal || d.NombreCompleto;
+          const rfc = d.RFC || 'Sin RFC';
+          const cp = d.CodigoPostalFiscal ? `C.P. ${d.CodigoPostalFiscal}` : 'Sin C.P.';
+          const regimen = d.RegimenFiscal || 'Sin régimen especificado';
+          const email = d.EmailFiscal || d.Email || 'Sin correo de facturación';
+          const tipo = d.TipoPersonaFiscal || 'Fisica';
+
+          detalle.innerHTML = `
+            <div class="row g-2 pt-1">
+              <div class="col-md-6">
+                <strong>Razón Social:</strong> <span class="text-dark">${escapeHtml(razon)}</span>
+              </div>
+              <div class="col-md-6">
+                <strong>RFC:</strong> <span class="badge bg-light text-dark border font-monospace">${escapeHtml(rfc)}</span>
+                <span class="badge bg-light text-secondary border ms-1">${tipo === 'Moral' ? 'Moral' : 'Física'}</span>
+              </div>
+              <div class="col-md-6">
+                <strong>Código Postal SAT:</strong> <span class="text-dark">${escapeHtml(cp)}</span>
+              </div>
+              <div class="col-md-6">
+                <strong>Correo CFDI:</strong> <span class="text-dark">${escapeHtml(email)}</span>
+              </div>
+              <div class="col-12">
+                <strong>Régimen Fiscal:</strong> <span class="text-dark">${escapeHtml(regimen)}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          badge.className = 'badge bg-warning-subtle text-dark border border-warning-subtle';
+          badge.innerHTML = '<i class="bi bi-exclamation-triangle me-1"></i> Sin datos fiscales completos';
+
+          detalle.innerHTML = `
+            <div class="text-muted">
+              El donante <strong>${escapeHtml(d.NombreCompleto)}</strong> aún no tiene RFC o datos de facturación guardados en su perfil.
+              <div class="mt-2 d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-sm btn-outline-purple" onclick="document.getElementById('modo_diferente').click();">
+                  <i class="bi bi-building me-1"></i> Capturar datos fiscales para este donativo
+                </button>
+                <a href="donante-editar.php?id=${d.ID_Donante}" target="_blank" class="btn btn-sm btn-light border text-decoration-none">
+                  <i class="bi bi-pencil-square me-1"></i> Actualizar perfil del donante
+                </a>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      function copiarFiscalesDonanteACamposDiferente() {
+        if (!donanteFiscalActual) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sin donante',
+            text: 'Primero selecciona un donante arriba para copiar sus datos base.'
+          });
+          return;
+        }
+
+        const d = donanteFiscalActual;
+        const tipoPersona = d.TipoPersonaFiscal || 'Moral';
+        document.getElementById('fact_tipo_persona').value = tipoPersona;
+        cambiarTipoPersonaFiscalDonativo(tipoPersona);
+
+        document.getElementById('fact_rfc').value = d.RFC || '';
+        document.getElementById('fact_cp').value = d.CodigoPostalFiscal || '';
+        document.getElementById('fact_razon_social').value = d.RazonSocialFiscal || d.NombreCompleto || '';
+        document.getElementById('fact_email').value = d.EmailFiscal || d.Email || '';
+        if (d.RegimenFiscal) {
+          document.getElementById('fact_regimen').value = d.RegimenFiscal;
+        }
+        if (d.UsoCFDI) {
+          document.getElementById('fact_uso_cfdi').value = d.UsoCFDI;
+        }
+
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Datos base cargados en el formulario de facturación',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      }
+
+      function escHtml(str) {
+        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function escapeHtml(str) {
+        return escHtml(str);
+      }
+
+      // Pantalla de carga profesional con puntitos animados y barra de progreso
+      function mostrarPantallaCargando(titulo = 'Actualizando donativo...') {
+        Swal.fire({
+          title: `<span style="color:#721896; font-size:1.25rem; font-weight:700;">${escHtml(titulo)}</span>`,
+          html: `
+            <div class="py-3 text-center">
+              <div class="mb-3" style="color: #721896;">
+                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s;"></span>
+                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s; animation-delay: 0.2s;"></span>
+                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 0.8s; animation-delay: 0.4s;"></span>
+              </div>
+              <p class="text-muted small mb-3">Estamos procesando y actualizando la información de la aportación en el sistema, por favor espera un momento...</p>
+              <div class="progress" style="height: 10px; border-radius: 8px; background-color: #f3e8ff;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%; background-color: #721896;"></div>
+              </div>
+            </div>
+          `,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false
+        });
+      }
+
+      // Validación detallada que extrae nombre del campo y motivo de error
+      function validarCamposFormulario(form) {
+        const errores = [];
+        const elementos = form.elements;
+
+        // Validar donante seleccionado específicamente
+        const hiddenId = document.getElementById('id_donante');
+        const inputDonante = document.getElementById('input_donante');
+        if (!hiddenId || !hiddenId.value || hiddenId.value === '') {
+          if (inputDonante) inputDonante.classList.add('is-invalid');
+          errores.push({
+            elemento: inputDonante || hiddenId,
+            nombre: 'Donante',
+            motivo: 'Debes buscar y seleccionar un donante válido del padrón.'
+          });
+        }
+
+        for (let i = 0; i < elementos.length; i++) {
+          const el = elementos[i];
+          if (el.disabled || el.type === 'button' || el.type === 'submit' || el.type === 'reset' || el.type === 'hidden') continue;
+          if (el.id === 'input_donante') continue;
+          if (el.closest('.d-none') || el.offsetParent === null) continue;
+
+          if (!el.checkValidity()) {
+            let nombreCampo = el.getAttribute('data-nombre-campo');
+            if (!nombreCampo) {
+              const label = form.querySelector(`label[for="${el.id}"]`);
+              if (label) {
+                nombreCampo = label.textContent.replace('*', '').trim();
+              } else {
+                nombreCampo = el.placeholder || el.name || 'Campo requerido';
+              }
+            }
+
+            let motivo = '';
+            if (el.validity.valueMissing) {
+              motivo = 'Es obligatorio y se encuentra vacío.';
+            } else if (el.validity.typeMismatch) {
+              if (el.type === 'email') motivo = 'Formato de correo no válido (ej. correo@ejemplo.com).';
+              else motivo = 'El formato ingresado es incorrecto.';
+            } else if (el.validity.rangeUnderflow) {
+              motivo = `El monto debe ser mayor a 0 (mínimo $${el.min || 1}).`;
+            } else if (el.validity.tooShort) {
+              motivo = `Debe tener al menos ${el.minLength} caracteres.`;
+            } else {
+              motivo = 'Por favor verifica la información ingresada en este campo.';
+            }
+
+            errores.push({ elemento: el, nombre: nombreCampo, motivo: motivo });
+          }
+        }
+        return errores;
+      }
+
+      // Validación del formulario
       (() => {
         'use strict'
-        const forms = document.querySelectorAll('.needs-validation')
-        Array.from(forms).forEach(form => {
-          form.addEventListener('submit', event => {
-            const hiddenId = document.getElementById('id_donante');
-            const inputDonante = document.getElementById('input_donante');
-            if (!hiddenId.value) {
-              inputDonante.classList.add('is-invalid');
+        const form = document.querySelector('form.needs-validation');
+        if (!form) return;
+
+        form.addEventListener('submit', event => {
+          const switchRecibo = document.getElementById('requiere_recibo');
+          const modoDiferente = document.getElementById('modo_diferente')?.checked;
+
+          // Si solicita recibo deducible con datos del donante pero el donante no tiene RFC registrado
+          if (switchRecibo && switchRecibo.checked && !modoDiferente) {
+            if (donanteFiscalActual && (!donanteFiscalActual.RFC || donanteFiscalActual.RFC.trim() === '')) {
               event.preventDefault();
               event.stopPropagation();
+              Swal.fire({
+                icon: 'warning',
+                title: 'RFC Faltante',
+                html: `El donante <b>${escHtml(donanteFiscalActual.NombreCompleto)}</b> no tiene RFC registrado en su perfil.<br><br>Por favor selecciona <b>"Facturar a nombre de Empresa u otro RFC"</b> para ingresar los datos fiscales de esta aportación, o actualiza su perfil de donante.`,
+                confirmButtonColor: '#721896',
+                confirmButtonText: 'Entendido'
+              });
+              return;
             }
-            if (!form.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
-            }
+          }
+
+          // Validar todos los campos obligatorios
+          const errores = validarCamposFormulario(form);
+          if (errores.length > 0) {
+            event.preventDefault();
+            event.stopPropagation();
             form.classList.add('was-validated');
-          }, false);
-        });
+
+            const primerError = errores[0].elemento;
+            primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            primerError.focus();
+
+            Swal.fire({
+              icon: 'warning',
+              title: 'Faltan campos por completar',
+              html: `
+                <div class="text-start" style="font-size: 0.92rem;">
+                  <p class="text-muted mb-2">Por favor revisa los siguientes campos requeridos antes de guardar:</p>
+                  <div class="p-3 bg-light rounded border mb-2" style="max-height: 220px; overflow-y: auto;">
+                    <ul class="mb-0 ps-3">
+                      ${errores.map(err => `
+                        <li class="mb-1">
+                          <strong class="text-dark">${escHtml(err.nombre)}:</strong>
+                          <span class="text-danger small d-block">${escHtml(err.motivo)}</span>
+                        </li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                  <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Los campos con observaciones se han resaltado en rojo.</small>
+                </div>
+              `,
+              confirmButtonColor: '#721896',
+              confirmButtonText: '<i class="bi bi-pencil-square me-1"></i> Corregir campos'
+            });
+            return;
+          }
+
+          form.classList.add('was-validated');
+          mostrarPantallaCargando('Actualizando información de la aportación...');
+          const btnSubmit = form.querySelector('button[type="submit"]');
+          if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span>Actualizando...`;
+          }
+        }, false);
       })();
     </script>
   </body>
