@@ -206,7 +206,7 @@ try {
             $nuevoIdDonativo,
             'Registro',
             'Aportación Recibida',
-            '$0.00 MXN',
+            '',
             $montoTxt,
             "Registro de donativo asignado al Donante #$idDonante{$reciboTxt}"
         );

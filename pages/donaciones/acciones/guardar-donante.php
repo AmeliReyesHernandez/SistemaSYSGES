@@ -219,7 +219,7 @@ try {
             $nuevoId, 
             'Registro', 
             'Alta de Donante', 
-            'Sin registrar', 
+            '', 
             $nombreComp, 
             "Registro inicial de donante: Correo: $email, RFC: $rfc, Estatus: $estatus"
         );
@@ -233,7 +233,7 @@ try {
             $nuevoIdDonativo,
             'Registro',
             'Aportación Recibida',
-            '$0.00 MXN',
+            '',
             $montoTxt,
             "Aportación inicial registrada al dar de alta al Donante #$nuevoId{$reciboTxt}"
         );

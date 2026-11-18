@@ -152,6 +152,40 @@ try {
         background: #721896;
         color: white;
       }
+      .btn-plantilla {
+        background: #fff;
+        border: 1.5px solid #d1d5db;
+        border-radius: 2rem;
+        padding: 4px 14px;
+        font-size: .8rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: #374151;
+        transition: all .15s;
+      }
+      .btn-plantilla:hover { border-color: #721896; color: #721896; }
+      .btn-plantilla.active { background: #721896; color: #fff; border-color: #721896; }
+      .ac-item {
+        padding: .55rem 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        border-bottom: 1px solid #f3f4f6;
+        transition: background .1s;
+      }
+      .ac-item:last-child { border-bottom: none; }
+      .ac-item:hover, .ac-item.focused { background: #f3e8ff; }
+      .ac-avatar {
+        width: 30px; height: 30px;
+        background: linear-gradient(135deg,#721896,#9b2ccc);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: .72rem; font-weight: 800; color: #fff;
+        flex-shrink: 0;
+      }
+      .ac-name  { font-weight: 600; font-size: .85rem; color: #111827; }
+      .ac-email { font-size: .75rem; color: #6b7280; }
     </style>
   </head>
   <body>
@@ -510,78 +544,96 @@ try {
       </div>
     </div>
 
-    <!-- Modal: Enviar Correo con Archivo Adjunto (Recibo PDF / Imagen / Doc) -->
+    <!-- Modal: Enviar Correo Institucional -->
     <div class="modal fade" id="modalEnviarCorreo" tabindex="-1" aria-labelledby="modalEnviarCorreoLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0 shadow">
-          <div class="modal-header text-white" style="background:#721896;">
-            <h5 class="modal-title" id="modalEnviarCorreoLabel"><i class="bi bi-envelope-paper-heart me-2"></i> Enviar Correo</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="acciones/enviar-correo.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="return_url" value="../donantes.php">
-            <input type="hidden" name="id_donante" id="correo_id_donante" value="">
-            <div class="modal-body p-4">
-              
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Seleccionar Plantilla Rápida</label>
-                <select class="form-select" id="plantillaSelect" onchange="cambiarPlantilla()">
-                  <option value="cumpleanos">Tarjeta de Feliz Cumpleaños</option>
-                  <option value="agradecimiento">Carta de Agradecimiento por Aportación</option>
-                  <option value="recibo">Envío de Recibo de Donativo / Comprobante</option>
-                  <option value="informativo">Informe de Actividades y Resultados</option>
-                  <option value="personalizado">Mensaje Personalizado</option>
-                </select>
-              </div>
+      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow" style="border-radius:.75rem;overflow:hidden;">
 
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold">Nombre del Donante<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" name="nombre" id="correo_nombre" 
-                         list="lista_donantes_datalist_donantes" 
-                         placeholder="Nombre completo o de pila" 
-                         oninput="manejarInputNombre(this.value)" 
-                         onchange="manejarInputNombre(this.value)" 
-                         autocomplete="off" required>
-                  <datalist id="lista_donantes_datalist_donantes">
-                    <?php foreach ($todosDonantesSelect as $dn): ?>
-                      <option value="<?= htmlspecialchars($dn['NombreCompleto']) ?>" 
-                              data-email="<?= htmlspecialchars($dn['Email'] ?? '') ?>" 
-                              data-id="<?= $dn['ID_Donante'] ?>">
-                        <?= htmlspecialchars($dn['Email'] ? $dn['Email'] : 'Sin correo') ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </datalist>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
-                  <input type="email" class="form-control" name="email" id="correo_email" placeholder="correo@ejemplo.com" required>
-                </div>
+          <div class="modal-header text-white" style="background:linear-gradient(135deg,#721896 0%,#9b2ccc 100%);padding:1.1rem 1.5rem;">
+            <div class="d-flex align-items-center gap-2">
+              <div style="width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:.5rem;display:flex;align-items:center;justify-content:center;">
+                <i class="bi bi-envelope-paper-heart fs-5"></i>
               </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Asunto del Correo <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="asunto" id="correo_asunto" value="Mensaje de la Familia GesMujer Oaxaca" required>
+              <div>
+                <h5 class="modal-title mb-0 fw-bold" id="modalEnviarCorreoLabel">Enviar Correo Institucional</h5>
+                <small style="opacity:.8;font-size:.75rem;">GesMujer — Comunicación con donantes</small>
               </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Mensaje <span class="text-danger">*</span></label>
-                <textarea class="form-control" name="mensaje" id="correo_mensaje" rows="5" required placeholder="Escribe el mensaje aquí..."></textarea>
-              </div>
-
-              <!-- Campo de Archivo Adjunto (Recibo PDF / Imagen / Doc) -->
-              <div class="mb-2 p-3 bg-light rounded-3 border">
-                <label class="form-label fw-semibold mb-1"><i class="bi bi-paperclip text-purple me-1"></i> Adjuntar Recibo, Comprobante o Documento</label>
-                <input type="file" name="adjunto" id="correo_adjunto" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.xls,.xlsx">
-                <div class="form-text text-muted">Formatos permitidos: PDF, Word (DOC/DOCX), Imágenes (JPG, PNG) o Excel (hasta 15MB).</div>
-              </div>
-
             </div>
-            <div class="modal-footer bg-light justify-content-between">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <form action="acciones/enviar-correo.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="return_url"  value="../donantes.php">
+            <input type="hidden" name="id_donante"  id="correo_id_donante" value="">
+            <input type="hidden" name="id_mensaje"  id="correo_id_mensaje"  value="">
+
+            <div class="modal-body p-0">
+
+              <div style="background:#f8f0ff;border-bottom:1px solid #e8d5f8;padding:1rem 1.5rem;">
+                <label class="form-label fw-semibold small text-uppercase" style="color:#721896;letter-spacing:.05em;font-size:.7rem;"><i class="bi bi-layout-text-window-reverse me-1"></i> Plantilla de Mensaje</label>
+                <div class="d-flex gap-2 flex-wrap" id="plantilla_btns">
+                  <button type="button" class="btn-plantilla active" data-val="cumpleanos" onclick="selPlantilla('cumpleanos')"> Cumpleaños</button>
+                  <button type="button" class="btn-plantilla" data-val="agradecimiento" onclick="selPlantilla('agradecimiento')"> Agradecimiento</button>
+                  <button type="button" class="btn-plantilla" data-val="recibo" onclick="selPlantilla('recibo')"> Recibo</button>
+                  <button type="button" class="btn-plantilla" data-val="informativo" onclick="selPlantilla('informativo')"> Informativo</button>
+                  <button type="button" class="btn-plantilla" data-val="personalizado" onclick="selPlantilla('personalizado')"> Personalizado</button>
+                </div>
+                <input type="hidden" id="plantillaSelect" value="cumpleanos">
+              </div>
+
+              <div class="p-4">
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold small"><i class="bi bi-person-fill me-1" style="color:#721896;"></i> Destinatario <span class="text-danger">*</span></label>
+                  <div class="row g-2">
+                    <div class="col-md-6">
+                      <div class="position-relative" id="autocomplete_wrapper">
+                        <input type="text" class="form-control" name="nombre" id="correo_nombre"
+                               placeholder="Buscar donante por nombre..."
+                               oninput="acNombreInput(this.value)"
+                               onkeydown="acKeyDown(event)"
+                               autocomplete="off" required
+                               style="padding-right:2.2rem;">
+                        <i class="bi bi-search" style="position:absolute;right:.7rem;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none;"></i>
+                        <div id="ac_dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #d1d5db;border-radius:.5rem;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:9999;max-height:220px;overflow-y:auto;margin-top:3px;"></div>
+                      </div>
+                      <small class="text-muted" style="font-size:.72rem;">Escribe el nombre para buscar o ingresa uno nuevo</small>
+                    </div>
+                    <div class="col-md-6">
+                      <input type="email" class="form-control" name="email" id="correo_email" placeholder="correo@ejemplo.com" required>
+                      <small class="text-muted" style="font-size:.72rem;">Se autocompleta al seleccionar donante</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold small"><i class="bi bi-chat-left-text-fill me-1" style="color:#721896;"></i> Asunto <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="asunto" id="correo_asunto" required>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold small"><i class="bi bi-file-text-fill me-1" style="color:#721896;"></i> Mensaje <span class="text-danger">*</span></label>
+                  <textarea class="form-control" name="mensaje" id="correo_mensaje" rows="6" required placeholder="Escribe el mensaje aquí..."></textarea>
+                </div>
+
+                <div style="background:#f8f9fa;border:1px dashed #d1d5db;border-radius:.5rem;padding:.85rem 1rem;">
+                  <label class="form-label fw-semibold small mb-1"><i class="bi bi-paperclip me-1" style="color:#721896;"></i> Archivo adjunto <span class="text-muted fw-normal">(opcional)</span></label>
+                  <input type="file" name="adjunto" id="correo_adjunto" class="form-control form-control-sm" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.xls,.xlsx">
+                  <div class="form-text" style="font-size:.72rem;">PDF, Word, Imágenes o Excel — máx. 15 MB</div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="modal-footer justify-content-between flex-wrap gap-2" style="background:#f8f0ff;border-top:1px solid #e8d5f8;">
+              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
               <div class="d-flex gap-2">
-                <button type="submit" name="accion" value="borrador" class="btn btn-outline-warning fw-semibold"><i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador</button>
-                <button type="submit" name="accion" value="enviar" class="btn btn-purple fw-semibold"><i class="bi bi-send-fill me-1"></i> Enviar</button>
+                <button type="submit" name="accion" value="borrador" class="btn btn-warning btn-sm fw-semibold">
+                  <i class="bi bi-file-earmark-text me-1"></i> Guardar Borrador
+                </button>
+                <button type="submit" name="accion" value="enviar" class="btn btn-sm fw-bold text-white" style="background:linear-gradient(135deg,#721896,#9b2ccc);border:none;">
+                  <i class="bi bi-send-fill me-1"></i> Enviar Correo
+                </button>
               </div>
             </div>
           </form>
@@ -985,32 +1037,83 @@ try {
         document.getElementById('correo_email').value = email || '';
         const idInput = document.getElementById('correo_id_donante');
         if (idInput) idInput.value = idDonante || '';
-        document.getElementById('plantillaSelect').value = 'cumpleanos';
-        cambiarPlantilla();
+        selPlantilla('cumpleanos');
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
-      function manejarInputNombre(val) {
-        const nombre = (val || '').trim();
-        const datalist = document.getElementById('lista_donantes_datalist_donantes');
-        const emailInput = document.getElementById('correo_email');
-        const idInput = document.getElementById('correo_id_donante');
+      // ─── AUTOCOMPLETADO DE DONANTE ────────────────────────────────────────────
+      let acTimeout = null;
+      let acFocusIdx = -1;
 
+      function acNombreInput(val) {
+        clearTimeout(acTimeout);
+        const q = (val || '').trim();
+        if (q.length < 1) { acOcultar(); actualizarNombreEnMensaje(); return; }
+        acTimeout = setTimeout(() => acBuscar(q), 180);
         actualizarNombreEnMensaje();
+      }
 
-        if (!datalist) return;
+      async function acBuscar(q) {
+        try {
+          const data = await (await fetch('ajax/buscar_donante.php?q=' + encodeURIComponent(q))).json();
+          if (!Array.isArray(data)) return;
+          acRenderizar(data);
+        } catch(e) { acOcultar(); }
+      }
 
-        const options = datalist.querySelectorAll('option');
-        for (let i = 0; i < options.length; i++) {
-          const opt = options[i];
-          if (opt.value.toLowerCase() === nombre.toLowerCase()) {
-            const email = opt.getAttribute('data-email') || '';
-            const idDonante = opt.getAttribute('data-id') || '';
-            if (emailInput && email) emailInput.value = email;
-            if (idInput) idInput.value = idDonante;
-            break;
-          }
-        }
+      function acRenderizar(donantes) {
+        const dd = document.getElementById('ac_dropdown');
+        if (!donantes.length) { dd.innerHTML = '<div class="ac-item"><span class="text-muted small">Sin resultados</span></div>'; dd.style.display = 'block'; return; }
+        dd.innerHTML = donantes.slice(0,8).map((d,i) => {
+          const initials = ((d.NombreCompleto||'?').split(' ').map(p=>p[0]||'').join('').substring(0,2)).toUpperCase();
+          return `<div class="ac-item" data-idx="${i}" onclick="acSeleccionar('${escJsStr(d.NombreCompleto)}','${escJsStr(d.Email||'')}','${d.ID_Donante}')">
+            <div class="ac-avatar">${initials}</div>
+            <div><div class="ac-name">${escHtmlAc(d.NombreCompleto)}</div><div class="ac-email"><i class="bi bi-envelope me-1"></i>${escHtmlAc(d.Email||'Sin correo')}</div></div>
+          </div>`;
+        }).join('');
+        dd.style.display = 'block';
+        acFocusIdx = -1;
+      }
+
+      function acSeleccionar(nombre, email, id) {
+        document.getElementById('correo_nombre').value     = nombre;
+        document.getElementById('correo_email').value      = email || '';
+        document.getElementById('correo_id_donante').value = id || '';
+        acOcultar();
+        actualizarNombreEnMensaje();
+      }
+
+      function acOcultar() {
+        const dd = document.getElementById('ac_dropdown');
+        if (dd) { dd.style.display = 'none'; dd.innerHTML = ''; }
+      }
+
+      function acKeyDown(e) {
+        const dd = document.getElementById('ac_dropdown');
+        const items = dd.querySelectorAll('.ac-item');
+        if (!items.length || dd.style.display === 'none') return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); acFocusIdx = Math.min(acFocusIdx+1, items.length-1); acHighlight(items); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); acFocusIdx = Math.max(acFocusIdx-1, 0); acHighlight(items); }
+        else if (e.key === 'Enter' && acFocusIdx >= 0) { e.preventDefault(); items[acFocusIdx].click(); }
+        else if (e.key === 'Escape') { acOcultar(); }
+      }
+
+      function acHighlight(items) {
+        items.forEach((el,i) => el.classList.toggle('focused', i === acFocusIdx));
+        if (acFocusIdx >= 0) items[acFocusIdx].scrollIntoView({block:'nearest'});
+      }
+
+      document.addEventListener('click', e => {
+        if (!document.getElementById('autocomplete_wrapper')?.contains(e.target)) acOcultar();
+      });
+
+      function escJsStr(s) { return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+      function escHtmlAc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+      function selPlantilla(val) {
+        document.getElementById('plantillaSelect').value = val;
+        document.querySelectorAll('.btn-plantilla').forEach(b => b.classList.toggle('active', b.dataset.val === val));
+        cambiarPlantilla();
       }
 
       function actualizarNombreEnMensaje() {
