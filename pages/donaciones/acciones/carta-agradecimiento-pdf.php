@@ -87,8 +87,13 @@ function generarCartaAgradecimientoPDF(array $opciones, string $dest = 'S', stri
                 $bloquesHtml .= '<div style="text-align: right; margin-bottom: 22px; color: #333333; font-size: 10pt;">' . $pHtml . '</div>';
             } elseif (stripos($pTrim, 'Querido(a)') === 0 || stripos($pTrim, 'Estimado(a)') === 0) {
                 $bloquesHtml .= '<div style="margin-bottom: 18px; font-size: 11pt; color: #111111;"><strong>' . $pHtml . '</strong></div>';
-            } elseif (stripos($pTrim, 'Con aprecio') === 0 || stripos($pTrim, 'Atentamente') === 0 || stripos($pTrim, 'María del Rosario') !== false) {
-                $bloquesHtml .= '<p style="margin: 0 0 12px 0; line-height: 1.4;">' . $pHtml . '</p>';
+            } elseif (stripos($pTrim, 'Con aprecio') === 0 || stripos($pTrim, 'Atentamente') === 0 || stripos($pTrim, 'María del Rosario') !== false || stripos($pTrim, 'Grupo de Estudios sobre la Mujer') !== false) {
+                $pStyled = preg_replace(
+                    '/(Grupo de Estudios sobre la Mujer Rosario Castellanos \(GESMujer\))/i',
+                    '<strong style="font-size: 11.5pt; color: #222222;">$1</strong>',
+                    $pHtml
+                );
+                $bloquesHtml .= '<p style="margin: 0 0 12px 0; line-height: 1.4;">' . $pStyled . '</p>';
             } else {
                 $bloquesHtml .= '<p style="text-align: justify; margin-bottom: 14px; text-indent: 0;">' . $pHtml . '</p>';
             }
@@ -121,9 +126,8 @@ function generarCartaAgradecimientoPDF(array $opciones, string $dest = 'S', stri
             </p>
             <div style="margin-top: 15px;">
                 <p style="margin: 0 0 16px 0;">Con aprecio y respeto,</p>
-                <p style="margin: 0; line-height: 1.3;">
-                    <strong>María del Rosario Martínez Miguel</strong><br>
-                    <span style="color: #444444; font-size: 9.5pt;">Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)</span>
+                <p style="margin: 0; line-height: 1.35;">
+                    <strong style="color: #222222; font-size: 11.5pt;">Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)</strong>
                 </p>
             </div>
         </div>';

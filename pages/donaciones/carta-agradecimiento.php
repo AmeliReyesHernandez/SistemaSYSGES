@@ -143,9 +143,8 @@ $htmlCarta = '
     <!-- Cierre y Despedida (Sin firma manuscrita) -->
     <div style="margin-top: 15px;">
         <p style="margin: 0 0 16px 0;">Con aprecio y respeto,</p>
-        <p style="margin: 0; line-height: 1.3;">
-            <strong>María del Rosario Martínez Miguel</strong><br>
-            <span style="color: #444444; font-size: 9.5pt;">Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)</span>
+        <p style="margin: 0; line-height: 1.35;">
+            <strong style="color: #222222; font-size: 11.5pt;">Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)</strong>
         </p>
     </div>
 

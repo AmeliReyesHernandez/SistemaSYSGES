@@ -113,7 +113,7 @@ if ($tipoDetectado === 'Agradecimiento') {
     $nombreAdjuntoEnvio = $nombreAdjunto ? "$nombreAdjunto, $nombrePdf" : $nombrePdf;
 
     $mensajeEnvio = "Estimado(a) {$saludoNombre}:\n\n"
-                  . "Te compartimos adjunta tu carta de agradecimiento en formato PDF, como muestra de nuestro reconocimiento y gratitud por tu valiosa donación y por contribuir a nuestra labor.\n\n"
+                  . "Te compartimos adjunta tu carta de agradecimiento, como muestra de nuestro reconocimiento y gratitud por tu valiosa donación y por contribuir a nuestra labor.\n\n"
                   . "Recibe nuestro más sincero agradecimiento.\n\n"
                   . "Atentamente,\n"
                   . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";
@@ -129,7 +129,7 @@ if ($tipoDetectado === 'Agradecimiento') {
     $nombreAdjuntoEnvio = $nombreAdjunto ? "$nombreAdjunto, $nombrePdf" : $nombrePdf;
 
     $mensajeEnvio = "Estimado(a) {$saludoNombre}:\n\n"
-                  . "¡En GESMujer celebramos tu vida y te deseamos un muy feliz cumpleaños! Te compartimos adjunta tu tarjeta de felicitación en formato PDF.\n\n"
+                  . "¡En GESMujer celebramos tu vida y te deseamos un muy feliz cumpleaños! Te compartimos adjunta tu tarjeta de felicitación.\n\n"
                   . "Recibe un afectuoso abrazo.\n\n"
                   . "Atentamente,\n"
                   . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";

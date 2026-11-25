@@ -267,7 +267,7 @@ try {
             $nombrePdf = 'Carta_Agradecimiento_' . preg_replace('/[^A-Za-z0-9_-]/', '', $saludoNombre) . '.pdf';
 
             $mensaje = "Estimado(a) {$saludoNombre}:\n\n"
-                     . "Te compartimos adjunta tu carta de agradecimiento en formato PDF, como muestra de nuestro reconocimiento y gratitud por tu valiosa donación y por contribuir a nuestra labor.\n\n"
+                     . "Te compartimos adjunta tu carta de agradecimiento, como muestra de nuestro reconocimiento y gratitud por tu valiosa donación y por contribuir a nuestra labor.\n\n"
                      . "Recibe nuestro más sincero agradecimiento.\n\n"
                      . "Atentamente,\n"
                      . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";

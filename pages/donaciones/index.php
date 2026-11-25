@@ -695,7 +695,6 @@ try {
               <img src="../../assets/img/cumpleanos_banner.png" alt="Tarjeta Oficial de Cumpleaños GESMujer" class="img-fluid w-100 d-block">
             </div>
             <div class="text-purple fw-bold fst-italic small mb-1">¡Que tengas el mejor de los días!</div>
-            <p style="font-size: 0.78rem;" class="text-muted mb-2">Diseño oficial enviado automáticamente en el día de cumpleaños de cada donante.</p>
             <span class="badge px-3 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d8b4fe;"> 
               Familia GESMujer Oaxaca
             </span>
@@ -709,7 +708,7 @@ try {
   </div>
 </div>
 
-    <!-- Modal: Redactar / Enviar Correo Institucional -->
+    <!-- Modal: Redactar / Enviar Correo -->
     <div class="modal fade" id="modalEnviarCorreo" tabindex="-1" aria-labelledby="modalEnviarCorreoLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content border-0 shadow" style="border-radius:.75rem;overflow:hidden;">
@@ -721,7 +720,7 @@ try {
                 <i class="bi bi-envelope-paper-heart fs-5"></i>
               </div>
               <div>
-                <h5 class="modal-title mb-0 fw-bold" id="modalEnviarCorreoLabel">Enviar Correo Institucional</h5>
+                <h5 class="modal-title mb-0 fw-bold" id="modalEnviarCorreoLabel">Enviar Correo</h5>
                 <small style="opacity:.8;font-size:.75rem;">GESMujer — Comunicación con donantes</small>
               </div>
             </div>
@@ -1052,7 +1051,6 @@ try {
             `Nos comprometemos firmemente a administrar tu aportación con total transparencia y con la dedicación que nos ha caracterizado por más de cuatro décadas de trabajo en favor de las mujeres oaxaqueñas.\n\n` +
             `Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\n` +
             `Con aprecio y respeto,\n\n` +
-            `María del Rosario Martínez Miguel\n` +
             `Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)`;
         } else if (sel === 'recibo') {
           asunto.value = 'Envío de Recibo de Donativo - GESMujer Oaxaca';

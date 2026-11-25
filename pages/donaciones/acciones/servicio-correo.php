@@ -249,7 +249,7 @@ function procesarCumpleanosAutomaticos($conn) {
             $nombrePdf  = 'Tarjeta_Cumpleanos_' . preg_replace('/[^A-Za-z0-9_-]/', '', $saludoNombre) . '.pdf';
 
             $mensaje = "Estimado(a) {$saludoNombre}:\n\n"
-                     . "¡En GESMujer celebramos tu vida y te deseamos un muy feliz cumpleaños! Te compartimos adjunta tu tarjeta de felicitación en formato PDF.\n\n"
+                     . "¡En GESMujer celebramos tu vida y te deseamos un muy feliz cumpleaños! Te compartimos adjunta tu tarjeta de felicitación.\n\n"
                      . "Recibe un afectuoso abrazo.\n\n"
                      . "Atentamente,\n"
                      . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";
