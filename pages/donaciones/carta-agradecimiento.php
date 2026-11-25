@@ -67,7 +67,7 @@ class CartaAgradecimientoPDF extends TCPDF {
         } else {
             $this->SetFont('helvetica', 'B', 15);
             $this->SetTextColor(114, 24, 150);
-            $this->Cell(0, 10, 'GesMujer Oaxaca', 0, 1, 'C');
+            $this->Cell(0, 10, 'GESMujer Oaxaca', 0, 1, 'C');
         }
     }
 
@@ -89,8 +89,8 @@ class CartaAgradecimientoPDF extends TCPDF {
 $pdf = new CartaAgradecimientoPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
 // Metadatos
-$pdf->SetCreator('SYSGES - GesMujer');
-$pdf->SetAuthor('GesMujer Oaxaca');
+$pdf->SetCreator('SYSGES - GESMujer');
+$pdf->SetAuthor('GESMujer Oaxaca');
 $pdf->SetTitle('Carta de Agradecimiento - Folio #' . $idDonativo);
 $pdf->SetSubject('Agradecimiento por Donativo');
 
@@ -117,7 +117,7 @@ $htmlCarta = '
 
     <!-- Párrafo 1 con detalle del donativo -->
     <p style="text-align: justify; margin-bottom: 14px; text-indent: 0;">
-        A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GesMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo' . htmlspecialchars($detalleDonativo) . '.
+        A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GESMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo' . htmlspecialchars($detalleDonativo) . '.
     </p>
 
     <!-- Párrafo 2 -->
@@ -127,7 +127,7 @@ $htmlCarta = '
 
     <!-- Párrafo 3 -->
     <p style="text-align: justify; margin-bottom: 14px; text-indent: 0;">
-        En GesMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.
+        En GESMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.
     </p>
 
     <!-- Párrafo 4 -->
@@ -145,7 +145,7 @@ $htmlCarta = '
         <p style="margin: 0 0 16px 0;">Con aprecio y respeto,</p>
         <p style="margin: 0; line-height: 1.3;">
             <strong>María del Rosario Martínez Miguel</strong><br>
-            <span style="color: #444444; font-size: 9.5pt;">Grupo de Estudios sobre la Mujer Rosario Castellanos (GesMujer)</span>
+            <span style="color: #444444; font-size: 9.5pt;">Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)</span>
         </p>
     </div>
 

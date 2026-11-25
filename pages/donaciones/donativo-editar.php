@@ -62,7 +62,7 @@ try {
     <script src="../../assets/js/color-modes.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Editar Donación | GesMujer</title>
+    <title>Editar Donación | GESMujer</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
     <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">

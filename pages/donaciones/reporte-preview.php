@@ -343,7 +343,7 @@ $totalPaginas = count($paginas);
       <div class="sheet-content-box">
         <!-- Encabezado Institucional (en todas las hojas) -->
         <div class="sheet-header mb-3">   
-          <img src="<?= $imgMembrete ?>" alt="Membrete GesMujer" class="sheet-header-img">
+          <img src="<?= $imgMembrete ?>" alt="Membrete GESMujer" class="sheet-header-img">
         </div>
 
         <div class="sheet-body">
@@ -532,7 +532,7 @@ $totalPaginas = count($paginas);
 
         <!-- Pie Institucional Oficial (Idéntico al PDF en cada hoja) -->
         <div class="sheet-footer">
-          SYSGES GesMujer &bull; Grupo de Estudios sobre la Mujer &quot;Rosario Castellanos&quot; A.C. &bull; P&aacute;gina <?= $numPag ?> de <?= $totalPaginas ?>
+          SYSGES GESMujer &bull; Grupo de Estudios sobre la Mujer &quot;Rosario Castellanos&quot; A.C. &bull; P&aacute;gina <?= $numPag ?> de <?= $totalPaginas ?>
         </div>
       </div>
     </div>

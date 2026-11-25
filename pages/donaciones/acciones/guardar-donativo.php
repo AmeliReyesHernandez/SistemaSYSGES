@@ -144,6 +144,9 @@ try {
     $stmtActivar = $conn->prepare("UPDATE donantes SET Estatus = 'Activo' WHERE ID_Donante = :donante");
     $stmtActivar->execute([':donante' => $idDonante]);
 
+    // Capturar ID del donativo antes de insertar en historial de mensajes
+    $nuevoIdDonativo = $esNuevo ? (int)$conn->lastInsertId() : null;
+
     // Si es un donativo nuevo, enviar correo automático de agradecimiento al donante
     if ($esNuevo) {
         $stmtDonante = $conn->prepare("
@@ -160,7 +163,7 @@ try {
             $nombreCompleto = trim($donante['NombreCompleto'] ?? '');
             $saludoNombre = !empty($nombrePila) ? $nombrePila : (!empty($nombreCompleto) ? $nombreCompleto : 'Donante');
             $email = $donante['Email'];
-            $asunto = "¡Gracias por sumarte a transformar vidas en Oaxaca! - GesMujer";
+            $asunto = "¡Gracias por sumarte a transformar vidas en Oaxaca! - GESMujer";
 
             // Fecha en formato formal
             $meses = ['', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -179,19 +182,32 @@ try {
                 $detalleDonativo = " de \${$montoFormateado} MXN ({$tipoMetodo})";
             }
 
-            // Cuerpo exacto de la carta oficial
-            $mensaje = "{$fechaCarta}\n\n"
-                     . "Querido(a) {$saludoNombre}, ¡gracias por sumarte a transformar vidas en Oaxaca!\n\n"
-                     . "A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GESMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo{$detalleDonativo}.\n\n"
-                     . "Acciones como la tuya hacen posible que sigamos caminando junto a mujeres, jóvenes y niñas de diversas comunidades indígenas y rurales del estado de Oaxaca. Gracias a tu valioso respaldo, podemos fortalecer nuestras acciones de acompañamiento, formación, defensa de sus derechos e impulso a su autonomía, brindándoles herramientas para construir proyectos de vida con dignidad, justicia y libres de violencia.\n\n"
-                     . "En GesMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n"
-                     . "Nos comprometemos firmemente a administrar tu aportación con total transparencia y con la dedicación que nos ha caracterizado por más de cuatro décadas de trabajo en favor de las mujeres oaxaqueñas.\n\n"
-                     . "Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\n"
-                     . "Con aprecio y respeto,\n\n"
-                     . "María del Rosario Martínez Miguel\n"
+            require_once __DIR__ . '/carta-agradecimiento-pdf.php';
+            $pdfBinario = generarCartaAgradecimientoPDF([
+                'saludoNombre'    => $saludoNombre,
+                'fechaCarta'      => $fechaCarta,
+                'detalleDonativo' => $detalleDonativo,
+                'idDonativo'      => $nuevoIdDonativo
+            ], 'S');
+            $nombrePdf = 'Carta_Agradecimiento_Folio_' . $nuevoIdDonativo . '_' . preg_replace('/[^A-Za-z0-9_-]/', '', $saludoNombre) . '.pdf';
+
+            $mensaje = "Estimado(a) {$saludoNombre}:\n\n"
+                     . "Te compartimos adjunta tu carta de agradecimiento en formato PDF, como muestra de nuestro reconocimiento y gratitud por tu valiosa donación y por contribuir a nuestra labor.\n\n"
+                     . "Recibe nuestro más sincero agradecimiento.\n\n"
+                     . "Atentamente,\n"
                      . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";
 
-            enviarCorreoInstitucional($email, $nombreCompleto ?: $saludoNombre, $asunto, $mensaje, 'Agradecimiento', $idDonante);
+            enviarCorreoInstitucional(
+                $email,
+                $nombreCompleto ?: $saludoNombre,
+                $asunto,
+                $mensaje,
+                'Agradecimiento',
+                $idDonante,
+                null,
+                $nombrePdf,
+                [['contenido' => $pdfBinario, 'nombre' => $nombrePdf]]
+            );
         }
     }
 
@@ -199,7 +215,6 @@ try {
     $montoTxt = $esEspecie ? "En Especie: $descripcionEspecie" : '$' . number_format((float)$montoDonacion, 2) . " MXN ($tipoDonacion)";
     $reciboTxt = $requiereRecibo ? " | Recibo Deducible: Sí (RFC: $rfcFiscal" . ($facturacionDiferente ? ", Facturado a: $razonSocialFiscal" : "") . ")" : " | Recibo Deducible: No";
     if ($esNuevo) {
-        $nuevoIdDonativo = (int)$conn->lastInsertId();
         registrarCambioAuditoria(
             $conn,
             'Donativo',

@@ -78,7 +78,7 @@ try {
     <script src="../../assets/js/color-modes.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Directorio de Donantes | GesMujer</title>
+    <title>Directorio de Donantes | GESMujer</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
     <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -556,7 +556,7 @@ try {
               </div>
               <div>
                 <h5 class="modal-title mb-0 fw-bold" id="modalEnviarCorreoLabel">Enviar Correo Institucional</h5>
-                <small style="opacity:.8;font-size:.75rem;">GesMujer — Comunicación con donantes</small>
+                <small style="opacity:.8;font-size:.75rem;">GESMujer — Comunicación con donantes</small>
               </div>
             </div>
             <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -572,13 +572,11 @@ try {
               <div style="background:#f8f0ff;border-bottom:1px solid #e8d5f8;padding:1rem 1.5rem;">
                 <label class="form-label fw-semibold small text-uppercase" style="color:#721896;letter-spacing:.05em;font-size:.7rem;"><i class="bi bi-layout-text-window-reverse me-1"></i> Plantilla de Mensaje</label>
                 <div class="d-flex gap-2 flex-wrap" id="plantilla_btns">
-                  <button type="button" class="btn-plantilla active" data-val="cumpleanos" onclick="selPlantilla('cumpleanos')"> Cumpleaños</button>
+                  <button type="button" class="btn-plantilla active" data-val="personalizado" onclick="selPlantilla('personalizado')"> Personalizado</button>
                   <button type="button" class="btn-plantilla" data-val="agradecimiento" onclick="selPlantilla('agradecimiento')"> Agradecimiento</button>
-                  <button type="button" class="btn-plantilla" data-val="recibo" onclick="selPlantilla('recibo')"> Recibo</button>
-                  <button type="button" class="btn-plantilla" data-val="informativo" onclick="selPlantilla('informativo')"> Informativo</button>
-                  <button type="button" class="btn-plantilla" data-val="personalizado" onclick="selPlantilla('personalizado')"> Personalizado</button>
+                  <button type="button" class="btn-plantilla" data-val="cumpleanos" onclick="selPlantilla('cumpleanos')"> Cumpleaños</button>
                 </div>
-                <input type="hidden" id="plantillaSelect" value="cumpleanos">
+                <input type="hidden" id="plantillaSelect" value="personalizado">
               </div>
 
               <div class="p-4">
@@ -1028,7 +1026,7 @@ try {
         document.getElementById('correo_email').value = email || '';
         const idInput = document.getElementById('correo_id_donante');
         if (idInput) idInput.value = idDonante || '';
-        cambiarPlantilla();
+        selPlantilla('personalizado');
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
@@ -1158,20 +1156,20 @@ try {
         const fechaCarta = `Oaxaca de Juárez, Oaxaca a ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
 
         if (sel === 'agradecimiento') {
-          asunto.value = '¡Gracias por sumarte a transformar vidas en Oaxaca! - GesMujer';
+          asunto.value = '¡Gracias por sumarte a transformar vidas en Oaxaca! - GESMujer';
           txt.value = `${fechaCarta}\n\n` +
             `Querido(a) ${nom}, ¡gracias por sumarte a transformar vidas en Oaxaca!\n\n` +
-            `A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GesMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo.\n\n` +
+            `A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GESMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo.\n\n` +
             `Acciones como la tuya hacen posible que sigamos caminando junto a mujeres, jóvenes y niñas de diversas comunidades indígenas y rurales del estado de Oaxaca. Gracias a tu valioso respaldo, podemos fortalecer nuestras acciones de acompañamiento, formación, defensa de sus derechos e impulso a su autonomía, brindándoles herramientas para construir proyectos de vida con dignidad, justicia y libres de violencia.\n\n` +
-            `En GesMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n` +
+            `En GESMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n` +
             `Nos comprometemos firmemente a administrar tu aportación con total transparencia y con la dedicación que nos ha caracterizado por más de cuatro décadas de trabajo en favor de las mujeres oaxaqueñas.\n\n` +
             `Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\n` +
             `Con aprecio y respeto,\n\n` +
             `María del Rosario Martínez Miguel\n` +
-            `Grupo de Estudios sobre la Mujer Rosario Castellanos (GesMujer)`;
+            `Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)`;
         } else if (sel === 'recibo') {
-          asunto.value = 'Envío de Recibo de Donativo - GesMujer Oaxaca';
-          txt.value = `Estimado(a) ${nom},\n\nLe hacemos llegar adjunto a este correo su recibo/comprobante oficial correspondiente a su reciente donativo.\n\nReiteramos nuestra gratitud por su generosidad y confianza en nuestras causas.\n\nAtentamente,\nEquipo GesMujer Oaxaca`;
+          asunto.value = 'Envío de Recibo de Donativo - GESMujer Oaxaca';
+          txt.value = `Estimado(a) ${nom},\n\nLe hacemos llegar adjunto a este correo su recibo/comprobante oficial correspondiente a su reciente donativo.\n\nReiteramos nuestra gratitud por su generosidad y confianza en nuestras causas.\n\nAtentamente,\nEquipo GESMujer Oaxaca`;
         } else if (sel === 'cumpleanos') {
           asunto.value = 'En GESMujer Te deseamos... ¡Feliz Cumpleaños!';
           txt.value = `¡Que tengas el mejor de los días!\n\n` +
@@ -1181,10 +1179,10 @@ try {
             `Atentamente.\n` +
             `Grupo de Estudios Sobre la Mujer "Rosario Castellanos" A.C.`;
         } else if (sel === 'informativo') {
-          asunto.value = 'Informe de Actividades y Resultados - GesMujer Oaxaca';
+          asunto.value = 'Informe de Actividades y Resultados - GESMujer Oaxaca';
           txt.value = `Estimado(a) ${nom},\n\nLe compartimos nuestro reporte de actividades y avances en los programas de apoyo a mujeres. Gracias a su solidaridad esto es posible.\n\nQuedamos a su disposición para cualquier duda.`;
         } else if (sel === 'personalizado') {
-          asunto.value = 'Mensaje de la Familia GesMujer Oaxaca';
+          asunto.value = 'Mensaje de la Familia GESMujer Oaxaca';
           txt.value = '';
         }
       }

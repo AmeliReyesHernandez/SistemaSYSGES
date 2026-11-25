@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $nombre    = trim($_POST['nombre']    ?? '');
 $email     = trim($_POST['email']     ?? '');
 $mensaje   = trim($_POST['mensaje']   ?? '');
-$asunto    = trim($_POST['asunto']    ?? 'Mensaje de la Familia GesMujer Oaxaca');
+$asunto    = trim($_POST['asunto']    ?? 'Mensaje de la Familia GESMujer Oaxaca');
 $accion    = trim($_POST['accion']    ?? 'enviar');
 $idDonante = isset($_POST['id_donante']) && is_numeric($_POST['id_donante']) ? (int)$_POST['id_donante'] : null;
 $idMensaje = isset($_POST['id_mensaje']) && is_numeric($_POST['id_mensaje']) ? (int)$_POST['id_mensaje'] : null;
@@ -97,9 +97,47 @@ if ($accion === 'borrador') {
 }
 
 // ─── ENVIAR ──────────────────────────────────────────────────────────────────
+$adjuntosExtra = [];
+$mensajeEnvio  = $mensaje;
+$nombreAdjuntoEnvio = $nombreAdjunto;
+
+if ($tipoDetectado === 'Agradecimiento') {
+    require_once __DIR__ . '/carta-agradecimiento-pdf.php';
+    $saludoNombre = explode(' ', trim($nombre))[0] ?: $nombre;
+    $pdfBinario = generarCartaAgradecimientoPDF([
+        'saludoNombre'       => $saludoNombre,
+        'textoPersonalizado' => $mensaje
+    ], 'S');
+    $nombrePdf = 'Carta_Agradecimiento_' . preg_replace('/[^A-Za-z0-9_-]/', '', $saludoNombre) . '.pdf';
+    $adjuntosExtra[] = ['contenido' => $pdfBinario, 'nombre' => $nombrePdf];
+    $nombreAdjuntoEnvio = $nombreAdjunto ? "$nombreAdjunto, $nombrePdf" : $nombrePdf;
+
+    $mensajeEnvio = "Estimado(a) {$saludoNombre}:\n\n"
+                  . "Te compartimos adjunta tu carta de agradecimiento en formato PDF, como muestra de nuestro reconocimiento y gratitud por tu valiosa donación y por contribuir a nuestra labor.\n\n"
+                  . "Recibe nuestro más sincero agradecimiento.\n\n"
+                  . "Atentamente,\n"
+                  . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";
+} elseif ($tipoDetectado === 'Cumpleaños') {
+    require_once __DIR__ . '/tarjeta-cumpleanos-pdf.php';
+    $saludoNombre = explode(' ', trim($nombre))[0] ?: $nombre;
+    $pdfBinario = generarTarjetaCumpleanosPDF([
+        'saludoNombre'       => $saludoNombre,
+        'textoPersonalizado' => $mensaje
+    ], 'S');
+    $nombrePdf = 'Tarjeta_Cumpleanos_' . preg_replace('/[^A-Za-z0-9_-]/', '', $saludoNombre) . '.pdf';
+    $adjuntosExtra[] = ['contenido' => $pdfBinario, 'nombre' => $nombrePdf];
+    $nombreAdjuntoEnvio = $nombreAdjunto ? "$nombreAdjunto, $nombrePdf" : $nombrePdf;
+
+    $mensajeEnvio = "Estimado(a) {$saludoNombre}:\n\n"
+                  . "¡En GESMujer celebramos tu vida y te deseamos un muy feliz cumpleaños! Te compartimos adjunta tu tarjeta de felicitación en formato PDF.\n\n"
+                  . "Recibe un afectuoso abrazo.\n\n"
+                  . "Atentamente,\n"
+                  . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";
+}
+
 if ($idMensaje) {
     // Enviar un borrador existente: actualizarlo y enviarlo
-    $resultado = enviarCorreoInstitucional($email, $nombre, $asunto, $mensaje, $tipoDetectado, $idDonante, $rutaAdjunto, $nombreAdjunto);
+    $resultado = enviarCorreoInstitucional($email, $nombre, $asunto, $mensajeEnvio, $tipoDetectado, $idDonante, $rutaAdjunto, $nombreAdjuntoEnvio, $adjuntosExtra);
 
     if ($resultado['success']) {
         try {
@@ -109,6 +147,7 @@ if ($idMensaje) {
                     EmailDestino  = :email,
                     Asunto        = :asunto,
                     Mensaje       = :mensaje,
+                    ArchivoAdjunto = :adjunto,
                     TipoMensaje   = :tipo,
                     Estado        = 'Enviado',
                     ID_Donante    = :id_donante
@@ -117,14 +156,15 @@ if ($idMensaje) {
             $stmt->bindParam(':nombre',     $nombre);
             $stmt->bindParam(':email',      $email);
             $stmt->bindParam(':asunto',     $asunto);
-            $stmt->bindParam(':mensaje',    $mensaje);
+            $stmt->bindParam(':mensaje',    $mensajeEnvio);
+            $stmt->bindParam(':adjunto',    $nombreAdjuntoEnvio);
             $stmt->bindParam(':tipo',       $tipoDetectado);
             $stmt->bindParam(':id_donante', $idDonante);
             $stmt->bindParam(':id',         $idMensaje, PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
             // El correo se envió pero no se pudo actualizar la BD — registrar como nuevo enviado
-            registrarMensajeEnHistorial($conn, $idDonante, $nombre, $email, $asunto, $mensaje, $tipoDetectado, 'Enviado', $nombreAdjunto);
+            registrarMensajeEnHistorial($conn, $idDonante, $nombre, $email, $asunto, $mensajeEnvio, $tipoDetectado, 'Enviado', $nombreAdjuntoEnvio);
         }
         header("Location: $returnUrl?status=sent");
         exit();
@@ -134,7 +174,7 @@ if ($idMensaje) {
     }
 } else {
     // Envío nuevo normal
-    $resultado = enviarCorreoInstitucional($email, $nombre, $asunto, $mensaje, $tipoDetectado, $idDonante, $rutaAdjunto, $nombreAdjunto);
+    $resultado = enviarCorreoInstitucional($email, $nombre, $asunto, $mensajeEnvio, $tipoDetectado, $idDonante, $rutaAdjunto, $nombreAdjuntoEnvio, $adjuntosExtra);
 
     if ($resultado['success']) {
         header("Location: $returnUrl?status=sent");

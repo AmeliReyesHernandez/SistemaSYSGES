@@ -151,7 +151,7 @@ class ReporteDonacionesPDF extends TCPDF {
         $this->SetY(-14);
         $this->SetFont('helvetica', '', 7.5);
         $this->SetTextColor(120, 120, 120);
-        $this->Cell(0, 10, 'SYSGES GesMujer  •  Grupo de Estudios sobre la Mujer "Rosario Castellanos" A.C.  •  Página ' . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages(), 0, 0, 'C');
+        $this->Cell(0, 10, 'SYSGES GESMujer  •  Grupo de Estudios sobre la Mujer "Rosario Castellanos" A.C.  •  Página ' . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages(), 0, 0, 'C');
     }
 }
 
@@ -159,8 +159,8 @@ class ReporteDonacionesPDF extends TCPDF {
 $pdf = new ReporteDonacionesPDF('P', 'mm', 'LETTER', true, 'UTF-8', false);
 
 // Información del documento
-$pdf->SetCreator('SYSGES - GesMujer');
-$pdf->SetAuthor('GesMujer Oaxaca');
+$pdf->SetCreator('SYSGES - GESMujer');
+$pdf->SetAuthor('GESMujer Oaxaca');
 $pdf->SetTitle('Reporte de Donativos');
 $pdf->SetSubject('Reporte de Donativos y Aportaciones');
 

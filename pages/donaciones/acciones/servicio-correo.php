@@ -53,7 +53,7 @@ function registrarMensajeEnHistorial($conn, $idDonante, $nombreDestino, $emailDe
 /**
  * Función centralizada para enviar correos electrónicos institucionales vía SMTP
  */
-function enviarCorreoInstitucional($emailDestino, $nombreDestino, $asunto, $mensajeTexto, $tipoMensaje = 'Manual', $idDonante = null, $rutaAdjunto = null, $nombreAdjunto = null) {
+function enviarCorreoInstitucional($emailDestino, $nombreDestino, $asunto, $mensajeTexto, $tipoMensaje = 'Manual', $idDonante = null, $rutaAdjunto = null, $nombreAdjunto = null, $adjuntosExtra = []) {
     global $conn;
 
     if (empty($emailDestino) || !filter_var($emailDestino, FILTER_VALIDATE_EMAIL)) {
@@ -84,24 +84,35 @@ function enviarCorreoInstitucional($emailDestino, $nombreDestino, $asunto, $mens
             ]
         ];
 
-        $mail->setFrom($mail->Username, 'GesMujer Oaxaca');
+        $mail->setFrom($mail->Username, 'GESMujer Oaxaca');
         $mail->addAddress($emailDestino, $nombreDestino);
-        $mail->addReplyTo($mail->Username, 'GesMujer Oaxaca');
+        $mail->addReplyTo($mail->Username, 'GESMujer Oaxaca');
 
         // Adjuntar archivo si existe (solo el archivo real del usuario)
         if (!empty($rutaAdjunto) && file_exists($rutaAdjunto)) {
             $mail->addAttachment($rutaAdjunto, $nombreAdjunto ?: basename($rutaAdjunto));
         }
 
+        // Adjuntar archivos generados en memoria (ej. Carta de Agradecimiento en PDF)
+        if (!empty($adjuntosExtra) && is_array($adjuntosExtra)) {
+            foreach ($adjuntosExtra as $adj) {
+                if (!empty($adj['contenido']) && !empty($adj['nombre'])) {
+                    $mail->addStringAttachment($adj['contenido'], $adj['nombre'], 'base64', $adj['mime'] ?? 'application/pdf');
+                }
+            }
+        }
+
+        $isSoloPdf = ($tipoMensaje === 'Agradecimiento' || $tipoMensaje === 'Cumpleaños' || $tipoMensaje === 'Manual');
+
         // Obtener las imágenes del membrete y de cumpleaños
         $headerImgPath = realpath(__DIR__ . '/../../../assets/img/membrete_header.jpg');
         $footerImgPath = realpath(__DIR__ . '/../../../assets/img/membrete_footer.jpg');
         $cumpleImgPath = realpath(__DIR__ . '/../../../assets/img/cumpleanos_banner.png');
 
-        $hasHeaderImg = ($headerImgPath && file_exists($headerImgPath));
-        $hasFooterImg = ($footerImgPath && file_exists($footerImgPath));
+        $hasHeaderImg = !$isSoloPdf && ($headerImgPath && file_exists($headerImgPath));
+        $hasFooterImg = !$isSoloPdf && ($footerImgPath && file_exists($footerImgPath));
         $isCumple = ($tipoMensaje === 'Cumpleaños' || stripos($asunto, 'cumpleañ') !== false || stripos($mensajeTexto, 'cumpleaños') !== false);
-        $hasCumpleImg = $isCumple && ($cumpleImgPath && file_exists($cumpleImgPath));
+        $hasCumpleImg = !$isSoloPdf && $isCumple && ($cumpleImgPath && file_exists($cumpleImgPath));
 
         if ($hasHeaderImg) {
             $mail->addEmbeddedImage($headerImgPath, 'membrete_header', 'membrete_header.jpg', 'base64', 'image/jpeg', 'inline');
@@ -116,15 +127,15 @@ function enviarCorreoInstitucional($emailDestino, $nombreDestino, $asunto, $mens
         $mail->isHTML(true);
         $mail->Subject = $asunto;
 
-        // Encabezado exacto con la imagen oficial de GesMujer
+        // Encabezado exacto con la imagen oficial de GESMujer
         $headerHtml = $hasHeaderImg 
-            ? "<div style='width: 100%; text-align: center; background-color: #ffffff;'><img src='cid:membrete_header' alt='GesMujer Oaxaca' style='width: 100%; max-width: 650px; height: auto; display: block; margin: 0 auto; border: 0;'></div>"
-            : "<div style='text-align: center; padding: 20px; background-color: #721896; color: #ffffff;'><h2 style='margin:0;'>GesMujer Oaxaca</h2></div>";
+            ? "<div style='width: 100%; text-align: center; background-color: #ffffff;'><img src='cid:membrete_header' alt='GESMujer Oaxaca' style='width: 100%; max-width: 650px; height: auto; display: block; margin: 0 auto; border: 0;'></div>"
+            : "<div style='text-align: center; padding: 20px; background-color: #721896; color: #ffffff;'><h2 style='margin:0;'>GESMujer Oaxaca</h2></div>";
 
-        // Pie de página exacto con la imagen oficial de GesMujer
+        // Pie de página exacto con la imagen oficial de GESMujer
         $footerHtml = $hasFooterImg
-            ? "<div style='width: 100%; text-align: center; background-color: #721896;'><img src='cid:membrete_footer' alt='Contacto GesMujer Oaxaca' style='width: 100%; max-width: 650px; height: auto; display: block; margin: 0 auto; border: 0;'></div>"
-            : "<div style='text-align: center; padding: 15px; color: #ffffff; background-color: #721896;'>GesMujer Oaxaca | www.gesmujer.org</div>";
+            ? "<div style='width: 100%; text-align: center; background-color: #721896;'><img src='cid:membrete_footer' alt='Contacto GESMujer Oaxaca' style='width: 100%; max-width: 650px; height: auto; display: block; margin: 0 auto; border: 0;'></div>"
+            : "<div style='text-align: center; padding: 15px; color: #ffffff; background-color: #721896;'>GESMujer Oaxaca | www.gesmujer.org</div>";
 
         // Si es felicitación de cumpleaños, integrar la ilustración oficial y subtítulo
         $cumpleBannerHtml = '';
@@ -153,25 +164,39 @@ function enviarCorreoInstitucional($emailDestino, $nombreDestino, $asunto, $mens
             $textoFinal
         );
 
-        $mail->Body = "
-            <div style='background-color: #f4f6f9; padding: 20px 10px; font-family: Arial, Helvetica, sans-serif;'>
-                <div style='max-width: 650px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dcdfe6; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.06);'>
-                    
-                    <!-- ENCABEZADO EXACTO DE LA HOJA MEMBRETADA -->
-                    {$headerHtml}
-                    
-                    <!-- CUERPO DEL MENSAJE / CARTA -->
-                    <div style='padding: 24px 34px 28px 34px; color: #222222; line-height: 1.7; background-color: #ffffff; font-family: Arial, Helvetica, sans-serif;'>
-                        {$cumpleBannerHtml}
-                        <p style='font-size: 14.5px; color: #222222; margin: 0; white-space: pre-line; line-height: 1.75; font-family: Arial, sans-serif; text-align: justify;'>" . htmlspecialchars($textoFinal) . "</p>
-                    </div>
-                    
-                    <!-- PIE DE PÁGINA EXACTO DE LA HOJA MEMBRETADA -->
-                    {$footerHtml}
-
+        if ($isSoloPdf) {
+            $htmlTexto = htmlspecialchars($textoFinal);
+            $htmlTexto = preg_replace(
+                '/(Grupo de Estudios sobre la Mujer Rosario Castellanos \(GESMujer\))/i',
+                '<strong>$1</strong>',
+                $htmlTexto
+            );
+            $mail->Body = "
+                <div style='font-family: Arial, Helvetica, sans-serif; color: #222222; font-size: 14.5px; line-height: 1.7; padding: 10px 4px;'>
+                    <p style='margin: 0; white-space: pre-line;'>" . $htmlTexto . "</p>
                 </div>
-            </div>
-        ";
+            ";
+        } else {
+            $mail->Body = "
+                <div style='background-color: #f4f6f9; padding: 20px 10px; font-family: Arial, Helvetica, sans-serif;'>
+                    <div style='max-width: 650px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dcdfe6; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.06);'>
+                        
+                        <!-- ENCABEZADO EXACTO DE LA HOJA MEMBRETADA -->
+                        {$headerHtml}
+                        
+                        <!-- CUERPO DEL MENSAJE / CARTA -->
+                        <div style='padding: 24px 34px 28px 34px; color: #222222; line-height: 1.7; background-color: #ffffff; font-family: Arial, Helvetica, sans-serif;'>
+                            {$cumpleBannerHtml}
+                            <p style='font-size: 14.5px; color: #222222; margin: 0; white-space: pre-line; line-height: 1.75; font-family: Arial, sans-serif; text-align: justify;'>" . htmlspecialchars($textoFinal) . "</p>
+                        </div>
+                        
+                        <!-- PIE DE PÁGINA EXACTO DE LA HOJA MEMBRETADA -->
+                        {$footerHtml}
+
+                    </div>
+                </div>
+            ";
+        }
 
         $mail->send();
 
@@ -219,14 +244,27 @@ function procesarCumpleanosAutomaticos($conn) {
             $idDonante = $donante['ID_Donante'];
             $asunto = "En GESMujer Te deseamos... ¡Feliz Cumpleaños!";
             
-            $mensaje = "¡Que tengas el mejor de los días!\n\n"
-                     . "{$saludoNombre}, en el GESMujer no solo celebramos tu cumpleaños, ¡También el tiempo de amistad y cariño! Gracias por ser parte de nuestra historia, tu apoyo siempre constante nos llena de alegría la vida. Deseamos con cariño que la sigas pasando... ¡Estupendo! Disfruta tu día en compañía de quienes más quieres, dedícate tiempo y déjate querer mucho.\n\n"
-                     . "Recibe los mejores deseos y muchos abrazos con cariño.\n\n"
-                     . "¡ Felicidades !\n"
-                     . "Atentamente.\n"
-                     . "Grupo de Estudios Sobre la Mujer \"Rosario Castellanos\" A.C.";
+            require_once __DIR__ . '/tarjeta-cumpleanos-pdf.php';
+            $pdfBinario = generarTarjetaCumpleanosPDF(['saludoNombre' => $saludoNombre], 'S');
+            $nombrePdf  = 'Tarjeta_Cumpleanos_' . preg_replace('/[^A-Za-z0-9_-]/', '', $saludoNombre) . '.pdf';
 
-            $res = enviarCorreoInstitucional($email, $nombreCompleto ?: $saludoNombre, $asunto, $mensaje, 'Cumpleaños', $idDonante);
+            $mensaje = "Estimado(a) {$saludoNombre}:\n\n"
+                     . "¡En GESMujer celebramos tu vida y te deseamos un muy feliz cumpleaños! Te compartimos adjunta tu tarjeta de felicitación en formato PDF.\n\n"
+                     . "Recibe un afectuoso abrazo.\n\n"
+                     . "Atentamente,\n"
+                     . "Grupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)";
+
+            $res = enviarCorreoInstitucional(
+                $email,
+                $nombreCompleto ?: $saludoNombre,
+                $asunto,
+                $mensaje,
+                'Cumpleaños',
+                $idDonante,
+                null,
+                $nombrePdf,
+                [['contenido' => $pdfBinario, 'nombre' => $nombrePdf]]
+            );
             if ($res['success']) {
                 $update = $conn->prepare("UPDATE donantes SET UltimoCumpleEnviado = CURRENT_DATE() WHERE ID_Donante = :id");
                 $update->execute([':id' => $idDonante]);

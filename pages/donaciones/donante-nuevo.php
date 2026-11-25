@@ -17,7 +17,7 @@ $statusAlerta   = trim($_GET['status'] ?? '');
     <script src="../../assets/js/color-modes.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nuevo Donante | GesMujer</title>
+    <title>Nuevo Donante | GESMujer</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
     <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -107,7 +107,7 @@ $statusAlerta   = trim($_GET['status'] ?? '');
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
           <div>
             <h2 class="h3 fw-bold mb-0 text-dark">Registrar Nuevo Donante</h2>
-            <p class="text-muted small mb-0">Captura de información para el padrón solidario de GesMujer</p>
+            <p class="text-muted small mb-0">Captura de información para el padrón solidario de GESMujer</p>
           </div>
           
           <div>

@@ -130,22 +130,22 @@ function renderDescripcionMovimiento($h) {
             $dest = $matches[0];
         }
         $titulo = !empty($dest) ? "Agradecimiento enviado a: <strong class='text-dark'>$dest</strong>" : htmlspecialchars($valNue);
-        $sub = !empty($det) ? $det : "ComunicaciÃ³n por correo electrÃ³nico";
+        $sub = !empty($det) ? $det : "Comunicación por correo electrónico";
         return "<div class='text-dark' style='word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;'>$titulo</div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;'>" . htmlspecialchars($sub) . "</small>";
     }
 
     if ($entidad === 'Donativo') {
-        if ($accion === 'GeneraciÃ³n' || strpos($campo, 'Carta') !== false) {
+        if ($accion === 'Generación' || strpos($campo, 'Carta') !== false) {
             $sub = !empty($det) ? $det : "Documento oficial generado";
             return "<div class='fw-semibold text-dark' style='word-break: break-word; overflow-wrap: anywhere;'><i class='bi bi-file-earmark-pdf text-danger me-1'></i> Carta de agradecimiento en PDF generada</div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;'>" . htmlspecialchars($sub) . "</small>";
         }
-        $sub = !empty($det) ? $det : "AportaciÃ³n registrada";
-        return $renderConVerMas($valNue, $sub, "AportaciÃ³n #$id", "Donativos y Aportaciones");
+        $sub = !empty($det) ? $det : "Aportación registrada";
+        return $renderConVerMas($valNue, $sub, "Aportación #$id", "Donativos y Aportaciones");
     }
 
     if ($entidad === 'Donante') {
         if ($accion === 'Registro' || strpos($campo, 'Alta') !== false) {
-            $sub = !empty($det) ? $det : "Nuevo registro de donante en el padrÃ³n";
+            $sub = !empty($det) ? $det : "Nuevo registro de donante en el padrón";
             return "<div class='fw-semibold text-dark' style='word-break: break-word; overflow-wrap: anywhere;'><i class='bi bi-person-check text-success me-1'></i> " . htmlspecialchars($valNue) . "</div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;'>" . htmlspecialchars($sub) . "</small>";
         }
         if ($campo === 'Estatus de Cuenta' || $accion === 'Cambio de Estatus') {
@@ -153,7 +153,7 @@ function renderDescripcionMovimiento($h) {
             return "<div class='fw-semibold text-dark' style='word-break: break-word; overflow-wrap: anywhere;'>Estatus actualizado a: <span class='badge bg-success-subtle text-success border border-success-subtle'>" . htmlspecialchars($valNue) . "</span></div><small class='text-muted d-block mt-1' style='word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;'>" . htmlspecialchars($sub) . "</small>";
         }
         $sub = !empty($det) ? $det : "Modificacion de datos";
-        return $renderConVerMas("ActualizaciÃ³n en expediente de $valNue", $sub, "Movimiento de Donante #$id", "Directorio de Donantes");
+        return $renderConVerMas("Actualización en expediente de $valNue", $sub, "Movimiento de Donante #$id", "Directorio de Donantes");
     }
 
     $sub = !empty($det) ? $det : $campo;
@@ -166,7 +166,7 @@ function renderDescripcionMovimiento($h) {
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Actividades - Donaciones GesMujer</title>
+    <title>Historial de Actividades - Donaciones GESMujer</title>
     <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="../dashboard.css" rel="stylesheet">
@@ -313,7 +313,7 @@ function renderDescripcionMovimiento($h) {
 
     <div class="container-fluid">
       <div class="row">
-        <!-- MenÃº lateral -->
+        <!-- Menu lateral -->
         <?php require_once __DIR__ . '/footer.php'; ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
@@ -321,16 +321,16 @@ function renderDescripcionMovimiento($h) {
           <!-- Encabezado Limpio y Profesional -->
           <div class="sf-header shadow-xs">
             <div class="d-flex align-items-center gap-3">
-              <div class="rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0" style="background:#721896; width:44px; height:44px; line-height:1;">
-                <i class="bi bi-clock-history fs-4" style="line-height:1;"></i>
+              <div class= style="">
+                <i class= style="line-height:1;"></i>
               </div>
               <div>
                 <h1 class="sf-header-title mb-0">Historial de Actividades</h1>
-                <p class="text-muted small mb-0">Registro cronologico de movimientos, aportaciones y comunicaciones realizadas en el modulo de donaciones</p>
+                <p class="text-muted small mb-0">Registro cronológico de movimientos, aportaciones y comunicaciones realizadas en el módulo de donaciones</p>
               </div>
             </div>
 
-            <!-- Fila de mÃ©tricas clave reales -->
+            <!-- Fila de métricas clave reales -->
             <div class="sf-metric-strip d-flex flex-wrap">
               <div class="sf-metric-item">
                 <div class="sf-metric-label">Total de Movimientos</div>
@@ -351,7 +351,7 @@ function renderDescripcionMovimiento($h) {
             </div>
           </div>
 
-          <!-- Barra de pestaÃ±as estÃ¡ndar del mÃ³dulo de Donaciones -->
+          <!-- Barra de pestañas estándar del módulo de Donaciones -->
           <ul class="nav sf-nav-tabs">
             <li class="nav-item">
               <a class="nav-link" href="index.php"><i class="bi bi-grid-1x2-fill me-1"></i> Inicio</a>
@@ -391,7 +391,7 @@ function renderDescripcionMovimiento($h) {
                 </div>
                 <div class="col-md-3 col-sm-3">
                   <select id="filtroEntidad" class="form-select" onchange="buscarHistorial()">
-                    <option value="">Todas las Secciones / Modulos</option>
+                    <option value="">Todas las Secciones / Módulos</option>
                     <option value="Donante" <?= $filtroEntidad === 'Donante' ? 'selected' : '' ?>>Donantes</option>
                     <option value="Donativo" <?= $filtroEntidad === 'Donativo' ? 'selected' : '' ?>>Donativos</option>
                     <option value="Mensaje" <?= $filtroEntidad === 'Mensaje' ? 'selected' : '' ?>>Correos / Comunicaciones</option>
@@ -399,11 +399,11 @@ function renderDescripcionMovimiento($h) {
                 </div>
                 <div class="col-md-3 col-sm-3">
                   <select id="filtroAccion" class="form-select" onchange="buscarHistorial()">
-                    <option value="">Todos los Tipos de Accion</option>
+                    <option value="">Todos los Tipos de Acción</option>
                     <option value="Registro" <?= $filtroAccion === 'Registro' ? 'selected' : '' ?>>Nuevo Registro / Alta</option>
-                    <option value="ModificaciÃ³n" <?= $filtroAccion === 'ModificaciÃ³n' ? 'selected' : '' ?>>Modificacion de Datos</option>
-                    <option value="EnvÃ­o de Correo" <?= $filtroAccion === 'EnvÃ­o de Correo' ? 'selected' : '' ?>>Envi­o de Correo</option>
-                    <option value="GeneraciÃ³n" <?= $filtroAccion === 'GeneraciÃ³n' ? 'selected' : '' ?>>Generacion de Carta PDF</option>
+                    <option value="Modificación" <?= $filtroAccion === 'Modificación' ? 'selected' : '' ?>>Modificación de Datos</option>
+                    <option value="Envío de Correo" <?= $filtroAccion === 'Envío de Correo' ? 'selected' : '' ?>>Envío de Correo</option>
+                    <option value="Generación" <?= $filtroAccion === 'Generación' ? 'selected' : '' ?>>Generación de Carta PDF</option>
                     <option value="Cambio de Estatus" <?= $filtroAccion === 'Cambio de Estatus' ? 'selected' : '' ?>>Cambio de Estatus</option>
                   </select>
                 </div>
@@ -433,9 +433,9 @@ function renderDescripcionMovimiento($h) {
                       <th style="width:60px;font-size:.75rem;">ID</th>
                       <th style="width:145px;font-size:.75rem;">Fecha / Hora</th>
                       <th style="width:130px;font-size:.75rem;">Usuario</th>
-                      <th style="width:135px;font-size:.75rem;">Seccion</th>
-                      <th style="width:175px;font-size:.75rem;">Accion Realizada</th>
-                      <th class="col-desc-movimiento" style="font-size:.75rem;">Descripcion del Movimiento</th>
+                      <th style="width:135px;font-size:.75rem;">Sección</th>
+                      <th style="width:175px;font-size:.75rem;">Acción Realizada</th>
+                      <th class="col-desc-movimiento" style="font-size:.75rem;">Descripción del Movimiento</th>
                       <th class="text-center" style="width:68px;white-space:nowrap;font-size:.75rem;">Detalle</th>
                     </tr>
                   </thead>
@@ -500,7 +500,7 @@ function renderDescripcionMovimiento($h) {
               </div>
             </div>
 
-            <!-- PaginaciÃ³n dinÃ¡mica -->
+            <!-- Paginación dinámica -->
             <div id="paginacionContainer">
               <?php if ($totalPaginas > 1): ?>
                 <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2">
@@ -534,7 +534,7 @@ function renderDescripcionMovimiento($h) {
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow">
           
-          <!-- Encabezado Institucional Morado GesMujer -->
+          <!-- Encabezado Institucional Morado GESMujer -->
           <div class="modal-header text-white" style="background:#721896;">
             <h5 class="modal-title fs-6 fw-bold mb-0">
               <i class="bi bi-clock-history me-2"></i> Detalle del Movimiento
@@ -548,10 +548,10 @@ function renderDescripcionMovimiento($h) {
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center pb-3 mb-3 border-bottom gap-2">
               <div>
                 <span class="badge px-2 py-1 mb-1" id="mdl_badge_seccion" style="background:#f3e8ff; color:#721896; border:1px solid #d1a8e7;">
-                  Seccion
+                  Sección
                 </span>
                 <h5 class="fw-bold text-dark mb-0 fs-5">
-                  <span id="mdl_titulo_movimiento">Accion Realizada</span>
+                  <span id="mdl_titulo_movimiento">Acción Realizada</span>
                   <span class="badge bg-light text-secondary border font-monospace fw-normal fs-6 ms-1">#<span id="mdl_id_header"></span></span>
                 </h5>
               </div>
@@ -561,7 +561,7 @@ function renderDescripcionMovimiento($h) {
               </div>
             </div>
 
-            <!-- Tabla Formal con Bordes (EstÃ¡ndar SYSGES) -->
+            <!-- Tabla Formal con Bordes (Estándar SYSGES) -->
             <div class="table-responsive mb-3" style="overflow-x: hidden;">
               <table class="table table-bordered align-middle mb-0" style="font-size: 0.9rem; table-layout: fixed; width: 100%;">
                 <tbody>
@@ -579,20 +579,20 @@ function renderDescripcionMovimiento($h) {
                     </td>
                   </tr>
                   <tr>
-                    <th class="bg-light text-muted" style="font-weight: 600;">Modulo / Seccion</th>
+                    <th class="bg-light text-muted" style="font-weight: 600;">Módulo / Sección</th>
                     <td id="mdl_seccion_nombre" class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;"></td>
                   </tr>
                   <tr>
-                    <th class="bg-light text-muted" style="font-weight: 600;">Tipo de accion</th>
+                    <th class="bg-light text-muted" style="font-weight: 600;">Tipo de acción</th>
                     <td id="mdl_tipo_accion" class="text-dark" style="word-break: break-word; overflow-wrap: anywhere;"></td>
                   </tr>
                   <tr>
-                    <th class="bg-light text-muted" style="font-weight: 600;">Descripcion del cambio</th>
+                    <th class="bg-light text-muted" style="font-weight: 600;">Descripción del cambio</th>
                     <td style="word-break: break-word; overflow-wrap: anywhere;">
                       <div id="mdl_descripcion_principal" class="fw-bold text-dark" style="line-height: 1.45;"></div>
                       <div id="mdl_desc_btn_ver_completa" class="mt-1" style="display: none;">
                         <button type="button" class="btn btn-link btn-sm p-0 text-purple text-decoration-none fw-semibold" style="font-size: 0.78rem;" onclick="verDescripcionModalCompleta()">
-                          <i class="bi bi-eye me-1"></i>Ver descripcion completa
+                          <i class="bi bi-eye me-1"></i>Ver descripción completa
                         </button>
                       </div>
                     </td>
@@ -605,7 +605,7 @@ function renderDescripcionMovimiento($h) {
               </table>
             </div>
 
-            <!-- Panel de ComparaciÃ³n (Solo si hubo modificaciÃ³n de un valor previo a uno nuevo) -->
+            <!-- Panel de Comparación (Solo si hubo modificación de un valor previo a uno nuevo) -->
             <div id="mdl_panel_cambio" class="card border mb-2" style="display:none;">
               <div class="card-header bg-light py-2 px-3 fw-semibold small text-muted">
                 <i class="bi bi-arrow-left-right text-primary me-1"></i> Modificacion de datos registrada
@@ -618,7 +618,7 @@ function renderDescripcionMovimiento($h) {
                       <div id="mdl_val_ant" class="text-danger fw-semibold" style="word-break: break-word; overflow-wrap: anywhere; white-space: pre-wrap; max-height: 140px; overflow-y: auto;"></div>
                       <div id="mdl_val_ant_btn_ver" class="mt-1" style="display:none;">
                         <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none fw-semibold" style="font-size: 0.85rem;" onclick="verValorAnteriorCompleto()">
-                          <i class="bi bi-eye me-1"></i>Ver descripcion completa
+                          <i class="bi bi-eye me-1"></i>Ver descripción completa
                         </button>
                       </div>
                     </div>
@@ -691,8 +691,8 @@ function renderDescripcionMovimiento($h) {
           title: `<span style="font-size: 1.15rem; color: #721896;"><i class="bi bi-card-text me-2"></i>${escHtml(titulo || 'Detalle del Movimiento')}</span>`,
           html: `
             <div class="text-start p-3 bg-light rounded-3 border mt-2">
-              ${subtitulo ? `<div class="small text-muted mb-2"><strong>SecciÃ³n:</strong> <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7;">${escHtml(subtitulo)}</span></div>` : ''}
-              <div class="small text-muted mb-1"><strong>DescripciÃ³n completa registrada:</strong></div>
+              ${subtitulo ? `<div class="small text-muted mb-2"><strong>Sección:</strong> <span class="badge px-2 py-1" style="background-color: #f3e8ff; color: #721896; border: 1px solid #d1a8e7;">${escHtml(subtitulo)}</span></div>` : ''}
+              <div class="small text-muted mb-1"><strong>Descripción completa registrada:</strong></div>
               <div class="p-3 bg-white rounded border text-dark" style="white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; max-height: 240px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; text-align: left;">${escHtml(contenido)}</div>
             </div>
           `,
@@ -713,8 +713,8 @@ function renderDescripcionMovimiento($h) {
         const entidad = h.Entidad || '';
         const valNue = (h.ValorNuevo || '').trim();
         let descCompleta = valNue;
-        if (entidad === 'Donativo' && !valNue.startsWith('AportaciÃ³n')) {
-          descCompleta = `AportaciÃ³n recibida: ${valNue}`;
+        if (entidad === 'Donativo' && !valNue.startsWith('Aportacion')) {
+          descCompleta = `Aportacion recibida: ${valNue}`;
         }
         mostrarDetalleTextoAuditoria(`Detalle de ${h.Campo || 'Movimiento'} #${h.ID_Historial}`, descCompleta, `${h.Entidad} - ${h.Accion}`);
       }
@@ -769,30 +769,30 @@ function renderDescripcionMovimiento($h) {
           const emailMatch = valNue.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
           const dest = emailMatch ? emailMatch[0] : '';
           const titulo = dest ? `Agradecimiento enviado a: <strong class="text-dark">${escHtml(dest)}</strong>` : escHtml(valNue);
-          const sub = det ? escHtml(det) : "ComunicaciÃ³n por correo electrÃ³nico";
+          const sub = det ? escHtml(det) : "Comunicación por correo electrónico";
           return `<div class="text-dark" style="word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;">${titulo}</div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;">${sub}</small>`;
         }
 
         if (entidad === 'Donativo') {
-          if (accion === 'GeneraciÃ³n' || campo.includes('Carta')) {
+          if (accion === 'Generación' || campo.includes('Carta')) {
             const sub = det ? escHtml(det) : "Documento oficial generado";
             return `<div class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;"><i class="bi bi-file-earmark-pdf text-danger me-1"></i> Carta de agradecimiento en PDF generada</div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;">${sub}</small>`;
           }
-          const sub = det || "AportaciÃ³n registrada";
-          return renderConVerMasJS(valNue, sub, `AportaciÃ³n #${id}`, "Donativos y Aportaciones");
+          const sub = det || "Aportacion registrada";
+          return renderConVerMasJS(valNue, sub, `Aportacion #${id}`, "Donativos y Aportaciones");
         }
 
         if (entidad === 'Donante') {
           if (accion === 'Registro' || campo.includes('Alta')) {
-            const sub = det || "Nuevo registro de donante en el padrÃ³n";
+            const sub = det || "Nuevo registro de donante en el padrón";
             return `<div class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;"><i class="bi bi-person-check text-success me-1"></i> ${escHtml(valNue)}</div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;">${escHtml(sub)}</small>`;
           }
           if (campo === 'Estatus de Cuenta' || accion === 'Cambio de Estatus') {
             const sub = det || "Cambio de estatus del donante";
             return `<div class="fw-semibold text-dark" style="word-break: break-word; overflow-wrap: anywhere;">Estatus actualizado a: <span class="badge bg-success-subtle text-success border border-success-subtle">${escHtml(valNue)}</span></div><small class="text-muted d-block mt-1" style="word-break: break-word; overflow-wrap: anywhere; font-size: 0.85rem;">${escHtml(sub)}</small>`;
           }
-          const sub = det || "ModificaciÃ³n de datos";
-          return renderConVerMasJS(`ActualizaciÃ³n en expediente de ${valNue}`, sub, `Movimiento de Donante #${id}`, "Directorio de Donantes");
+          const sub = det || "Modificación de datos";
+          return renderConVerMasJS(`Actualización en expediente de ${valNue}`, sub, `Movimiento de Donante #${id}`, "Directorio de Donantes");
         }
 
         const sub = det || campo;
@@ -918,7 +918,7 @@ function renderDescripcionMovimiento($h) {
         const valAnt  = (h.ValorAnterior || '').trim();
         const det     = (h.Detalles || '').trim();
 
-        // 1. MÃ³dulo / SecciÃ³n formal (SIN IDs artificiales como "#8")
+        // 1. Modulo / Sección formal (SIN IDs artificiales como "#8")
         let seccionNombre = '';
         let badgeSeccionHtml = '';
         let tituloMovimiento = '';
@@ -928,7 +928,7 @@ function renderDescripcionMovimiento($h) {
         if (entidad === 'Mensaje' || accion.includes('Correo')) {
           seccionNombre = 'Historial de Mensajes (Agradecimientos y Notificaciones)';
           badgeSeccionHtml = '<i class="bi bi-envelope-heart-fill me-1"></i> Correos de Agradecimiento';
-          tituloMovimiento = 'EnvÃ­o de Correo ElectrÃ³nico';
+          tituloMovimiento = 'Envío de Correo Electrónico';
 
           const emailMatch = valNue.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
           const dest = emailMatch ? emailMatch[0] : '';
@@ -939,14 +939,14 @@ function renderDescripcionMovimiento($h) {
           seccionNombre = 'Historial de Donativos y Aportaciones';
           badgeSeccionHtml = '<i class="bi bi-coin me-1"></i> Donativos y Aportaciones';
           
-          if (accion === 'GeneraciÃ³n' || campo.includes('Carta')) {
-            tituloMovimiento = 'GeneraciÃ³n de Carta en PDF';
+          if (accion === 'Generación' || campo.includes('Carta')) {
+            tituloMovimiento = 'Generación de Carta en PDF';
             descripcionPrincipal = 'Carta Oficial de Agradecimiento emitida en PDF';
-            observacionesTexto = det || 'Se generÃ³ la carta membretada para el donante';
+            observacionesTexto = det || 'Se generó la carta membretada para el donante';
           } else {
             tituloMovimiento = 'Registro de Donativo';
-            descripcionPrincipal = `AportaciÃ³n recibida: ${valNue}`;
-            observacionesTexto = det || 'AportaciÃ³n econÃ³mica o en especie registrada';
+            descripcionPrincipal = `Aportación recibida: ${valNue}`;
+            observacionesTexto = det || 'Aportación económica o en especie registrada';
           }
         } 
         else if (entidad === 'Donante') {
@@ -956,19 +956,19 @@ function renderDescripcionMovimiento($h) {
           if (accion === 'Registro' || campo.includes('Alta')) {
             tituloMovimiento = 'Alta de Donante';
             descripcionPrincipal = `Nuevo donante registrado: ${valNue}`;
-            observacionesTexto = det || 'Registro en el padrÃ³n de donantes';
+            observacionesTexto = det || 'Registro en el padrón de donantes';
           } else if (campo === 'Estatus de Cuenta' || accion === 'Cambio de Estatus') {
             tituloMovimiento = 'Cambio de Estatus de Donante';
             descripcionPrincipal = `Estatus actualizado a: ${valNue}`;
-            observacionesTexto = det || 'ModificaciÃ³n del estado del expediente';
+            observacionesTexto = det || 'Modificación del estado del expediente';
           } else {
-            tituloMovimiento = 'ModificaciÃ³n de Expediente';
-            descripcionPrincipal = `ActualizaciÃ³n de datos: ${valNue}`;
-            observacionesTexto = det || 'ModificaciÃ³n de informaciÃ³n del donante';
+            tituloMovimiento = 'Modificación de Expediente';
+            descripcionPrincipal = `Actualización de datos: ${valNue}`;
+            observacionesTexto = det || 'Modificación de información del donante';
           }
         } 
         else {
-          seccionNombre = entidad || 'MÃ³dulo de Donaciones';
+          seccionNombre = entidad || 'Módulo de Donaciones';
           badgeSeccionHtml = `<i class="bi bi-layers-fill me-1"></i> ${escHtml(entidad)}`;
           tituloMovimiento = campo || accion || 'Movimiento en el Sistema';
           descripcionPrincipal = valNue || campo;
@@ -1008,7 +1008,7 @@ function renderDescripcionMovimiento($h) {
         document.getElementById('mdl_seccion_nombre').textContent        = seccionNombre;
         document.getElementById('mdl_tipo_accion').textContent           = `${h.Campo} (${h.Accion})`;
         
-        // Manejo de descripciÃ³n principal (recorte si es muy larga + botÃ³n para ver completo)
+        // Manejo de descripción principal (recorte si es muy larga + botón para ver completo)
         const elDesc = document.getElementById('mdl_descripcion_principal');
         const btnDescVer = document.getElementById('mdl_desc_btn_ver_completa');
         if (descripcionPrincipal.length > 85) {
@@ -1019,7 +1019,7 @@ function renderDescripcionMovimiento($h) {
           btnDescVer.style.display = 'none';
         }
 
-        // Fila de observaciones: solo mostrar si aporta informaciÃ³n no repetida
+        // Fila de observaciones: solo mostrar si aporta información no repetida
         const filaObs = document.getElementById('mdl_fila_observaciones');
         if (observacionesTexto && observacionesTexto.trim() !== '' && observacionesTexto !== descripcionPrincipal) {
           document.getElementById('mdl_observaciones').textContent = observacionesTexto;
@@ -1028,7 +1028,7 @@ function renderDescripcionMovimiento($h) {
           filaObs.style.display = 'none';
         }
 
-        // Panel de comparaciÃ³n (solo si hubo un cambio real de datos, no para altas nuevas ni correos)
+        // Panel de comparación (solo si hubo un cambio real de datos, no para altas nuevas ni correos)
         const panelCambio = document.getElementById('mdl_panel_cambio');
         const esSoloRegistro = (accion === 'Registro') || (entidad === 'Mensaje') || accion.includes('Correo');
         const valAntSignificativo = valAnt && valAnt.trim() !== '' && valAnt !== valNue &&

@@ -445,7 +445,6 @@ try {
                                 <button class="btn-accion btn-del" onclick="eliminarMensaje(<?= $m['ID_Mensaje'] ?>,'Fallido')" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
                               <?php else: ?>
                                 <button class="btn-accion btn-ver" onclick="verDetalleMensaje(<?= $jsonData ?>)" title="Ver"><i class="bi bi-eye-fill"></i></button>
-                                <button class="btn-accion btn-resend" onclick="reenviarMensaje(<?= $jsonData ?>)" title="Reenviar"><i class="bi bi-reply-fill"></i></button>
                               <?php endif; ?>
                             </div>
                           </td>
@@ -537,14 +536,14 @@ try {
         <div class="modal-content border-0 shadow" style="border-radius:.75rem;overflow:hidden;">
 
           <!-- Cabecera con degradado -->
-          <div class="modal-header text-white" style="background:linear-gradient(135deg,#721896 0%,#9b2ccc 100%);padding:1.1rem 1.5rem;">
-            <div class="d-flex align-items-center gap-2">
-              <div style="width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:.5rem;display:flex;align-items:center;justify-content:center;">
-                <i class="bi bi-envelope-paper-heart fs-5"></i>
+          <div class="modal-header text-white align-items-center" style="background:linear-gradient(135deg,#721896 0%,#9b2ccc 100%);padding:1.1rem 1.5rem;">
+            <div class="d-flex align-items-center gap-3">
+              <div style="width:40px;height:40px;background:rgba(255,255,255,.18);border-radius:.6rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i class="bi bi-envelope-paper-heart fs-5" id="modalEnviarCorreoIcon"></i>
               </div>
               <div>
-                <h5 class="modal-title mb-0 fw-bold" id="modalEnviarCorreoLabel">Redactar Correo Institucional</h5>
-                <small style="opacity:.8;font-size:.75rem;">GesMujer — Comunicación con donantes</small>
+                <h5 class="modal-title mb-0 fw-bold" id="modalEnviarCorreoLabel" style="line-height:1.2;">Redactar Correo Institucional</h5>
+                <small class="d-block" style="opacity:.85;font-size:.76rem;">GESMujer — Comunicación con donantes</small>
               </div>
             </div>
             <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -561,13 +560,11 @@ try {
               <div class="compose-section" style="background:#f8f0ff;">
                 <div class="compose-section-label"><i class="bi bi-layout-text-window-reverse"></i> Plantilla de Mensaje</div>
                 <div class="d-flex gap-2 flex-wrap" id="plantilla_btns">
-                  <button type="button" class="btn-plantilla active" data-val="cumpleanos"     onclick="selPlantilla('cumpleanos')">🎂 Cumpleaños</button>
-                  <button type="button" class="btn-plantilla"        data-val="agradecimiento" onclick="selPlantilla('agradecimiento')">💜 Agradecimiento</button>
-                  <button type="button" class="btn-plantilla"        data-val="recibo"         onclick="selPlantilla('recibo')">📄 Recibo</button>
-                  <button type="button" class="btn-plantilla"        data-val="informativo"    onclick="selPlantilla('informativo')">📊 Informativo</button>
-                  <button type="button" class="btn-plantilla"        data-val="personalizado"  onclick="selPlantilla('personalizado')">✏️ Personalizado</button>
+                  <button type="button" class="btn-plantilla active" data-val="personalizado"  onclick="selPlantilla('personalizado')"> Personalizado</button>
+                  <button type="button" class="btn-plantilla"        data-val="agradecimiento" onclick="selPlantilla('agradecimiento')"> Agradecimiento</button>
+                  <button type="button" class="btn-plantilla"        data-val="cumpleanos"     onclick="selPlantilla('cumpleanos')"> Cumpleaños</button>
                 </div>
-                <input type="hidden" id="plantillaSelect" value="cumpleanos">
+                <input type="hidden" id="plantillaSelect" value="personalizado">
               </div>
 
               <!-- 2. Destinatario -->
@@ -691,12 +688,7 @@ try {
             <button class="btn btn-purple btn-sm fw-semibold" onclick="bootstrap.Modal.getInstance(document.getElementById('modalVerMensaje')).hide();enviarBorrador(msgActual)">
               <i class="bi bi-send-fill me-1"></i> Enviar ahora
             </button>`;
-        } else if (msg.Estado === 'Enviado') {
-          acciones = `
-            <button class="btn btn-outline-secondary btn-sm fw-semibold" onclick="bootstrap.Modal.getInstance(document.getElementById('modalVerMensaje')).hide();reenviarMensaje(msgActual)">
-              <i class="bi bi-reply-fill me-1"></i> Reenviar
-            </button>`;
-        } else {
+        } else if (msg.Estado === 'Fallido') {
           acciones = `
             <button class="btn btn-outline-primary btn-sm fw-semibold" onclick="bootstrap.Modal.getInstance(document.getElementById('modalVerMensaje')).hide();reenviarMensaje(msgActual)">
               <i class="bi bi-arrow-clockwise me-1"></i> Reintentar envío
@@ -709,14 +701,14 @@ try {
 
       // ─── REDACTAR NUEVO ───────────────────────────────────────────────────────
       function abrirModalRedactar() {
-        const lbl = document.getElementById('modalEnviarCorreoLabel');
-        lbl.innerHTML = `<div class="d-flex align-items-center gap-2"><div style="width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:.5rem;display:flex;align-items:center;justify-content:center;"><i class="bi bi-envelope-paper-heart fs-5"></i></div><div><span class="fw-bold">Redactar Correo Institucional</span><br><small style="opacity:.8;font-size:.75rem;">GesMujer — Comunicación con donantes</small></div></div>`;
+        document.getElementById('modalEnviarCorreoIcon').className   = 'bi bi-envelope-paper-heart fs-5';
+        document.getElementById('modalEnviarCorreoLabel').textContent = 'Redactar Correo Institucional';
         document.getElementById('correo_nombre').value      = '';
         document.getElementById('correo_email').value       = '';
         document.getElementById('correo_id_donante').value  = '';
         document.getElementById('correo_id_mensaje').value  = '';
-        document.getElementById('plantillaSelect').value    = 'cumpleanos';
-        document.querySelectorAll('.btn-plantilla').forEach(b => b.classList.toggle('active', b.dataset.val === 'cumpleanos'));
+        document.getElementById('plantillaSelect').value    = 'personalizado';
+        document.querySelectorAll('.btn-plantilla').forEach(b => b.classList.toggle('active', b.dataset.val === 'personalizado'));
         acMsgOcultar();
         cambiarPlantilla();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
@@ -724,8 +716,8 @@ try {
 
       // ─── EDITAR BORRADOR ──────────────────────────────────────────────────────
       function editarBorrador(msg) {
-        const lbl = document.getElementById('modalEnviarCorreoLabel');
-        lbl.innerHTML = `<div class="d-flex align-items-center gap-2"><div style="width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:.5rem;display:flex;align-items:center;justify-content:center;"><i class="bi bi-pencil-fill fs-5"></i></div><div><span class="fw-bold">Editar Borrador #${msg.ID_Mensaje}</span><br><small style="opacity:.8;font-size:.75rem;">GesMujer — Comunicación con donantes</small></div></div>`;
+        document.getElementById('modalEnviarCorreoIcon').className   = 'bi bi-pencil-fill fs-5';
+        document.getElementById('modalEnviarCorreoLabel').textContent = `Editar Borrador #${msg.ID_Mensaje}`;
         document.getElementById('correo_nombre').value     = msg.NombreDestino || '';
         document.getElementById('correo_email').value      = msg.EmailDestino  || '';
         document.getElementById('correo_asunto').value     = msg.Asunto        || '';
@@ -735,6 +727,7 @@ try {
         // Marcar plantilla como personalizada
         document.getElementById('plantillaSelect').value = 'personalizado';
         document.querySelectorAll('.btn-plantilla').forEach(b => b.classList.toggle('active', b.dataset.val === 'personalizado'));
+        acMsgOcultar();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
@@ -743,10 +736,10 @@ try {
         editarBorrador(msg);
       }
 
-      // ─── REENVIAR / REINTENTAR ────────────────────────────────────────────────
+      // ─── REINTENTAR ENVÍO FALLIDO ─────────────────────────────────────────────
       function reenviarMensaje(msg) {
-        const lbl = document.getElementById('modalEnviarCorreoLabel');
-        lbl.innerHTML = `<div class="d-flex align-items-center gap-2"><div style="width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:.5rem;display:flex;align-items:center;justify-content:center;"><i class="bi bi-reply-fill fs-5"></i></div><div><span class="fw-bold">Reenviar Correo</span><br><small style="opacity:.8;font-size:.75rem;">GesMujer — Comunicación con donantes</small></div></div>`;
+        document.getElementById('modalEnviarCorreoIcon').className   = 'bi bi-arrow-clockwise fs-5';
+        document.getElementById('modalEnviarCorreoLabel').textContent = 'Reintentar Envío';
         document.getElementById('correo_nombre').value     = msg.NombreDestino || '';
         document.getElementById('correo_email').value      = msg.EmailDestino  || '';
         document.getElementById('correo_asunto').value     = msg.Asunto        || '';
@@ -755,6 +748,7 @@ try {
         document.getElementById('correo_id_mensaje').value = ''; // Siempre crea registro nuevo
         document.getElementById('plantillaSelect').value   = 'personalizado';
         document.querySelectorAll('.btn-plantilla').forEach(b => b.classList.toggle('active', b.dataset.val === 'personalizado'));
+        acMsgOcultar();
         new bootstrap.Modal(document.getElementById('modalEnviarCorreo')).show();
       }
 
@@ -804,47 +798,85 @@ try {
         buscarMensajes();
       }
 
-      // ─── AUTOCOMPLETAR ────────────────────────────────────────────────────────
-      function manejarInputNombre(val) {
-        const nombre = (val||'').trim();
-        const datalist   = document.getElementById('lista_donantes_datalist');
-        const emailInput = document.getElementById('correo_email');
-        const idInput    = document.getElementById('correo_id_donante');
+      // ─── AUTOCOMPLETAR DONANTE ────────────────────────────────────────────────
+      let acMsgTimeout  = null;
+      let acMsgFocusIdx = -1;
+
+      function acMsgInput(val) {
+        clearTimeout(acMsgTimeout);
+        const q = (val || '').trim();
+        if (q.length < 1) { acMsgOcultar(); actualizarNombreEnMensaje(); return; }
+        acMsgTimeout = setTimeout(() => acMsgBuscar(q), 180);
         actualizarNombreEnMensaje();
-        if (!datalist) return;
-        for (const opt of datalist.querySelectorAll('option')) {
-          if (opt.value.toLowerCase() === nombre.toLowerCase()) {
-            const email = opt.getAttribute('data-email')||'';
-            const idDon = opt.getAttribute('data-id')||'';
-            if (email) emailInput.value = email;
-            if (idDon) idInput.value    = idDon;
-            return;
-          }
-        }
-        if (nombre.length >= 2) buscarDonantesDatalist(nombre);
       }
 
-      let timeoutDatalist = null;
-      async function buscarDonantesDatalist(q) {
-        clearTimeout(timeoutDatalist);
-        timeoutDatalist = setTimeout(async () => {
-          try {
-            const donantes = await (await fetch('ajax/buscar_donante.php?q=' + encodeURIComponent(q))).json();
-            if (!Array.isArray(donantes)) return;
-            const datalist = document.getElementById('lista_donantes_datalist');
-            donantes.forEach(d => {
-              const existe = Array.from(datalist.options).some(o => o.value.toLowerCase() === d.NombreCompleto.toLowerCase());
-              if (!existe) {
-                const opt = document.createElement('option');
-                opt.value = d.NombreCompleto;
-                opt.setAttribute('data-email', d.Email||'');
-                opt.setAttribute('data-id', d.ID_Donante);
-                opt.textContent = d.Email||'Sin correo';
-                datalist.appendChild(opt);
-              }
-            });
-          } catch(e) {}
-        }, 220);
+      async function acMsgBuscar(q) {
+        try {
+          const data = await (await fetch('ajax/buscar_donante.php?q=' + encodeURIComponent(q))).json();
+          if (!Array.isArray(data)) return;
+          acMsgRenderizar(data);
+        } catch(e) { acMsgOcultar(); }
+      }
+
+      function acMsgRenderizar(donantes) {
+        const dd = document.getElementById('ac_dropdown_msg');
+        if (!dd) return;
+        if (!donantes.length) {
+          dd.innerHTML = '<div class="ac-item"><span class="text-muted small">Sin resultados</span></div>';
+          dd.style.display = 'block';
+          return;
+        }
+        dd.innerHTML = donantes.slice(0, 8).map((d, i) => {
+          const initials = ((d.NombreCompleto || '?').split(' ').map(p => p[0] || '').join('').substring(0, 2)).toUpperCase();
+          return `<div class="ac-item" data-idx="${i}" onclick="acMsgSeleccionar('${escJsStr(d.NombreCompleto)}','${escJsStr(d.Email || '')}','${d.ID_Donante}')">
+            <div class="ac-avatar">${initials}</div>
+            <div><div class="ac-name">${escHtmlAc(d.NombreCompleto)}</div><div class="ac-email"><i class="bi bi-envelope me-1"></i>${escHtmlAc(d.Email || 'Sin correo')}</div></div>
+          </div>`;
+        }).join('');
+        dd.style.display = 'block';
+        acMsgFocusIdx = -1;
+      }
+
+      function acMsgSeleccionar(nombre, email, id) {
+        document.getElementById('correo_nombre').value     = nombre;
+        document.getElementById('correo_email').value      = email || '';
+        document.getElementById('correo_id_donante').value = id || '';
+        acMsgOcultar();
+        actualizarNombreEnMensaje();
+      }
+
+      function acMsgOcultar() {
+        const dd = document.getElementById('ac_dropdown_msg');
+        if (dd) { dd.style.display = 'none'; dd.innerHTML = ''; }
+      }
+
+      function acMsgKeyDown(e) {
+        const dd = document.getElementById('ac_dropdown_msg');
+        if (!dd) return;
+        const items = dd.querySelectorAll('.ac-item');
+        if (!items.length || dd.style.display === 'none') return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); acMsgFocusIdx = Math.min(acMsgFocusIdx + 1, items.length - 1); acMsgHighlight(items); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); acMsgFocusIdx = Math.max(acMsgFocusIdx - 1, 0); acMsgHighlight(items); }
+        else if (e.key === 'Enter' && acMsgFocusIdx >= 0) { e.preventDefault(); items[acMsgFocusIdx].click(); }
+        else if (e.key === 'Escape') { acMsgOcultar(); }
+      }
+
+      function acMsgHighlight(items) {
+        items.forEach((el, i) => el.classList.toggle('focused', i === acMsgFocusIdx));
+        if (acMsgFocusIdx >= 0) items[acMsgFocusIdx].scrollIntoView({block: 'nearest'});
+      }
+
+      document.addEventListener('click', e => {
+        if (!document.getElementById('autocomplete_wrapper_msg')?.contains(e.target)) acMsgOcultar();
+      });
+
+      function escJsStr(s) { return String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+      function escHtmlAc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+      function selPlantilla(val) {
+        document.getElementById('plantillaSelect').value = val;
+        document.querySelectorAll('.btn-plantilla').forEach(b => b.classList.toggle('active', b.dataset.val === val));
+        cambiarPlantilla();
       }
 
       function actualizarNombreEnMensaje() {
@@ -871,24 +903,24 @@ try {
         const fecha = `Oaxaca de Juárez, Oaxaca a ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
 
         if (sel === 'agradecimiento') {
-          asunto.value = '¡Gracias por sumarte a transformar vidas en Oaxaca! - GesMujer';
+          asunto.value = '¡Gracias por sumarte a transformar vidas en Oaxaca! - GESMujer';
           txt.value = `${fecha}\n\nQuerido(a) ${nom}, ¡gracias por sumarte a transformar vidas en Oaxaca!\n\n`+
-            `A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GesMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo.\n\n`+
+            `A nombre de todas las personas que formamos parte del Grupo de Estudios sobre la Mujer Rosario Castellanos, GESMujer, quiero expresarte nuestro más sincero agradecimiento por tu generoso donativo.\n\n`+
             `Acciones como la tuya hacen posible que sigamos caminando junto a mujeres, jóvenes y niñas de diversas comunidades indígenas y rurales del estado de Oaxaca. Gracias a tu valioso respaldo, podemos fortalecer nuestras acciones de acompañamiento, formación, defensa de sus derechos e impulso a su autonomía, brindándoles herramientas para construir proyectos de vida con dignidad, justicia y libres de violencia.\n\n`+
-            `En GesMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n`+
+            `En GESMujer estamos convencidas de que la transformación comunitaria se logra uniendo voluntades. Tu contribución no solo representa un apoyo económico indispensable, sino también un mensaje directo de esperanza y solidaridad para quienes más lo necesitan.\n\n`+
             `Nos comprometemos firmemente a administrar tu aportación con total transparencia y con la dedicación que nos ha caracterizado por más de cuatro décadas de trabajo en favor de las mujeres oaxaqueñas.\n\n`+
-            `Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\nCon aprecio y respeto,\n\nMaría del Rosario Martínez Miguel\nGrupo de Estudios sobre la Mujer Rosario Castellanos (GesMujer)`;
+            `Te reiteramos nuestra gratitud y dejamos nuestras puertas abiertas para mantenerte informado sobre el impacto y los logros que tu donativo ayuda a construir día con día.\n\nCon aprecio y respeto,\n\nMaría del Rosario Martínez Miguel\nGrupo de Estudios sobre la Mujer Rosario Castellanos (GESMujer)`;
         } else if (sel === 'recibo') {
-          asunto.value = 'Envío de Recibo de Donativo - GesMujer Oaxaca';
-          txt.value = `Estimado(a) ${nom},\n\nLe hacemos llegar adjunto a este correo su recibo/comprobante oficial correspondiente a su reciente donativo.\n\nReiteramos nuestra gratitud por su generosidad y confianza en nuestras causas.\n\nAtentamente,\nEquipo GesMujer Oaxaca`;
+          asunto.value = 'Envío de Recibo de Donativo - GESMujer Oaxaca';
+          txt.value = `Estimado(a) ${nom},\n\nLe hacemos llegar adjunto a este correo su recibo/comprobante oficial correspondiente a su reciente donativo.\n\nReiteramos nuestra gratitud por su generosidad y confianza en nuestras causas.\n\nAtentamente,\nEquipo GESMujer Oaxaca`;
         } else if (sel === 'cumpleanos') {
           asunto.value = 'En GESMujer Te deseamos... ¡Feliz Cumpleaños!';
           txt.value = `¡Que tengas el mejor de los días!\n\n${nom}, en el GESMujer no solo celebramos tu cumpleaños, ¡También el tiempo de amistad y cariño! Gracias por ser parte de nuestra historia, tu apoyo siempre constante nos llena de alegría la vida. Deseamos con cariño que la sigas pasando... ¡Estupendo! Disfruta tu día en compañía de quienes más quieres, dedícate tiempo y déjate querer mucho.\n\nRecibe los mejores deseos y muchos abrazos con cariño.\n\n¡ Felicidades !\n\nAtentamente.\nGrupo de Estudios Sobre la Mujer "Rosario Castellanos" A.C.`;
         } else if (sel === 'informativo') {
-          asunto.value = 'Informe de Actividades y Resultados - GesMujer Oaxaca';
+          asunto.value = 'Informe de Actividades y Resultados - GESMujer Oaxaca';
           txt.value = `Estimado(a) ${nom},\n\nLe compartimos nuestro reporte de actividades y avances en los programas de apoyo a mujeres. Gracias a su solidaridad esto es posible.\n\nQuedamos a su disposición para cualquier duda.`;
         } else {
-          asunto.value = 'Mensaje de la Familia GesMujer Oaxaca';
+          asunto.value = 'Mensaje de la Familia GESMujer Oaxaca';
           txt.value = '';
         }
       }
@@ -989,8 +1021,7 @@ try {
               <button class="btn-accion btn-del"    onclick="eliminarMensaje(${m.ID_Mensaje},'Fallido')" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>`;
           } else {
             acciones = `
-              <button class="btn-accion btn-ver"    onclick='verDetalleMensaje(${json})' title="Ver"><i class="bi bi-eye-fill"></i></button>
-              <button class="btn-accion btn-resend" onclick='reenviarMensaje(${json})'   title="Reenviar"><i class="bi bi-reply-fill"></i></button>`;
+              <button class="btn-accion btn-ver"    onclick='verDetalleMensaje(${json})' title="Ver"><i class="bi bi-eye-fill"></i></button>`;
           }
 
           return `<tr>
