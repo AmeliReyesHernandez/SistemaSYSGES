@@ -217,7 +217,7 @@ $msj= false;
     
     <main class="form-signin w-100 m-auto">
         <form action="index.php" method="POST">
-            <img class="mb-4" src="../assets/img/logo 1.png" alt="" width="220" height="200">
+            <img class="d-block mx-auto mb-4" src="../assets/img/logo 1.png" alt="Logo GESMujer" width="210" height="210" style="object-fit: contain;">
             
 
             <?php if(isset($error_message)): ?>

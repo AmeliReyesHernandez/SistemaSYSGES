@@ -275,7 +275,7 @@ try {
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" id="tablaDonantes">
+            <table class="table table-hover tabla-con-id align-middle mb-0" id="tablaDonantes">
               <thead class="table-light small text-uppercase">
                 <tr>
                   <th style="width: 50px;">ID</th>
@@ -520,7 +520,7 @@ try {
               <i class="bi bi-clock-history me-1"></i> Historial Completo de Aportaciones
             </h6>
             <div class="table-responsive border rounded-3 bg-white mb-2">
-              <table class="table table-hover align-middle mb-0" id="fd_tabla_donativos" style="table-layout: fixed; width: 100%;">
+              <table class="table table-hover tabla-con-id align-middle mb-0" id="fd_tabla_donativos" style="table-layout: fixed; width: 100%;">
                 <thead class="table-light small text-uppercase">
                   <tr>
                     <th style="width: 70px;">Folio</th>

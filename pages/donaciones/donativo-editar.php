@@ -722,27 +722,9 @@ try {
         return escHtml(str);
       }
 
-      // Pantalla de carga profesional con puntitos animados y barra de progreso
-      function mostrarPantallaCargando(titulo = 'Actualizando donativo...') {
-        Swal.fire({
-          title: `<span style="color:#721896; font-size:1.25rem; font-weight:700;">${escHtml(titulo)}</span>`,
-          html: `
-            <div class="py-3 text-center">
-              <div class="mb-3" style="color: #721896;">
-                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s;"></span>
-                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s; animation-delay: 0.2s;"></span>
-                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 0.8s; animation-delay: 0.4s;"></span>
-              </div>
-              <p class="text-muted small mb-3">Estamos procesando y actualizando la información de la aportación en el sistema, por favor espera un momento...</p>
-              <div class="progress" style="height: 10px; border-radius: 8px; background-color: #f3e8ff;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%; background-color: #721896;"></div>
-              </div>
-            </div>
-          `,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showConfirmButton: false
-        });
+      // Indicador discreto de 3 puntitos
+      function mostrarPantallaCargando(titulo = 'Actualizando') {
+        if (window.mostrarCargandoDiscreto) window.mostrarCargandoDiscreto(titulo);
       }
 
       // Validación detallada que extrae nombre del campo y motivo de error
@@ -866,7 +848,7 @@ try {
           const btnSubmit = form.querySelector('button[type="submit"]');
           if (btnSubmit) {
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span>Actualizando...`;
+            btnSubmit.innerHTML = window.htmlTresPuntitos ? window.htmlTresPuntitos('Actualizando') : 'Actualizando...';
           }
         }, false);
       })();

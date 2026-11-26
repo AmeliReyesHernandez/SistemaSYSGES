@@ -427,7 +427,7 @@ function renderDescripcionMovimiento($h) {
 
             <div class="card-body p-0">
               <div class="table-responsive">
-                <table class="table table-hover table-sf align-middle mb-0">
+                <table class="table table-hover table-sf tabla-con-id align-middle mb-0">
                   <thead class="table-light text-uppercase">
                     <tr>
                       <th style="width:60px;font-size:.75rem;">ID</th>

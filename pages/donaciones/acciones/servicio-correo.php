@@ -102,7 +102,7 @@ function enviarCorreoInstitucional($emailDestino, $nombreDestino, $asunto, $mens
             }
         }
 
-        $isSoloPdf = ($tipoMensaje === 'Agradecimiento' || $tipoMensaje === 'Cumpleaños' || $tipoMensaje === 'Manual');
+        $isSoloPdf = ($tipoMensaje === 'Agradecimiento' || $tipoMensaje === 'Cumpleaños');
 
         // Obtener las imágenes del membrete y de cumpleaños
         $headerImgPath = realpath(__DIR__ . '/../../../assets/img/membrete_header.jpg');
@@ -177,17 +177,23 @@ function enviarCorreoInstitucional($emailDestino, $nombreDestino, $asunto, $mens
                 </div>
             ";
         } else {
+            $htmlTexto = htmlspecialchars($textoFinal);
+            $htmlTexto = preg_replace(
+                '/(Grupo de Estudios sobre la Mujer Rosario Castellanos \(GESMujer\))/i',
+                '<strong>$1</strong>',
+                $htmlTexto
+            );
             $mail->Body = "
-                <div style='background-color: #f4f6f9; padding: 20px 10px; font-family: Arial, Helvetica, sans-serif;'>
-                    <div style='max-width: 650px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dcdfe6; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.06);'>
+                <div style='background-color: #f6f2fa; padding: 24px 12px; font-family: Arial, Helvetica, sans-serif;'>
+                    <div style='max-width: 650px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e6d8f2; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 18px rgba(114, 24, 150, 0.08);'>
                         
                         <!-- ENCABEZADO EXACTO DE LA HOJA MEMBRETADA -->
                         {$headerHtml}
                         
                         <!-- CUERPO DEL MENSAJE / CARTA -->
-                        <div style='padding: 24px 34px 28px 34px; color: #222222; line-height: 1.7; background-color: #ffffff; font-family: Arial, Helvetica, sans-serif;'>
+                        <div style='padding: 26px 36px 32px 36px; color: #222222; line-height: 1.75; background-color: #ffffff; font-family: Arial, Helvetica, sans-serif;'>
                             {$cumpleBannerHtml}
-                            <p style='font-size: 14.5px; color: #222222; margin: 0; white-space: pre-line; line-height: 1.75; font-family: Arial, sans-serif; text-align: justify;'>" . htmlspecialchars($textoFinal) . "</p>
+                            <p style='font-size: 15px; color: #222222; margin: 0; white-space: pre-line; line-height: 1.75; font-family: Arial, Helvetica, sans-serif; text-align: justify;'>" . $htmlTexto . "</p>
                         </div>
                         
                         <!-- PIE DE PÁGINA EXACTO DE LA HOJA MEMBRETADA -->

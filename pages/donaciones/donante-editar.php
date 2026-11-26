@@ -162,19 +162,19 @@ try {
                   <div class="row g-3">
                     <div class="col-md-4">
                       <label for="nombre" class="form-label fw-semibold">Nombre(s) <span class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="nombre" name="nombre" value="<?= htmlspecialchars($donante['Nombre']) ?>" required>
-                      <div class="invalid-feedback">Por favor ingresa el nombre.</div>
+                      <input type="text" class="form-control" id="nombre" name="nombre" value="<?= htmlspecialchars($donante['Nombre']) ?>" maxlength="30" required autocomplete="off">
+                      <div class="invalid-feedback">Por favor ingresa el nombre (solo letras).</div>
                     </div>
 
                     <div class="col-md-4">
                       <label for="apellido_paterno" class="form-label fw-semibold">Apellido Paterno <span class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" value="<?= htmlspecialchars($donante['ApellidoPaterno']) ?>" required>
-                      <div class="invalid-feedback">Por favor ingresa el apellido paterno.</div>
+                      <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" value="<?= htmlspecialchars($donante['ApellidoPaterno']) ?>" maxlength="25" required autocomplete="off">
+                      <div class="invalid-feedback">Por favor ingresa el apellido paterno (solo letras).</div>
                     </div>
 
                     <div class="col-md-4">
                       <label for="apellido_materno" class="form-label fw-semibold">Apellido Materno</label>
-                      <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" value="<?= htmlspecialchars($donante['ApellidoMaterno']) ?>">
+                      <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" value="<?= htmlspecialchars($donante['ApellidoMaterno']) ?>" maxlength="25" autocomplete="off">
                     </div>
 
                     <div class="col-md-6">
@@ -189,7 +189,7 @@ try {
                       <label for="ocupacion" class="form-label fw-semibold">
                         <i class="bi bi-briefcase me-1"></i> Ocupación / Profesión
                       </label>
-                      <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="<?= htmlspecialchars($donante['Ocupacion'] ?? '') ?>" placeholder="Ej. Abogada, Docente, Empresaria...">
+                      <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="<?= htmlspecialchars($donante['Ocupacion'] ?? '') ?>" placeholder="Ej. Abogada, Docente, Empresaria..." maxlength="40" autocomplete="off">
                     </div>
                   </div>
                 </div>
@@ -206,7 +206,7 @@ try {
                       <label for="email" class="form-label fw-semibold">Correo Electrónico <span class="text-danger">*</span></label>
                       <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($donante['Email']) ?>" required>
+                        <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($donante['Email']) ?>" maxlength="80" required>
                         <div class="invalid-feedback">Ingresa un correo electrónico válido.</div>
                       </div>
                     </div>
@@ -215,7 +215,7 @@ try {
                       <label for="telefono" class="form-label fw-semibold">Teléfono / Celular</label>
                       <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                        <input type="tel" class="form-control" id="telefono" name="telefono" value="<?= htmlspecialchars($donante['Telefono'] ?? '') ?>" placeholder="10 dígitos">
+                        <input type="tel" class="form-control" id="telefono" name="telefono" value="<?= htmlspecialchars($donante['Telefono'] ?? '') ?>" placeholder="10 dígitos" maxlength="10" minlength="10" pattern="\d{10}" inputmode="numeric" autocomplete="off">
                       </div>
                     </div>
 
@@ -223,18 +223,18 @@ try {
                       <label for="domicilio" class="form-label fw-semibold">Domicilio (Calle, Número, Colonia)</label>
                       <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-house-door"></i></span>
-                        <input type="text" class="form-control" id="domicilio" name="domicilio" value="<?= htmlspecialchars($donante['Domicilio'] ?? '') ?>" placeholder="Ej. Calle Macedonio Alcalá #200, Col. Centro">
+                        <input type="text" class="form-control" id="domicilio" name="domicilio" value="<?= htmlspecialchars($donante['Domicilio'] ?? '') ?>" placeholder="Ej. Calle Macedonio Alcalá #200, Col. Centro" maxlength="120">
                       </div>
                     </div>
 
                     <div class="col-md-6">
                       <label for="ciudad" class="form-label fw-semibold">Ciudad / Municipio</label>
-                      <input type="text" class="form-control" id="ciudad" name="ciudad" value="<?= htmlspecialchars($donante['Ciudad'] ?? '') ?>" placeholder="Ej. Oaxaca de Juárez">
+                      <input type="text" class="form-control" id="ciudad" name="ciudad" value="<?= htmlspecialchars($donante['Ciudad'] ?? '') ?>" placeholder="Ej. Oaxaca de Juárez" maxlength="35" autocomplete="off">
                     </div>
 
                     <div class="col-md-6">
                       <label for="estado" class="form-label fw-semibold">Estado</label>
-                      <input type="text" class="form-control" id="estado" name="estado" value="<?= htmlspecialchars($donante['Estado'] ?? 'Oaxaca') ?>" placeholder="Ej. Oaxaca">
+                      <input type="text" class="form-control" id="estado" name="estado" value="<?= htmlspecialchars($donante['Estado'] ?? 'Oaxaca') ?>" placeholder="Ej. Oaxaca" maxlength="25" autocomplete="off">
                     </div>
                   </div>
                 </div>
@@ -429,27 +429,9 @@ try {
         return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
 
-      // Pantalla de carga profesional con puntitos animados y barra de progreso
-      function mostrarPantallaCargando(titulo = 'Actualizando información...') {
-        Swal.fire({
-          title: `<span style="color:#721896; font-size:1.25rem; font-weight:700;">${escHtml(titulo)}</span>`,
-          html: `
-            <div class="py-3 text-center">
-              <div class="mb-3" style="color: #721896;">
-                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s;"></span>
-                <span class="spinner-grow spinner-grow-sm me-1" role="status" style="animation-duration: 0.8s; animation-delay: 0.2s;"></span>
-                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 0.8s; animation-delay: 0.4s;"></span>
-              </div>
-              <p class="text-muted small mb-3">Estamos procesando y actualizando el expediente en el sistema, por favor espera un momento...</p>
-              <div class="progress" style="height: 10px; border-radius: 8px; background-color: #f3e8ff;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%; background-color: #721896;"></div>
-              </div>
-            </div>
-          `,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showConfirmButton: false
-        });
+      // Indicador discreto de 3 puntitos
+      function mostrarPantallaCargando(titulo = 'Actualizando') {
+        if (window.mostrarCargandoDiscreto) window.mostrarCargandoDiscreto(titulo);
       }
 
       // Validación detallada que extrae nombre del campo y motivo de error
@@ -479,8 +461,10 @@ try {
             } else if (el.validity.typeMismatch) {
               if (el.type === 'email') motivo = 'Formato de correo no válido (ej. correo@ejemplo.com).';
               else motivo = 'El formato ingresado es incorrecto.';
-            } else if (el.validity.tooShort) {
-              motivo = `Debe tener al menos ${el.minLength} caracteres.`;
+            } else if (el.validity.tooShort || el.validity.patternMismatch) {
+              if (el.id === 'telefono') motivo = 'Debe tener exactamente 10 dígitos numéricos.';
+              else if (el.minLength > 0) motivo = `Debe tener al menos ${el.minLength} caracteres.`;
+              else motivo = 'El formato ingresado no es válido.';
             } else {
               motivo = 'Por favor verifica la información ingresada en este campo.';
             }
@@ -537,7 +521,7 @@ try {
           const btnSubmit = form.querySelector('button[type="submit"]');
           if (btnSubmit) {
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span>Actualizando...`;
+            btnSubmit.innerHTML = window.htmlTresPuntitos ? window.htmlTresPuntitos('Actualizando') : 'Actualizando...';
           }
         }, false);
       })();
